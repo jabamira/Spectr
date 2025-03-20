@@ -1,0 +1,183 @@
+﻿<Page x:Class="Spectr.AdministratorPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Spectr"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="AdministratorPage"
+      KeyDown="MainWindow_KeyDown"
+      Focusable="True">
+    <Page.Resources>    
+        <Style TargetType="Button" x:Key="RoundedButtonStyle">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" 
+                        CornerRadius="7">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="red"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+
+    </Page.Resources>
+
+    <Grid Background="white">
+       
+        <StackPanel Orientation="Horizontal">
+            <!-- Первый столбец-->
+            <Border BorderBrush="Gray" BorderThickness="2" Margin="2 2 2 2" CornerRadius="5" Padding="5" Background="LightGray">
+                <StackPanel Orientation="Vertical" Width="300" HorizontalAlignment="Left" >
+                    <StackPanel Orientation="Horizontal" >
+                        <Label FontWeight="Bold">Выберите проект</Label>
+                        <Button Width="100" Margin="80 2 0 0" Style="{StaticResource RoundedButtonStyle}">Сортировка</Button>
+                    </StackPanel>
+                    <TreeView Name="treeView"  Background="LightGray" SelectedItemChanged="treeView_SelectedItemChanged"> 
+                        <TreeViewItem Header="Площадь 1">
+                            <TreeViewItem Header="Профиль 1">
+                                <TreeViewItem Header="Пикет 1"/>
+                                <TreeViewItem Header="Пикет 2"/>
+                            </TreeViewItem>
+                            <TreeViewItem Header="Профиль 2">
+                                <TreeViewItem Header="Пикет 3"/>
+                                <TreeViewItem Header="Пикет 4"/>
+                            </TreeViewItem>
+                        </TreeViewItem>
+                        <TreeViewItem Header="Площадь 2">
+                            <TreeViewItem Header="Профиль 3">
+                                <TreeViewItem Header="Пикет 5"/>
+                                <TreeViewItem Header="Пикет 6"/>
+                            </TreeViewItem>
+                        </TreeViewItem>
+                    </TreeView>
+
+                </StackPanel>
+            </Border>
+            <!-- Второй столбец-->
+            <Border BorderBrush="Gray" BorderThickness="2" Margin="2" CornerRadius="5"  Background="LightGray">
+            <StackPanel Orientation="Vertical">
+                
+                <StackPanel Orientation="Horizontal" VerticalAlignment="top" >
+                    <Button x:Name="BtnInfo" Height="20" Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnInfo_Click">
+                        <Viewbox Stretch="Uniform">
+                            <TextBlock Text="Посмотреть информацию" />
+                        </Viewbox>
+                    </Button>
+
+                    <Button x:Name="BtnGraphik" Height="20" Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnGraphik_Click">
+                       
+                        <Viewbox Stretch="Uniform">
+                            <TextBlock Text="Построить график" />
+                        </Viewbox>
+                    </Button>
+                    <Button x:Name="BtnSchem" Height="20" Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnSchem_Click">
+                        <Viewbox Stretch="Uniform">
+                            <TextBlock Text="Построить схему" />
+                        </Viewbox> 
+                    </Button>
+                    <Button x:Name="BtnReport" Height="20" Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnReport_Click">
+                        <Viewbox Stretch="Uniform">
+                            <TextBlock Text="Сформировать отчет" />
+                        </Viewbox>
+                    </Button>
+
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="BtnAdd" Height="20" Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnAdd_Click">
+
+                        <Viewbox Stretch="Uniform">
+                            <TextBlock Text="Добавить" />
+                        </Viewbox> 
+                    </Button>
+
+                    <Button x:Name="BtnEdit" Height="20"  Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnEdit_Click">
+                        <Viewbox Stretch="Uniform">
+                            <TextBlock Text="  Редактировать" />
+                        </Viewbox>
+                      
+                    </Button>
+                    <Button x:Name="BtnDelete" Height="20"  Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnDelete_Click">
+                        <Viewbox Stretch="Uniform">
+                            <TextBlock Text="Удалить" />
+                        </Viewbox>
+                    </Button>
+                    <Button x:Name="BtnExport" Height="20"  Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnExport_Click">
+
+                        <Viewbox Stretch="Uniform">
+                            <TextBlock Text="Экспортировать" />
+                        </Viewbox> 
+                    </Button>
+                </StackPanel>
+
+                    <Label x:Name="LabelLogin" Content="User:Login" FontSize="12" HorizontalContentAlignment="Right" Margin="0 0 20 0">
+
+                    </Label>
+
+                    <Label Name="infoLabel" HorizontalContentAlignment="Center">Информация о выбранном проекте</Label>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock HorizontalAlignment="Left" Width="260" Height="200" TextWrapping="Wrap" Margin="0 0 20 0">Ифнормация  Сроки выполн Цена заказа Количество сотрудников в проекте Количество Площадей/</TextBlock>
+                        <ListView>
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="X" Width="60" DisplayMemberBinding="{Binding xCoordinate}">
+                                        
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Y" Width="60" DisplayMemberBinding="{Binding yCoordinate}">
+
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Z" Width="60" DisplayMemberBinding="{Binding zCoordinate}">
+
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </StackPanel>
+                    <ListView>
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn Header="ID оператора" DisplayMemberBinding="{Binding OperatorID}">
+
+                                </GridViewColumn>
+                                <GridViewColumn Header="ФИО" DisplayMemberBinding="{Binding FullName}">
+
+                                </GridViewColumn>
+                                <GridViewColumn Header="Электронная почта" DisplayMemberBinding="{Binding Email}">
+
+                                </GridViewColumn>
+                                <GridViewColumn Header="Номер телефона" DisplayMemberBinding="{Binding PhoneNumber}">
+
+                                </GridViewColumn>
+                                <GridViewColumn Header="Название работы" DisplayMemberBinding="{Binding JobTitle}">
+
+                                </GridViewColumn>
+                                <GridViewColumn Header="ID профиля" DisplayMemberBinding="{Binding ProfileID}">
+
+                                </GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                    </ListView>
+
+                </StackPanel>
+           </Border>
+         
+        </StackPanel>
+        
+       
+
+    </Grid>
+</Page>

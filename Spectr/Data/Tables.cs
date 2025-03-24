@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace Spectr.Data
 {
@@ -12,6 +13,7 @@ namespace Spectr.Data
     {
         Администратор,Оператор,Заказчик,Аналитик
     }
+    [Index(nameof(AdministratorLogin), IsUnique = true)]
     public class Administrator
     {
         [Key]
@@ -43,7 +45,7 @@ namespace Spectr.Data
 
         public List<Contract> Contracts { get; set; }
     }
-
+    [Index(nameof(CustomerLogin), IsUnique = true)]
     public class Customer
     {
         [Key]
@@ -174,7 +176,7 @@ namespace Spectr.Data
         public int ProfileID { get; set; }
         public Profile Profile { get; set; }
     }
-
+    [Index(nameof(OperatorLogin), IsUnique = true)]
     public class Operator
     {
         [Key]
@@ -253,7 +255,7 @@ namespace Spectr.Data
         public int SpectrometerID { get; set; }
         public GammaSpectrometer GammaSpectrometer { get; set; }
     }
-
+    [Index(nameof(AnalystLogin), IsUnique = true)]
     public class Analyst
     {
         [Key]

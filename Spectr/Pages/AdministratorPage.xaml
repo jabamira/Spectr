@@ -3,7 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Spectr"
+      xmlns:local="clr-namespace:Spectr.Data"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AdministratorPage"
@@ -39,7 +39,7 @@
 
     <Grid Background="white">
        
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <!-- Первый столбец-->
             <Border BorderBrush="Gray" BorderThickness="2" Margin="2 2 2 2" CornerRadius="5" Padding="5" Background="LightGray">
                 <StackPanel Orientation="Vertical" Width="300" HorizontalAlignment="Left" >
@@ -47,29 +47,52 @@
                         <Label FontWeight="Bold">Выберите проект</Label>
                         <Button Width="100" Margin="80 2 0 0" Style="{StaticResource RoundedButtonStyle}">Сортировка</Button>
                     </StackPanel>
-                    <TreeView Name="treeView"  Background="LightGray" SelectedItemChanged="treeView_SelectedItemChanged"> 
-                        <TreeViewItem Header="Площадь 1">
-                            <TreeViewItem Header="Профиль 1">
-                                <TreeViewItem Header="Пикет 1"/>
-                                <TreeViewItem Header="Пикет 2"/>
-                            </TreeViewItem>
-                            <TreeViewItem Header="Профиль 2">
-                                <TreeViewItem Header="Пикет 3"/>
-                                <TreeViewItem Header="Пикет 4"/>
-                            </TreeViewItem>
-                        </TreeViewItem>
-                        <TreeViewItem Header="Площадь 2">
-                            <TreeViewItem Header="Профиль 3">
-                                <TreeViewItem Header="Пикет 5"/>
-                                <TreeViewItem Header="Пикет 6"/>
-                            </TreeViewItem>
-                        </TreeViewItem>
+                    <TreeView x:Name="treeView" ItemsSource="{Binding Contracts}">
+                        <!-- Контракты -->
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate DataType="{x:Type local:Contract}" ItemsSource="{Binding Areas}">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Контракт№ " />
+                                    <TextBlock Text="{Binding ContractID}" />
+                                </StackPanel>
+                                <!-- Площади -->
+                                <HierarchicalDataTemplate.ItemTemplate>
+                                    <HierarchicalDataTemplate DataType="{x:Type local:Area}" ItemsSource="{Binding Profiles}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Площадь: " />
+                                            <TextBlock Text="{Binding AreaName}" />
+                                        </StackPanel>
+                                        <!-- Профили -->
+                                        <HierarchicalDataTemplate.ItemTemplate>
+                                            <HierarchicalDataTemplate DataType="{x:Type local:Profile}" ItemsSource="{Binding Pickets}">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="Профиль: " />
+                                                    <TextBlock Text="{Binding ProfileName}" />
+                                                </StackPanel>
+                                                <!-- Пикеты -->
+                                                <HierarchicalDataTemplate.ItemTemplate>
+                                                    <DataTemplate DataType="{x:Type local:Picket}">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="Пиект№ " />
+                                                            <TextBlock Text="{Binding PicketID}" />
+                                                        </StackPanel>
+                                                      
+                                                    </DataTemplate>
+                                                </HierarchicalDataTemplate.ItemTemplate>
+                                            </HierarchicalDataTemplate>
+                                        </HierarchicalDataTemplate.ItemTemplate>
+                                    </HierarchicalDataTemplate>
+                                </HierarchicalDataTemplate.ItemTemplate>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
                     </TreeView>
+
+
 
                 </StackPanel>
             </Border>
             <!-- Второй столбец-->
-            <Border BorderBrush="Gray" BorderThickness="2" Margin="2" CornerRadius="5"  Background="LightGray">
+            <Border BorderBrush="Gray" BorderThickness="2" Margin="2" CornerRadius="5"  Background="LightGray" >
             <StackPanel Orientation="Vertical">
                 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="top" >

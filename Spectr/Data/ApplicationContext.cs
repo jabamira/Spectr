@@ -24,7 +24,7 @@ namespace Spectr.Data
         public DbSet<Analyst> Analysts { get; set; }
 
         static string servername_ = "DBSRV\\ag2024";
-        static string dbName = "LesnikovAA_2207g2_spectr5";
+        static string dbName = "LesnikovAA_2207g2_spectr";
         static string servername = "ZALMAN\\MSSQLSERVER01";
         public string connectionString = $"Server={servername};Database={dbName};Integrated Security=True;TrustServerCertificate=True;";
 
@@ -52,6 +52,11 @@ namespace Spectr.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<ContractAnalyst>()
+         .HasKey(ca => new { ca.ContractID, ca.AnalystID });
+            modelBuilder.Entity<ProfileOperator>()
+        .HasKey(po => new { po.ProfileID, po.OperatorID });
+
             base.OnModelCreating(modelBuilder);
         }
     }

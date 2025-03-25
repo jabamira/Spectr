@@ -104,7 +104,9 @@ namespace Spectr.Data
         public Administrator Administrator { get; set; }
 
         public List<Area> Areas { get; set; }
-        public List<Analyst> Analysts { get; set; }
+
+        // Связь многие ко многим
+        public List<ContractAnalyst> ContractAnalysts { get; set; }
     }
 
     public class Area
@@ -159,6 +161,7 @@ namespace Spectr.Data
 
         public List<ProfileCoordinates> ProfileCoordinates { get; set; }
         public List<Picket> Pickets { get; set; }
+        public List<ProfileOperator> ProfileOperators { get; set; }
     }
 
     public class ProfileCoordinates
@@ -207,6 +210,7 @@ namespace Spectr.Data
         public string OperatorPassword { get; set; }
 
         public List<Picket> Pickets { get; set; }
+        public List<ProfileOperator> ProfileOperators { get; set; }
     }
 
     public class GammaSpectrometer
@@ -285,8 +289,35 @@ namespace Spectr.Data
         [MaxLength(36)]
         public string AnalystPassword { get; set; }
 
+        // Связь многие ко многим
+        public List<ContractAnalyst> ContractAnalysts { get; set; }
+    }
+    public class ContractAnalyst
+    {
+        [Key]
+        [Column(Order = 0)]
         [ForeignKey("Contract")]
         public int ContractID { get; set; }
         public Contract Contract { get; set; }
+
+        [Key]
+        [Column(Order = 1)]
+        [ForeignKey("Analyst")]
+        public int AnalystID { get; set; }
+        public Analyst Analyst { get; set; }
+    }
+    public class ProfileOperator
+    {
+        [Key]
+        [Column(Order = 0)]
+        [ForeignKey("Profile")]
+        public int ProfileID { get; set; }
+        public Profile Profile { get; set; }
+
+        [Key]
+        [Column(Order = 1)]
+        [ForeignKey("Operator")]
+        public int OperatorID { get; set; }
+        public Operator Operator { get; set; }
     }
 }

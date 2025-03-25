@@ -50,7 +50,9 @@ namespace Spectr
                     .Include(c => c.Areas)
                         .ThenInclude(a => a.Profiles)
                             .ThenInclude(p => p.Pickets) // Включаем пикеты
-                                .ThenInclude(o=>o.Operator)
+                                .ThenInclude(pk => pk.Operator)
+                    .Include(c => c.ContractAnalysts) // Включаем связи контракт-аналитик
+                        .ThenInclude(ca => ca.Analyst) // Включаем сами объекты аналитиков
                     .ToList();
 
                 treeView.ItemsSource = contracts;
@@ -119,38 +121,60 @@ namespace Spectr
             if (treeView.SelectedItem is Contract selectedContract)
             {
                 listViewArea.ItemsSource = selectedContract.Areas;
-                ResetVisibility();
-                listViewArea.Visibility = Visibility.Visible;
-                listViewArea.Items.Refresh();
 
-                 List<Operator> allOperators = selectedContract.Areas
-                .SelectMany(a => a.Profiles)
-                .SelectMany(p => p.Pickets)
-                .Select(pk => pk.Operator)
-                .Distinct()
-                .ToList();
+                listViewAnalysts.ItemsSource = selectedContract.ContractAnalysts
+               .Select(ca => ca.Analyst)
+               .Distinct()
+               .ToList();
+
+                List<Operator> allOperators = selectedContract.Areas
+              .SelectMany(a => a.Profiles)
+              .SelectMany(p => p.Pickets)
+              .Select(pk => pk.Operator)
+              .Distinct()
+              .ToList();
 
                 listViewOperators.ItemsSource = allOperators;
+
+
+                ResetVisibility();
+
+                labelAnalystHeader.Visibility = Visibility.Visible;
+                labelAnalystHeader.Content = $"Аналитики Контракта:{selectedContract.ContractID}";
+                labelAreaHeader.Visibility = Visibility.Visible;
+                labelAreaHeader.Content = $"Площади Контракта:{selectedContract.ContractID}";
+                listViewArea.Visibility = Visibility.Visible;
+                listViewAnalysts.Visibility = Visibility.Visible;
+                labelOperatorsHeader.Content = $"Операторы задействованные в выполнении Контракта:{selectedContract.ContractID}";
+
+                listViewAnalysts.Items.Refresh();
+                listViewArea.Items.Refresh();
                 listViewOperators.Items.Refresh();
             }
             if (treeView.SelectedItem is Area selecteArea)
             {
                 listViewProfile.ItemsSource = selecteArea.Profiles;
                 listViewAreaCoordinates.ItemsSource = selecteArea.AreaCoordinates;
-
-                ResetVisibility();
-                listViewProfile.Visibility = Visibility.Visible;
-                listViewAreaCoordinates.Visibility = Visibility.Visible;
-                listViewProfile.Items.Refresh();
-                listViewAreaCoordinates.Items.Refresh();
-
                 List<Operator> allOperators = selecteArea.Profiles
-                .SelectMany(p => p.Pickets)
-                .Select(pk => pk.Operator)
-                .Distinct()
-                .ToList();
+               .SelectMany(p => p.Pickets)
+               .Select(pk => pk.Operator)
+               .Distinct()
+               .ToList();
 
                 listViewOperators.ItemsSource = allOperators;
+
+                ResetVisibility();
+                
+                listViewProfile.Visibility = Visibility.Visible;
+                labelProfilesHeader.Visibility = Visibility.Visible;
+                labelProfilesHeader.Content = $"Профили Площади:{selecteArea.AreaName},{selecteArea.AreaID}";
+                labelAreaCoordinatesHeader.Visibility = Visibility.Visible;
+                labelAreaCoordinatesHeader.Content = $"Координаты Площади:{selecteArea.AreaName},{selecteArea.AreaID}";
+                listViewAreaCoordinates.Visibility = Visibility.Visible;
+                labelOperatorsHeader.Content = $"Операторы задействованные на Площади:{selecteArea.AreaName},{selecteArea.AreaID}";
+
+                listViewProfile.Items.Refresh();
+                listViewAreaCoordinates.Items.Refresh();
                 listViewOperators.Items.Refresh();
             }
             if (treeView.SelectedItem is Profile selectedProfile)
@@ -158,20 +182,26 @@ namespace Spectr
                 
                 listViewPickets.ItemsSource = selectedProfile.Pickets;
                 listViewProfileCoordinates.ItemsSource = selectedProfile.ProfileCoordinates;
-                
-                ResetVisibility();
-                listViewPickets.Visibility = Visibility.Visible;
-                listViewProfileCoordinates.Visibility = Visibility.Visible;
-               
-                listViewPickets.Items.Refresh();
-                listViewProfileCoordinates.Items.Refresh();
-
                 List<Operator> allOperators = selectedProfile.Pickets
-              .Select(pk => pk.Operator)
-              .Distinct()
-              .ToList();
+                .Select(pk => pk.Operator)
+                .Distinct()
+                .ToList();
 
                 listViewOperators.ItemsSource = allOperators;
+
+                ResetVisibility();
+
+                listViewPickets.Visibility = Visibility.Visible;
+                listViewProfileCoordinates.Visibility = Visibility.Visible;
+                labelPicketsHeader.Visibility = Visibility.Visible;
+                labelPicketsHeader.Content = $"Пикеты Профиля:{selectedProfile.ProfileName},{selectedProfile.ProfileID}";
+                labelProfilesHeader.Visibility =Visibility.Visible;
+                labelProfilesHeader.Content = $"Координаты Профиля:{selectedProfile.ProfileName},{selectedProfile.ProfileID}";
+                labelOperatorsHeader.Content = $"Операторы задействованные на Профиле:{selectedProfile.ProfileName},{selectedProfile.ProfileID}";
+
+
+                listViewPickets.Items.Refresh();
+                listViewProfileCoordinates.Items.Refresh();
                 listViewOperators.Items.Refresh();
             }
             if (treeView.SelectedItem is Picket selectedPicket)
@@ -180,7 +210,7 @@ namespace Spectr
                 listViewPickets.Items.Refresh();
 
                 List<Operator> allOperators = new List<Operator> { selectedPicket.Operator };
-
+                labelOperatorsHeader.Content = $"Оператор пикета:{selectedPicket.PicketID}";
                 listViewOperators.ItemsSource = allOperators;
                 listViewOperators.Items.Refresh();
             }
@@ -192,8 +222,17 @@ namespace Spectr
             listViewArea.Visibility = Visibility.Collapsed;
             listViewPickets.Visibility = Visibility.Collapsed;
             listViewProfile.Visibility = Visibility.Collapsed;
+            listViewAnalysts.Visibility = Visibility.Collapsed;
             listViewProfileCoordinates.Visibility = Visibility.Collapsed;
             listViewAreaCoordinates.Visibility = Visibility.Collapsed;
+            
+            
+            labelPicketsHeader.Visibility = Visibility.Collapsed;
+            labelProfilesHeader.Visibility = Visibility.Collapsed;
+            labelAreaHeader.Visibility = Visibility.Collapsed;
+            labelProfileCoordinatesHeader.Visibility = Visibility.Collapsed;
+            labelAreaCoordinatesHeader.Visibility = Visibility.Collapsed;
+            labelAnalystHeader.Visibility = Visibility.Collapsed;
         }
 
     }

@@ -36,71 +36,68 @@
 
 
     </Page.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
 
-       
-       
-
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <!-- Первый столбец с фиксированной шириной -->
-                <ColumnDefinition Width="*" />
-                <!-- Второй столбец, который будет растягиваться -->
-            </Grid.ColumnDefinitions>
-
-            <!-- Первый столбец -->
-            <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="2" Margin="2" CornerRadius="5" Padding="5" Background="LightGray">
-                <StackPanel Orientation="Vertical">
-                    <!-- Ваш контент для первого столбца -->
-                    <StackPanel Orientation="Horizontal">
-                        <Label FontWeight="Bold">Выберите проект</Label>
-                        <Button Width="100" Margin="80 2 0 0" Style="{StaticResource RoundedButtonStyle}">Сортировка</Button>
-                    </StackPanel>
-                    <TreeView x:Name="treeView" ItemsSource="{Binding Contracts}" SelectedItemChanged="treeView_SelectedItemChanged_1">
-                        <!-- Контракты -->
-                        <TreeView.ItemTemplate>
-                            <HierarchicalDataTemplate DataType="{x:Type local:Contract}" ItemsSource="{Binding Areas}">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="Контракт№ " />
-                                    <TextBlock Text="{Binding ContractID}" />
-                                </StackPanel>
-                                <!-- Площади -->
-                                <HierarchicalDataTemplate.ItemTemplate>
-                                    <HierarchicalDataTemplate DataType="{x:Type local:Area}" ItemsSource="{Binding Profiles}">
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="Площадь: " />
-                                            <TextBlock Text="{Binding AreaName}" />
-                                        </StackPanel>
-                                        <!-- Профили -->
-                                        <HierarchicalDataTemplate.ItemTemplate>
-                                            <HierarchicalDataTemplate DataType="{x:Type local:Profile}" ItemsSource="{Binding Pickets}">
-                                                <StackPanel Orientation="Horizontal">
-                                                    <TextBlock Text="Профиль: " />
-                                                    <TextBlock Text="{Binding ProfileName}" />
-                                                </StackPanel>
-                                                <!-- Пикеты -->
-                                                <HierarchicalDataTemplate.ItemTemplate>
-                                                    <DataTemplate DataType="{x:Type local:Picket}">
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <TextBlock Text="Пиект№ " />
-                                                            <TextBlock Text="{Binding PicketID}" />
-                                                        </StackPanel>
-
-                                                    </DataTemplate>
-                                                </HierarchicalDataTemplate.ItemTemplate>
-                                            </HierarchicalDataTemplate>
-                                        </HierarchicalDataTemplate.ItemTemplate>
-                                    </HierarchicalDataTemplate>
-                                </HierarchicalDataTemplate.ItemTemplate>
-                            </HierarchicalDataTemplate>
-                        </TreeView.ItemTemplate>
-                    </TreeView>
+        <!-- Первый столбец -->
+        <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="2" Margin="2" CornerRadius="5" Padding="5" Background="LightGray">
+            <StackPanel Orientation="Vertical">
+                <!-- Ваш контент для первого столбца -->
+                <StackPanel Orientation="Horizontal">
+                    <Label FontWeight="Bold">Выберите проект</Label>
+                    <Button Width="100" Margin="80 2 0 0" Style="{StaticResource RoundedButtonStyle}">Сортировка</Button>
                 </StackPanel>
-            </Border>
+                <TreeView x:Name="treeView" ItemsSource="{Binding Contracts}" SelectedItemChanged="treeView_SelectedItemChanged_1">
+                    <!-- Контракты -->
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate DataType="{x:Type local:Contract}" ItemsSource="{Binding Areas}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Контракт№ " />
+                                <TextBlock Text="{Binding ContractID}" />
+                            </StackPanel>
+                            <!-- Площади -->
+                            <HierarchicalDataTemplate.ItemTemplate>
+                                <HierarchicalDataTemplate DataType="{x:Type local:Area}" ItemsSource="{Binding Profiles}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Площадь: " />
+                                        <TextBlock Text="{Binding AreaName}" />
+                                    </StackPanel>
+                                    <!-- Профили -->
+                                    <HierarchicalDataTemplate.ItemTemplate>
+                                        <HierarchicalDataTemplate DataType="{x:Type local:Profile}" ItemsSource="{Binding Pickets}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="Профиль: " />
+                                                <TextBlock Text="{Binding ProfileName}" />
+                                            </StackPanel>
+                                            <!-- Пикеты -->
+                                            <HierarchicalDataTemplate.ItemTemplate>
+                                                <DataTemplate DataType="{x:Type local:Picket}">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="Пиект№ " />
+                                                        <TextBlock Text="{Binding PicketID}" />
+                                                    </StackPanel>
 
-            <!-- Второй столбец -->
-            <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="2" Margin="2" CornerRadius="5" Background="LightGray">
-                <StackPanel Orientation="Vertical">
+                                                </DataTemplate>
+                                            </HierarchicalDataTemplate.ItemTemplate>
+                                        </HierarchicalDataTemplate>
+                                    </HierarchicalDataTemplate.ItemTemplate>
+                                </HierarchicalDataTemplate>
+                            </HierarchicalDataTemplate.ItemTemplate>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+            </StackPanel>
+        </Border>
+
+        
+            
+        <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="2" Margin="2" CornerRadius="5" Background="LightGray">
+            
+            <Grid>
+                <StackPanel Grid.Row="0"  Orientation="Vertical">
 
                     <StackPanel Orientation="Horizontal" VerticalAlignment="top" >
                         <Button x:Name="BtnInfo" Height="20" Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnInfo_Click">
@@ -157,165 +154,208 @@
                     <Label x:Name="LabelLogin" Content="User:Login" FontSize="12" HorizontalContentAlignment="Right" Margin="0 0 20 0">
 
                     </Label>
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Height="500">
-                        <StackPanel Orientation="Vertical" >
-                            <Label Name="infoLabel" HorizontalContentAlignment="Center">Информация о выбранном проекте</Label>
-                            <Label Name="infoContractId" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
-                            <Label Name="infoContractName" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
-                            <Label Name="infoContractDate" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
-                            <Label Name="infoContractServiceDescription" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
-                            <Label Name="infoContractCustomerinfo" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
-
-                            <Label Name="infoAreaID" HorizontalContentAlignment="Left" Visibility="Collapsed">Информация о выбранном проекте</Label>
-                            <Label Name="infoAreaName" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
-                            <Label Name="infoContractID" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
-
-
-                            <Label  Name="labelPicketsHeader" Content="Пикеты выбранного профиля" Visibility="Collapsed" HorizontalAlignment="Center"></Label>
-                            <ListView Name="listViewPickets"  Visibility="Collapsed " Height="200">
-                                <ListView.View>
-                                    <GridView>
-                                        <GridViewColumn Header="ID" Width="30" DisplayMemberBinding="{Binding PicketID}">
-
-                                        </GridViewColumn>
-                                        <GridViewColumn Header="X" Width="60" DisplayMemberBinding="{Binding CoordinateX}">
-
-                                        </GridViewColumn>
-                                        <GridViewColumn Header="Y" Width="60" DisplayMemberBinding="{Binding CoordinateY}">
-
-                                        </GridViewColumn>
-                                        <GridViewColumn Header="Канал 1" Width="60" DisplayMemberBinding="{Binding Channel1}">
-
-                                        </GridViewColumn>
-                                        <GridViewColumn Header="Канал 2" Width="60" DisplayMemberBinding="{Binding Channel2}">
-
-                                        </GridViewColumn>
-                                        <GridViewColumn Header="Канал 3" Width="60" DisplayMemberBinding="{Binding Channel3}">
-
-                                        </GridViewColumn>
-                                    </GridView>
-                                </ListView.View>
-                            </ListView>
-                            <Label  Name="labelProfilesHeader" Content="Профили выбранной площади" Visibility="Collapsed" HorizontalAlignment="Center"></Label>
-                            <ListView Name="listViewProfile" Visibility="Collapsed" Height="200">
-                                <ListView.View>
-                                    <GridView>
-                                        <GridViewColumn Header="ID" Width="30" DisplayMemberBinding="{Binding ProfileID}">
-
-                                        </GridViewColumn>
-                                        <GridViewColumn Header="Название профиля" Width="120" DisplayMemberBinding="{Binding ProfileName}">
-
-                                        </GridViewColumn>
-                                        <GridViewColumn Header="Тип профиля" Width="120" DisplayMemberBinding="{Binding ProfileType}">
-
-                                        </GridViewColumn>
-                                    </GridView>
-                                </ListView.View>
-                            </ListView>
-                            <Label  Name="labelAreaHeader" Content="Площади выбранного контракта" Visibility="Collapsed" HorizontalAlignment="Center"></Label>
-                            <ListView Name="listViewArea"  Visibility="Collapsed" Height="200">
-                                <ListView.View>
-                                    <GridView>
-                                        <GridViewColumn Header="ID" Width="30" DisplayMemberBinding="{Binding AreaID}">
-
-                                        </GridViewColumn>
-                                        <GridViewColumn Header="Имя площади" Width="120" DisplayMemberBinding="{Binding AreaName}">
-
-                                        </GridViewColumn>
-
-                                    </GridView>
-                                </ListView.View>
-                            </ListView>
-                            <Label  Name="labelProfileCoordinatesHeader" Content="Коорднаты выбранного профиля" Visibility="Collapsed" HorizontalAlignment="Center"></Label>
-                            <ListView Name="listViewProfileCoordinates"  Visibility="Collapsed" Height="200">
-                                <ListView.View>
-                                    <GridView>
-                                        <GridViewColumn Header="ID" Width="30" DisplayMemberBinding="{Binding ProfileCoordinatesID}">
-
-                                        </GridViewColumn>
-                                        <GridViewColumn Header="X" Width="80" DisplayMemberBinding="{Binding X}">
-
-                                        </GridViewColumn>
-                                        <GridViewColumn Header="Y" Width="80" DisplayMemberBinding="{Binding X}">
-
-                                        </GridViewColumn>
-
-                                    </GridView>
-                                </ListView.View>
-                            </ListView>
-
-                            <Label  Name="labelAreaCoordinatesHeader" Content="Коорднаты выбранной площади" Visibility="Collapsed" HorizontalAlignment="Center"></Label>
-                            <ListView Name="listViewAreaCoordinates"  Visibility="Collapsed" Height="200">
-                                <ListView.View>
-                                    <GridView>
-                                        <GridViewColumn Header="ID" Width="30" DisplayMemberBinding="{Binding AreaCoordinatesID}">
-
-                                        </GridViewColumn>
-                                        <GridViewColumn Header="X" Width="80" DisplayMemberBinding="{Binding X}">
-
-                                        </GridViewColumn>
-                                        <GridViewColumn Header="Y" Width="80" DisplayMemberBinding="{Binding Y}">
-
-                                        </GridViewColumn>
-
-                                    </GridView>
-                                </ListView.View>
-                            </ListView>
-                            <Label  Name="labelOperatorsHeader" Content="Операторы этого выбранного элемента" HorizontalAlignment="Center" Visibility="Visible"  ></Label>
-                            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                                <ListView Name="listViewOperators" Height="120" Visibility="Visible">
-                                    <ListView.View>
-                                        <GridView>
-                                            <GridViewColumn Header="ID оператора" DisplayMemberBinding="{Binding OperatorID}"/>
-                                            <GridViewColumn Header="ФИО" DisplayMemberBinding="{Binding FullName}"/>
-                                            <GridViewColumn Header="Электронная почта" DisplayMemberBinding="{Binding Email}"/>
-                                            <GridViewColumn Header="Номер телефона" DisplayMemberBinding="{Binding PhoneNumber}"/>
-                                            <GridViewColumn Header="Название работы" DisplayMemberBinding="{Binding JobTitle}"/>
-                                        </GridView>
-                                    </ListView.View>
-                                </ListView>
-                            </ScrollViewer>
-
-                            <Label  Name="labelAnalystHeader" Content="Аналитики этого контракта" HorizontalAlignment="Center" Visibility="Collapsed"></Label>
-
-                            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                                <ListView  Name="listViewAnalysts"  Height="120" Visibility="Collapsed" >
-
-                                    <ListView.View>
-
-                                        <GridView>
-
-                                            <GridViewColumn Header="ID Аналитика" DisplayMemberBinding="{Binding AnalystID}">
-
-                                            </GridViewColumn>
-                                            <GridViewColumn Header="ФИО" DisplayMemberBinding="{Binding FullName}">
-
-                                            </GridViewColumn>
-                                            <GridViewColumn Header="Электронная почта" DisplayMemberBinding="{Binding Email}">
-
-                                            </GridViewColumn>
-                                            <GridViewColumn Header="Номер телефона" DisplayMemberBinding="{Binding PhoneNumber}">
-
-                                            </GridViewColumn>
-
-                                            <GridViewColumn Header="Название работы" DisplayMemberBinding="{Binding JobTitle}">
-
-                                            </GridViewColumn>
-
-                                        </GridView>
-                                    </ListView.View>
-                                </ListView>
-                            </ScrollViewer>
-                        </StackPanel>
-
-                    </ScrollViewer>
+                  
 
 
 
                 </StackPanel>
-            </Border>
-        </Grid>
+                <ScrollViewer  Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" >
+                    <StackPanel Orientation="Vertical" >
+                        <Label Name="infoLabel" HorizontalContentAlignment="Center">Информация о выбранном проекте</Label>
+
+                        <Label Name="infoContractId" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
+                        <Label Name="infoContractDate" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
+                        <Label Name="infoContractServiceDescription" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
+                        <TextBlock Margin="6 0 0 0" Name="infoContractCustomerinfo"    Visibility="Collapsed">Информация о выбранном проекте</TextBlock>
+
+                        <Label Name="infoAreaID" HorizontalContentAlignment="Left" Visibility="Collapsed">Информация о выбранном проекте</Label>
+                        <Label Name="infoAreaName" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
+                        <Label Name="infoContractID" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
+
+                        <Label Name="infoProfileID" HorizontalContentAlignment="Left" Visibility="Collapsed">Информация о выбранном проекте</Label>
+                        <Label Name="infoProfileName" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
+                        <Label Name="infoProfileType" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
+                        <Label Name="infoArea" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
+
+                        <Label Name="infoPicketID" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
+                        <Label Name="infoCoordinate" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
+                        <Label Name="infoChannel" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
+                        <Label Name="infoProfile" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
+                        <Label Name="infoGammaSpectrometer" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
 
 
 
+
+
+
+
+                        <Label  Name="labelPicketsHeader" Content="Пикеты выбранного профиля" Visibility="Collapsed" HorizontalAlignment="Center"></Label>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+
+                            <ListView Name="listViewPickets"  Visibility="Collapsed " Height="120">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding PicketID}">
+
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="X"  DisplayMemberBinding="{Binding CoordinateX}">
+
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Y" DisplayMemberBinding="{Binding CoordinateY}">
+
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Канал 1" DisplayMemberBinding="{Binding Channel1}">
+
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Канал 2"  DisplayMemberBinding="{Binding Channel2}">
+
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Канал 3"  DisplayMemberBinding="{Binding Channel3}">
+
+                                        </GridViewColumn>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </ScrollViewer>
+
+                        <Label  Name="labelProfilesHeader" Content="Профили выбранной площади" Visibility="Collapsed" HorizontalAlignment="Center"></Label>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+
+                            <ListView Name="listViewProfile" Visibility="Collapsed" Height="120">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ProfileID}">
+
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Название профиля" DisplayMemberBinding="{Binding ProfileName}">
+
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Тип профиля"  DisplayMemberBinding="{Binding ProfileType}">
+
+                                        </GridViewColumn>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </ScrollViewer>
+
+                        <Label  Name="labelAreaHeader" Content="Площади выбранного контракта" Visibility="Collapsed" HorizontalAlignment="Center"></Label>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+
+                            <ListView Name="listViewArea"  Visibility="Collapsed" Height="120">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="ID"  DisplayMemberBinding="{Binding AreaID}">
+
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Имя площади"  DisplayMemberBinding="{Binding AreaName}">
+
+                                        </GridViewColumn>
+
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </ScrollViewer>
+
+                        <Label  Name="labelProfileCoordinatesHeader" Content="Коорднаты выбранного профиля" Visibility="Collapsed" HorizontalAlignment="Center"></Label>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                            <ListView Name="listViewProfileCoordinates"  Visibility="Collapsed" Height="120">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ProfileCoordinatesID}">
+
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="X" DisplayMemberBinding="{Binding X}">
+
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Y"  DisplayMemberBinding="{Binding X}">
+
+                                        </GridViewColumn>
+
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+
+                        </ScrollViewer>
+
+                        <Label  Name="labelAreaCoordinatesHeader" Content="Коорднаты выбранной площади" Visibility="Collapsed" HorizontalAlignment="Center"></Label>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                            <ListView Name="listViewAreaCoordinates"  Visibility="Collapsed" Height="120">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding AreaCoordinatesID}">
+
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="X"  DisplayMemberBinding="{Binding X}">
+
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Y"  DisplayMemberBinding="{Binding Y}">
+
+                                        </GridViewColumn>
+
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </ScrollViewer>
+
+
+                        <Label  Name="labelOperatorsHeader" Content="Операторы этого выбранного элемента" HorizontalAlignment="Center" Visibility="Visible"  ></Label>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                            <ListView Name="listViewOperators" Height="120" Visibility="Visible">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="ID оператора" DisplayMemberBinding="{Binding OperatorID}"/>
+                                        <GridViewColumn Header="ФИО" DisplayMemberBinding="{Binding FullName}"/>
+                                        <GridViewColumn Header="Электронная почта" DisplayMemberBinding="{Binding Email}"/>
+                                        <GridViewColumn Header="Номер телефона" DisplayMemberBinding="{Binding PhoneNumber}"/>
+                                        <GridViewColumn Header="Название работы" DisplayMemberBinding="{Binding JobTitle}"/>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </ScrollViewer>
+
+                        <Label  Name="labelAnalystHeader" Content="Аналитики этого контракта" HorizontalAlignment="Center" Visibility="Collapsed"></Label>
+
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                            <ListView  Name="listViewAnalysts"  Height="120" Visibility="Collapsed" >
+
+                                <ListView.View>
+
+                                    <GridView>
+
+                                        <GridViewColumn Header="ID Аналитика" DisplayMemberBinding="{Binding AnalystID}">
+
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="ФИО" DisplayMemberBinding="{Binding FullName}">
+
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Электронная почта" DisplayMemberBinding="{Binding Email}">
+
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Номер телефона" DisplayMemberBinding="{Binding PhoneNumber}">
+
+                                        </GridViewColumn>
+
+                                        <GridViewColumn Header="Название работы" DisplayMemberBinding="{Binding JobTitle}">
+
+                                        </GridViewColumn>
+
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </ScrollViewer>
+                    </StackPanel>
+
+                </ScrollViewer>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <!-- Кнопки -->
+                    <RowDefinition Height="*"/>
+                    <!-- ScrollViewer (вся оставшаяся высота) -->
+                </Grid.RowDefinitions>
+            </Grid>
+            
+        </Border>
+     
+
+    </Grid>
 </Page>

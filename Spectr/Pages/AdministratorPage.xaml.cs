@@ -118,104 +118,163 @@ namespace Spectr
 
         private void treeView_SelectedItemChanged_1(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
+            ResetVisibility();
+
             if (treeView.SelectedItem is Contract selectedContract)
             {
+                infoLabel.Content = $"Информация о контракте {selectedContract.ContractID}";
                 listViewArea.ItemsSource = selectedContract.Areas;
 
                 listViewAnalysts.ItemsSource = selectedContract.ContractAnalysts
-               .Select(ca => ca.Analyst)
-               .Distinct()
-               .ToList();
+                   .Select(ca => ca.Analyst)
+                   .Distinct()
+                   .ToList();
 
                 List<Operator> allOperators = selectedContract.Areas
-              .SelectMany(a => a.Profiles)
-              .SelectMany(p => p.Pickets)
-              .Select(pk => pk.Operator)
-              .Distinct()
-              .ToList();
+                   .SelectMany(a => a.Profiles)
+                   .SelectMany(p => p.Pickets)
+                   .Select(pk => pk.Operator)
+                   .Distinct()
+                   .ToList();
 
                 listViewOperators.ItemsSource = allOperators;
 
+                infoContractId.Visibility = Visibility.Visible;
+                infoContractId.Content = $"ID: {selectedContract.ContractID}";
 
-                ResetVisibility();
+                infoContractDate.Visibility = Visibility.Visible;
+                infoContractDate.Content = $"Дата заключения контракта: {selectedContract.StartDate.ToShortDateString()}   Дата завершения контракта: {selectedContract.EndDate.ToShortDateString()}";
+
+                infoContractServiceDescription.Visibility = Visibility.Visible;
+                infoContractServiceDescription.Content = $"Описание услуги: {selectedContract.ServiceDescription}";
+
+                infoContractCustomerinfo.Visibility = Visibility.Visible;
+                infoContractCustomerinfo.Text = $"Заказчик: Компания {selectedContract.Customer.CompanyName}\nКонтактное лицо:{selectedContract.Customer.ContactPerson}\nНомер телефона:{selectedContract.Customer.PhoneNumber}\nЭлектронная почта:{selectedContract.Customer.Email}";
 
                 labelAnalystHeader.Visibility = Visibility.Visible;
-                labelAnalystHeader.Content = $"Аналитики Контракта:{selectedContract.ContractID}";
+                labelAnalystHeader.Content = $"Аналитики Контракта: {selectedContract.ContractID}";
+
                 labelAreaHeader.Visibility = Visibility.Visible;
-                labelAreaHeader.Content = $"Площади Контракта:{selectedContract.ContractID}";
+                labelAreaHeader.Content = $"Площади Контракта: {selectedContract.ContractID}";
+
+                labelOperatorsHeader.Visibility = Visibility.Visible;
+                labelOperatorsHeader.Content = $"Операторы задействованные в контракте: {selectedContract.ContractID}";
+
                 listViewArea.Visibility = Visibility.Visible;
                 listViewAnalysts.Visibility = Visibility.Visible;
-                labelOperatorsHeader.Content = $"Операторы задействованные в выполнении Контракта:{selectedContract.ContractID}";
+                listViewOperators.Visibility = Visibility.Visible;
 
                 listViewAnalysts.Items.Refresh();
                 listViewArea.Items.Refresh();
                 listViewOperators.Items.Refresh();
             }
-            if (treeView.SelectedItem is Area selecteArea)
+            else if (treeView.SelectedItem is Area selectedArea)
             {
-                listViewProfile.ItemsSource = selecteArea.Profiles;
-                listViewAreaCoordinates.ItemsSource = selecteArea.AreaCoordinates;
-                List<Operator> allOperators = selecteArea.Profiles
-               .SelectMany(p => p.Pickets)
-               .Select(pk => pk.Operator)
-               .Distinct()
-               .ToList();
+                infoLabel.Content = $"Информация о Площади {selectedArea.AreaName}, {selectedArea.AreaID}";
+                listViewProfile.ItemsSource = selectedArea.Profiles;
+                listViewAreaCoordinates.ItemsSource = selectedArea.AreaCoordinates;
+
+                List<Operator> allOperators = selectedArea.Profiles
+                   .SelectMany(p => p.Pickets)
+                   .Select(pk => pk.Operator)
+                   .Distinct()
+                   .ToList();
 
                 listViewOperators.ItemsSource = allOperators;
 
-                ResetVisibility();
-                
-                listViewProfile.Visibility = Visibility.Visible;
+                infoAreaID.Visibility = Visibility.Visible;
+                infoAreaID.Content = $"ID: {selectedArea.AreaID}";
+
+                infoAreaName.Visibility = Visibility.Visible;
+                infoAreaName.Content = $"Название: {selectedArea.AreaName}";
+
                 labelProfilesHeader.Visibility = Visibility.Visible;
-                labelProfilesHeader.Content = $"Профили Площади:{selecteArea.AreaName},{selecteArea.AreaID}";
+                labelProfilesHeader.Content = $"Профили Площади: {selectedArea.AreaName}, {selectedArea.AreaID}";
+
                 labelAreaCoordinatesHeader.Visibility = Visibility.Visible;
-                labelAreaCoordinatesHeader.Content = $"Координаты Площади:{selecteArea.AreaName},{selecteArea.AreaID}";
+                labelAreaCoordinatesHeader.Content = $"Координаты Площади: {selectedArea.AreaName}, {selectedArea.AreaID}";
+
+                labelOperatorsHeader.Visibility = Visibility.Visible;
+                labelOperatorsHeader.Content = $"Операторы на Площади: {selectedArea.AreaName}, {selectedArea.AreaID}";
+
+                listViewProfile.Visibility = Visibility.Visible;
                 listViewAreaCoordinates.Visibility = Visibility.Visible;
-                labelOperatorsHeader.Content = $"Операторы задействованные на Площади:{selecteArea.AreaName},{selecteArea.AreaID}";
+                listViewOperators.Visibility = Visibility.Visible;
 
                 listViewProfile.Items.Refresh();
                 listViewAreaCoordinates.Items.Refresh();
                 listViewOperators.Items.Refresh();
             }
-            if (treeView.SelectedItem is Profile selectedProfile)
+            else if (treeView.SelectedItem is Profile selectedProfile)
             {
-                
+                infoLabel.Content = $"Информация о Профиле {selectedProfile.ProfileName}, {selectedProfile.ProfileID}";
                 listViewPickets.ItemsSource = selectedProfile.Pickets;
                 listViewProfileCoordinates.ItemsSource = selectedProfile.ProfileCoordinates;
+
                 List<Operator> allOperators = selectedProfile.Pickets
-                .Select(pk => pk.Operator)
-                .Distinct()
-                .ToList();
+                   .Select(pk => pk.Operator)
+                   .Distinct()
+                   .ToList();
 
                 listViewOperators.ItemsSource = allOperators;
 
-                ResetVisibility();
+                infoProfileID.Visibility = Visibility.Visible;
+                infoProfileID.Content = $"ID: {selectedProfile.ProfileID}";
+
+                infoProfileName.Visibility = Visibility.Visible;
+                infoProfileName.Content = $"Название: {selectedProfile.ProfileName}";
+
+                infoProfileType.Visibility = Visibility.Visible;
+                infoProfileType.Content = $"Тип: {selectedProfile.ProfileType}";
+
+                labelPicketsHeader.Visibility = Visibility.Visible;
+                labelPicketsHeader.Content = $"Пикеты Профиля: {selectedProfile.ProfileName}, {selectedProfile.ProfileID}";
+
+                labelProfilesHeader.Visibility = Visibility.Visible;
+                labelProfilesHeader.Content = $"Координаты Профиля: {selectedProfile.ProfileName}, {selectedProfile.ProfileID}";
+
+                labelOperatorsHeader.Visibility = Visibility.Visible;
+                labelOperatorsHeader.Content = $"Операторы на Профиле: {selectedProfile.ProfileName}, {selectedProfile.ProfileID}";
 
                 listViewPickets.Visibility = Visibility.Visible;
                 listViewProfileCoordinates.Visibility = Visibility.Visible;
-                labelPicketsHeader.Visibility = Visibility.Visible;
-                labelPicketsHeader.Content = $"Пикеты Профиля:{selectedProfile.ProfileName},{selectedProfile.ProfileID}";
-                labelProfilesHeader.Visibility =Visibility.Visible;
-                labelProfilesHeader.Content = $"Координаты Профиля:{selectedProfile.ProfileName},{selectedProfile.ProfileID}";
-                labelOperatorsHeader.Content = $"Операторы задействованные на Профиле:{selectedProfile.ProfileName},{selectedProfile.ProfileID}";
-
+                listViewOperators.Visibility = Visibility.Visible;
 
                 listViewPickets.Items.Refresh();
                 listViewProfileCoordinates.Items.Refresh();
                 listViewOperators.Items.Refresh();
             }
-            if (treeView.SelectedItem is Picket selectedPicket)
+            else if (treeView.SelectedItem is Picket selectedPicket)
             {
-                ResetVisibility();
-                listViewPickets.Items.Refresh();
+                infoLabel.Content = $"Информация о Пикете {selectedPicket.PicketID}";
+
+                infoPicketID.Visibility = Visibility.Visible;
+                infoPicketID.Content = $"ID: {selectedPicket.PicketID}";
+
+                infoCoordinate.Visibility = Visibility.Visible;
+                infoCoordinate.Content = $"Координата Х: {selectedPicket.CoordinateX} Координата Y: {selectedPicket.CoordinateY}";
+
+                infoChannel.Visibility = Visibility.Visible;
+                infoChannel.Content = $"Канал 1: {selectedPicket.Channel1} Канал 2: {selectedPicket.Channel2} Канал 3: {selectedPicket.Channel3}";
+
+                infoProfile.Visibility = Visibility.Visible;
+                infoProfile.Content = $"Профиль: {selectedPicket.Profile.ProfileName}";
+
+                infoGammaSpectrometer.Visibility = Visibility.Visible;
+                infoGammaSpectrometer.Content = $"Гамма-спектрометр: {selectedPicket.GammaSpectrometer}";
 
                 List<Operator> allOperators = new List<Operator> { selectedPicket.Operator };
-                labelOperatorsHeader.Content = $"Оператор пикета:{selectedPicket.PicketID}";
+
+                labelOperatorsHeader.Visibility = Visibility.Visible;
+                labelOperatorsHeader.Content = $"Оператор пикета: {selectedPicket.PicketID}";
+
                 listViewOperators.ItemsSource = allOperators;
+                listViewOperators.Visibility = Visibility.Visible;
+
                 listViewOperators.Items.Refresh();
             }
+
             Debug.WriteLine(1);
-           
         }
         private void ResetVisibility()
         {
@@ -225,15 +284,35 @@ namespace Spectr
             listViewAnalysts.Visibility = Visibility.Collapsed;
             listViewProfileCoordinates.Visibility = Visibility.Collapsed;
             listViewAreaCoordinates.Visibility = Visibility.Collapsed;
-            
-            
+
             labelPicketsHeader.Visibility = Visibility.Collapsed;
             labelProfilesHeader.Visibility = Visibility.Collapsed;
             labelAreaHeader.Visibility = Visibility.Collapsed;
             labelProfileCoordinatesHeader.Visibility = Visibility.Collapsed;
             labelAreaCoordinatesHeader.Visibility = Visibility.Collapsed;
             labelAnalystHeader.Visibility = Visibility.Collapsed;
+
+            infoContractId.Visibility = Visibility.Collapsed;
+            infoContractDate.Visibility = Visibility.Collapsed;
+            infoContractServiceDescription.Visibility = Visibility.Collapsed;
+            infoContractCustomerinfo.Visibility = Visibility.Collapsed;
+
+            infoAreaID.Visibility = Visibility.Collapsed;
+            infoAreaName.Visibility = Visibility.Collapsed;
+            infoContractID.Visibility = Visibility.Collapsed;
+
+            infoProfileID.Visibility = Visibility.Collapsed;
+            infoProfileName.Visibility = Visibility.Collapsed;
+            infoProfileType.Visibility = Visibility.Collapsed;
+            infoArea.Visibility = Visibility.Collapsed;
+
+            infoPicketID.Visibility = Visibility.Collapsed;
+            infoCoordinate.Visibility = Visibility.Collapsed;
+            infoChannel.Visibility = Visibility.Collapsed;
+            infoProfile.Visibility = Visibility.Collapsed;
+            infoGammaSpectrometer.Visibility = Visibility.Collapsed;
         }
+
 
     }
 }

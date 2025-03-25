@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Spectr"
         mc:Ignorable="d"
-        Title="MainWindow" Height="650" Width="825">
+        Title="MainWindow" Height="650" Width="925">
     <Grid>
         <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden">
             

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 
 namespace Spectr.Data
 {
@@ -109,14 +110,27 @@ namespace Spectr.Data
         public List<ContractAnalyst> ContractAnalysts { get; set; }
     }
 
-    public class Area
+    public class Area : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
         [Key]
         public int AreaID { get; set; }
 
+        private string _areaName;
         [Required]
         [MaxLength(255)]
-        public string AreaName { get; set; }
+        public string AreaName
+        {
+            get => _areaName;
+            set
+            {
+                _areaName = value;
+                OnPropertyChanged(nameof(AreaName));
+            }
+        }
 
         [ForeignKey("Contract")]
         public int ContractID { get; set; }
@@ -126,34 +140,78 @@ namespace Spectr.Data
         public List<Profile> Profiles { get; set; }
     }
 
-    public class AreaCoordinates
+    public class AreaCoordinates : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
         [Key]
         public int AreaCoordinatesID { get; set; }
 
+        private float _x;
         [Required]
-        public float X { get; set; }
+        public float X
+        {
+            get => _x;
+            set
+            {
+                _x = value;
+                OnPropertyChanged(nameof(X));
+            }
+        }
 
+        private float _y;
         [Required]
-        public float Y { get; set; }
+        public float Y
+        {
+            get => _y;
+            set
+            {
+                _y = value;
+                OnPropertyChanged(nameof(Y));
+            }
+        }
 
         [ForeignKey("Area")]
         public int AreaID { get; set; }
         public Area Area { get; set; }
     }
 
-    public class Profile
+    public class Profile : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
         [Key]
         public int ProfileID { get; set; }
 
+        private string _profileName;
         [Required]
         [MaxLength(255)]
-        public string ProfileName { get; set; }
+        public string ProfileName
+        {
+            get => _profileName;
+            set
+            {
+                _profileName = value;
+                OnPropertyChanged(nameof(ProfileName));
+            }
+        }
 
+        private string _profileType;
         [Required]
         [MaxLength(100)]
-        public string ProfileType { get; set; }
+        public string ProfileType
+        {
+            get => _profileType;
+            set
+            {
+                _profileType = value;
+                OnPropertyChanged(nameof(ProfileType));
+            }
+        }
 
         [ForeignKey("Area")]
         public int AreaID { get; set; }
@@ -161,19 +219,40 @@ namespace Spectr.Data
 
         public List<ProfileCoordinates> ProfileCoordinates { get; set; }
         public List<Picket> Pickets { get; set; }
-        public List<ProfileOperator> ProfileOperators { get; set; }
     }
 
-    public class ProfileCoordinates
+    public class ProfileCoordinates : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
         [Key]
         public int ProfileCoordinatesID { get; set; }
 
+        private float _x;
         [Required]
-        public float X { get; set; }
+        public float X
+        {
+            get => _x;
+            set
+            {
+                _x = value;
+                OnPropertyChanged(nameof(X));
+            }
+        }
 
+        private float _y;
         [Required]
-        public float Y { get; set; }
+        public float Y
+        {
+            get => _y;
+            set
+            {
+                _y = value;
+                OnPropertyChanged(nameof(Y));
+            }
+        }
 
         [ForeignKey("Profile")]
         public int ProfileID { get; set; }
@@ -232,20 +311,72 @@ namespace Spectr.Data
         public List<Picket> Pickets { get; set; }
     }
 
-    public class Picket
+    public class Picket : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
         [Key]
         public int PicketID { get; set; }
 
-        [Required]
-        public float CoordinateX { get; set; }
+        private float _coordinateX;
+        private float _coordinateY;
+        private float? _channel1;
+        private float? _channel2;
+        private float? _channel3;
 
         [Required]
-        public float CoordinateY { get; set; }
+        public float CoordinateX
+        {
+            get => _coordinateX;
+            set
+            {
+                _coordinateX = value;
+                OnPropertyChanged(nameof(CoordinateX));
+            }
+        }
 
-        public float? Channel1 { get; set; }
-        public float? Channel2 { get; set; }
-        public float? Channel3 { get; set; }
+        [Required]
+        public float CoordinateY
+        {
+            get => _coordinateY;
+            set
+            {
+                _coordinateY = value;
+                OnPropertyChanged(nameof(CoordinateY));
+            }
+        }
+
+        public float? Channel1
+        {
+            get => _channel1;
+            set
+            {
+                _channel1 = value;
+                OnPropertyChanged(nameof(Channel1));
+            }
+        }
+
+        public float? Channel2
+        {
+            get => _channel2;
+            set
+            {
+                _channel2 = value;
+                OnPropertyChanged(nameof(Channel2));
+            }
+        }
+
+        public float? Channel3
+        {
+            get => _channel3;
+            set
+            {
+                _channel3 = value;
+                OnPropertyChanged(nameof(Channel3));
+            }
+        }
 
         [ForeignKey("Profile")]
         public int ProfileID { get; set; }
@@ -259,6 +390,7 @@ namespace Spectr.Data
         public int SpectrometerID { get; set; }
         public GammaSpectrometer GammaSpectrometer { get; set; }
     }
+
     [Index(nameof(AnalystLogin), IsUnique = true)]
     public class Analyst
     {

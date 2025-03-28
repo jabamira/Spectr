@@ -192,30 +192,56 @@
                         <Label  Name="labelPicketsHeader" Content="Пикеты выбранного профиля" Visibility="Collapsed" HorizontalAlignment="Center"></Label>
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
 
-                            <ListView Name="listViewPickets"  Visibility="Collapsed " Height="120">
+                            <ListView Name="listViewPickets" Height="120" ItemsSource="{Binding Pickets}" Visibility="Collapsed">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding PicketID}">
+                                        <GridViewColumn Header="ID" Width="40" DisplayMemberBinding="{Binding PicketID}" />
 
+                                        <GridViewColumn Header="X">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding CoordinateX, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}"   LostFocus="TextBox_LostFocus" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn Header="X"  DisplayMemberBinding="{Binding CoordinateX}">
 
+                                        <GridViewColumn Header="Y">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding CoordinateY, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}"  LostFocus="TextBox_LostFocus" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn Header="Y" DisplayMemberBinding="{Binding CoordinateY}">
 
+                                        <GridViewColumn Header="Канал 1">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding Channel1, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}"   LostFocus="TextBox_LostFocus"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn Header="Канал 1" DisplayMemberBinding="{Binding Channel1}">
 
+                                        <GridViewColumn Header="Канал 2">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding Channel2, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}"  LostFocus="TextBox_LostFocus" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn Header="Канал 2"  DisplayMemberBinding="{Binding Channel2}">
 
+                                        <GridViewColumn Header="Канал 3">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding Channel3, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"  />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn Header="Канал 3"  DisplayMemberBinding="{Binding Channel3}">
 
-                                        </GridViewColumn>
+
                                     </GridView>
                                 </ListView.View>
                             </ListView>
+
                         </ScrollViewer>
 
                         <Label  Name="labelProfilesHeader" Content="Профили выбранной площади" Visibility="Collapsed" HorizontalAlignment="Center"></Label>
@@ -278,24 +304,28 @@
                         </ScrollViewer>
 
                         <Label  Name="labelAreaCoordinatesHeader" Content="Коорднаты выбранной площади" Visibility="Collapsed" HorizontalAlignment="Center"></Label>
-                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                            <ListView Name="listViewAreaCoordinates"  Visibility="Collapsed" Height="120">
-                                <ListView.View>
-                                    <GridView>
-                                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding AreaCoordinatesID}">
 
-                                        </GridViewColumn>
-                                        <GridViewColumn Header="X"  DisplayMemberBinding="{Binding X}">
+                        <ListView Name="listViewAreaCoordinates" ItemsSource="{Binding AreaCoordinates}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="X">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBox Text="{Binding X, StringFormat=F5, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Y">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBox Text="{Binding Y,StringFormat=F5, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
 
-                                        </GridViewColumn>
-                                        <GridViewColumn Header="Y"  DisplayMemberBinding="{Binding Y}">
-
-                                        </GridViewColumn>
-
-                                    </GridView>
-                                </ListView.View>
-                            </ListView>
-                        </ScrollViewer>
 
 
                         <Label  Name="labelOperatorsHeader" Content="Операторы этого выбранного элемента" HorizontalAlignment="Center" Visibility="Visible"  ></Label>

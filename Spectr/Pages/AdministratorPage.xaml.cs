@@ -17,7 +17,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Contract = Spectr.Data.Contract;
-
+using Spectr.Db;
 namespace Spectr
 {
     /// <summary>
@@ -26,44 +26,18 @@ namespace Spectr
     public partial class AdministratorPage : Page
     {
         Administrator Administrator;
-
+        Db_Helper dbHelper;
+        
         public AdministratorPage(Administrator administrator)
         {
             Administrator = administrator;
-         
             InitializeComponent();
             LabelLogin.Content = administrator.AdministratorLogin;
-            LoadContracts();
+            dbHelper = new();
+            dbHelper.LoadContract();
+            treeView.ItemsSource = dbHelper.contracts;
         }
-        private void LoadContracts()
-        {
-            using (ApplicationContext _context = new ApplicationContext())
-            {
-                var contracts = _context.Contracts
-                    .Include(c => c.Customer)
-                    .Include(c => c.Administrator)
-                    .Include(c => c.Areas)
-                        .ThenInclude(a => a.AreaCoordinates) // Включаем координаты зон
-                    .Include(c => c.Areas)
-                        .ThenInclude(a => a.Profiles)
-                            .ThenInclude(p => p.ProfileCoordinates) // Включаем координаты профилей
-                    .Include(c => c.Areas)
-                        .ThenInclude(a => a.Profiles)
-                            .ThenInclude(p => p.Pickets) // Включаем пикеты
-                                .ThenInclude(pk => pk.Operator)
-                    .Include(c => c.ContractAnalysts) // Включаем связи контракт-аналитик
-                        .ThenInclude(ca => ca.Analyst) // Включаем сами объекты аналитиков
-                    .ToList();
 
-                treeView.ItemsSource = contracts;
-            }
-
-
-
-
-            // Устанавливаем контракты в ItemsSource для TreeView
-
-        }
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
@@ -77,6 +51,11 @@ namespace Spectr
         }
 
         private void BtnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            dbHelper.DeleteProject((object)treeView.SelectedItem);
+            treeView.Items.Refresh();
+        }
+        private void BtnEdit_Click(object sender, RoutedEventArgs e)
         {
 
         }
@@ -101,10 +80,7 @@ namespace Spectr
 
         }
 
-        private void BtnEdit_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+       
 
         private void BtnExport_Click(object sender, RoutedEventArgs e)
         {
@@ -312,6 +288,15 @@ namespace Spectr
             infoProfile.Visibility = Visibility.Collapsed;
             infoGammaSpectrometer.Visibility = Visibility.Collapsed;
         }
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is TextBox textBox && textBox.DataContext is object picket)
+            {
+                dbHelper.SaveProject(picket);
+                
+            }
+        }
+
 
 
     }

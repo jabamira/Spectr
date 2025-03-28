@@ -9,7 +9,8 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-
+using System;
+using System.Diagnostics;
 namespace Spectr.Db
 {
     public class Db_Helper
@@ -75,26 +76,46 @@ namespace Spectr.Db
             if (project == null) return;
 
 
-
+            Debug.WriteLine(project.GetType());
             switch (project)
             {
                 case Contract contract:
                     context.Contracts.Update(contract);
                     context.SaveChanges();
+ 
                     break;
 
                 case Area area:
                     context.Areas.Update(area);
                     context.SaveChanges();
+
                     break;
 
                 case Profile profile:
                     context.Profiles.Update(profile);
                     context.SaveChanges();
+   
                     break;
 
                 case Picket picket:
                     context.Pickets.Update(picket);
+                    context.SaveChanges();
+     
+                    break;
+                case AreaCoordinates areaCoordinate:
+                    context.AreaCoordinates.Update(areaCoordinate);
+                    context.SaveChanges();
+                    break;
+                case ProfileCoordinates profileCoordinate:
+                    context.ProfileCoordinates.Update(profileCoordinate);
+                    context.SaveChanges();
+                    break;
+                case Analyst analyst:
+                    context.Analysts.Update(analyst);
+                    context.SaveChanges();
+                    break;
+                case Operator _operator:
+                    context.Operators.Update(_operator);
                     context.SaveChanges();
                     break;
             }

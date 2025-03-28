@@ -247,56 +247,73 @@
                         <Label  Name="labelProfilesHeader" Content="Профили выбранной площади" Visibility="Collapsed" HorizontalAlignment="Center"></Label>
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
 
-                            <ListView Name="listViewProfile" Visibility="Collapsed" Height="120">
+                            <ListView Name="listViewProfile" Visibility="Collapsed" Height="120" ItemsSource="{Binding Profiles}">
                                 <ListView.View>
                                     <GridView>
                                         <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ProfileID}">
-
+                                           
                                         </GridViewColumn>
-                                        <GridViewColumn Header="Название профиля" DisplayMemberBinding="{Binding ProfileName}">
-
+                                        <GridViewColumn Header="Название профиля">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding ProfileName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn Header="Тип профиля"  DisplayMemberBinding="{Binding ProfileType}">
-
+                                        <GridViewColumn Header="Тип профиля">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding ProfileType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
                                     </GridView>
                                 </ListView.View>
                             </ListView>
+
                         </ScrollViewer>
 
                         <Label  Name="labelAreaHeader" Content="Площади выбранного контракта" Visibility="Collapsed" HorizontalAlignment="Center"></Label>
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
 
-                            <ListView Name="listViewArea"  Visibility="Collapsed" Height="120">
+                            <ListView Name="listViewArea" Visibility="Collapsed" Height="120" ItemsSource="{Binding Areas}">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Header="ID"  DisplayMemberBinding="{Binding AreaID}">
-
+                                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding AreaID}">
+                                            
                                         </GridViewColumn>
-                                        <GridViewColumn Header="Имя площади"  DisplayMemberBinding="{Binding AreaName}">
-
+                                        <GridViewColumn Header="Имя площади">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding AreaName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-
                                     </GridView>
                                 </ListView.View>
                             </ListView>
+
                         </ScrollViewer>
 
                         <Label  Name="labelProfileCoordinatesHeader" Content="Коорднаты выбранного профиля" Visibility="Collapsed" HorizontalAlignment="Center"></Label>
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                            <ListView Name="listViewProfileCoordinates"  Visibility="Collapsed" Height="120">
+                            <ListView Name="listViewProfileCoordinates" ItemsSource="{Binding ProfileCoordinates}">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding ProfileCoordinatesID}">
-
+                                        <GridViewColumn Header="X">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding X, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn Header="X" DisplayMemberBinding="{Binding X}">
-
+                                        <GridViewColumn Header="Y" >
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding Y, UpdateSourceTrigger=PropertyChanged}"  LostFocus="TextBox_LostFocus"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn Header="Y"  DisplayMemberBinding="{Binding X}">
-
-                                        </GridViewColumn>
-
                                     </GridView>
                                 </ListView.View>
                             </ListView>
@@ -333,11 +350,37 @@
                             <ListView Name="listViewOperators" Height="120" Visibility="Visible">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Header="ID оператора" DisplayMemberBinding="{Binding OperatorID}"/>
-                                        <GridViewColumn Header="ФИО" DisplayMemberBinding="{Binding FullName}"/>
-                                        <GridViewColumn Header="Электронная почта" DisplayMemberBinding="{Binding Email}"/>
-                                        <GridViewColumn Header="Номер телефона" DisplayMemberBinding="{Binding PhoneNumber}"/>
-                                        <GridViewColumn Header="Название работы" DisplayMemberBinding="{Binding JobTitle}"/>
+                                        <GridViewColumn Header="ID оператора" DisplayMemberBinding="{Binding OperatorID}">
+                                          
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="ФИО">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Электронная почта">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Номер телефона">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Название работы">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding JobTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
                                     </GridView>
                                 </ListView.View>
                             </ListView>
@@ -346,29 +389,40 @@
                         <Label  Name="labelAnalystHeader" Content="Аналитики этого контракта" HorizontalAlignment="Center" Visibility="Collapsed"></Label>
 
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                            <ListView  Name="listViewAnalysts"  Height="120" Visibility="Collapsed" >
-
+                            <ListView Name="listViewAnalysts" Height="120" Visibility="Collapsed">
                                 <ListView.View>
-
                                     <GridView>
-
                                         <GridViewColumn Header="ID Аналитика" DisplayMemberBinding="{Binding AnalystID}">
-
+                                           
                                         </GridViewColumn>
-                                        <GridViewColumn Header="ФИО" DisplayMemberBinding="{Binding FullName}">
-
+                                        <GridViewColumn Header="ФИО">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn Header="Электронная почта" DisplayMemberBinding="{Binding Email}">
-
+                                        <GridViewColumn Header="Электронная почта">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn Header="Номер телефона" DisplayMemberBinding="{Binding PhoneNumber}">
-
+                                        <GridViewColumn Header="Номер телефона">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-
-                                        <GridViewColumn Header="Название работы" DisplayMemberBinding="{Binding JobTitle}">
-
+                                        <GridViewColumn Header="Название работы">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding JobTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-
                                     </GridView>
                                 </ListView.View>
                             </ListView>

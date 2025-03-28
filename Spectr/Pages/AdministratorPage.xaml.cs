@@ -49,6 +49,7 @@ namespace Spectr
         {
 
         }
+       
 
         private void BtnDelete_Click(object sender, RoutedEventArgs e)
         {
@@ -290,8 +291,10 @@ namespace Spectr
         }
         private void TextBox_LostFocus(object sender, RoutedEventArgs e)
         {
+            Debug.WriteLine("here2");
             if (sender is TextBox textBox && textBox.DataContext is object picket)
             {
+                Debug.WriteLine("here");
                 dbHelper.SaveProject(picket);
                 
             }

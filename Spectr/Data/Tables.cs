@@ -82,19 +82,68 @@ namespace Spectr.Data
         public List<Contract> Contracts { get; set; }
     }
 
-    public class Contract
+    public class Contract : INotifyPropertyChanged
     {
+        private int _contractID;
+        private DateTime _startDate;
+        private DateTime _endDate;
+        private string _serviceDescription;
+
         [Key]
-        public int ContractID { get; set; }
+        public int ContractID
+        {
+            get { return _contractID; }
+            set
+            {
+                if (_contractID != value)
+                {
+                    _contractID = value;
+                    OnPropertyChanged(nameof(ContractID));
+                }
+            }
+        }
 
         [Required]
-        public DateTime StartDate { get; set; }
+        public DateTime StartDate
+        {
+            get { return _startDate; }
+            set
+            {
+                if (_startDate != value)
+                {
+                    _startDate = value;
+                    OnPropertyChanged(nameof(StartDate));
+                }
+            }
+        }
 
         [Required]
-        public DateTime EndDate { get; set; }
+        public DateTime EndDate
+        {
+            get { return _endDate; }
+            set
+            {
+                if (_endDate != value)
+                {
+                    _endDate = value;
+                    OnPropertyChanged(nameof(EndDate));
+                }
+            }
+        }
 
         [Required]
-        public string ServiceDescription { get; set; }
+        public string ServiceDescription
+        {
+            get { return _serviceDescription; }
+            set
+            {
+                if (_serviceDescription != value)
+                {
+                    _serviceDescription = value;
+                    OnPropertyChanged(nameof(ServiceDescription));
+                }
+            }
+        }
 
         [ForeignKey("Customer")]
         public int CustomerID { get; set; }
@@ -106,8 +155,15 @@ namespace Spectr.Data
 
         public List<Area> Areas { get; set; }
 
-        // Связь многие ко многим
         public List<ContractAnalyst> ContractAnalysts { get; set; }
+
+        // INotifyPropertyChanged implementation
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 
     public class Area : INotifyPropertyChanged

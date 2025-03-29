@@ -81,6 +81,7 @@ namespace Spectr.Db
             {
                 case Contract contract:
                     context.Contracts.Update(contract);
+                    Debug.WriteLine( contract.StartDate);
                     context.SaveChanges();
  
                     break;

@@ -3,7 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:Spectr.Data"
+      xmlns:local="clr-namespace:Spectr.Data" d:DataContext="{d:DesignInstance Type=local:Area}"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="AdministratorPage"
@@ -161,27 +161,105 @@
                 </StackPanel>
                 <ScrollViewer  Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" >
                     <StackPanel Orientation="Vertical" >
-                        <Label Name="infoLabel" HorizontalContentAlignment="Center">Информация о выбранном проекте</Label>
+                        <StackPanel Orientation="Vertical" >
+                            <Label Name="infoLabel" HorizontalContentAlignment="Center">Выберите Проект</Label>
+                            <StackPanel Orientation="Horizontal">
+                                <Label Name="infoContractIdLabel" Content="ID:" />
+                                <TextBox Name="infoContractId" Text="{Binding ContractID,  UpdateSourceTrigger=PropertyChanged}"  HorizontalContentAlignment="Left" Margin="5" Visibility="Collapsed" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent"  />
+                            </StackPanel>
 
-                        <Label Name="infoContractId" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
-                        <Label Name="infoContractDate" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
-                        <Label Name="infoContractServiceDescription" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
-                        <TextBlock Margin="6 0 0 0" Name="infoContractCustomerinfo"    Visibility="Collapsed">Информация о выбранном проекте</TextBlock>
+                            <StackPanel Orientation="Horizontal">
+                                <Label  Name="infoContractDateLabel" Content="Дата заключения контракта:" />
+                                <TextBox Name="infoContractDate" Text="{Binding StartDate,  UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Left" Margin="5" Visibility="Collapsed" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" LostFocus="TextBox_LostFocus" />
 
-                        <Label Name="infoAreaID" HorizontalContentAlignment="Left" Visibility="Collapsed">Информация о выбранном проекте</Label>
-                        <Label Name="infoAreaName" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
-                        <Label Name="infoContractID" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
+                                <Label  Name="infoContractDateLabel1" Content="Дата Завершения контракта:" />
+                                <TextBox Name="infoContractDate1" Text="{Binding EndDate,  UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Left" Margin="5"  Visibility="Collapsed" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" LostFocus="TextBox_LostFocus" />
+                            </StackPanel>
 
-                        <Label Name="infoProfileID" HorizontalContentAlignment="Left" Visibility="Collapsed">Информация о выбранном проекте</Label>
-                        <Label Name="infoProfileName" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
-                        <Label Name="infoProfileType" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
-                        <Label Name="infoArea" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
+                            <StackPanel Orientation="Horizontal">
+                                <Label  Name="infoContractServiceDescriptionLabel" Content="Описание услуги:" />
+                                <TextBox Name="infoContractServiceDescription" Text="{Binding ServiceDescription,  UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Left"  Margin="5" Visibility="Collapsed" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" LostFocus="TextBox_LostFocus" />
+                            </StackPanel>
 
-                        <Label Name="infoPicketID" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
-                        <Label Name="infoCoordinate" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
-                        <Label Name="infoChannel" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
-                        <Label Name="infoProfile" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
-                        <Label Name="infoGammaSpectrometer" HorizontalContentAlignment="Left"  Visibility="Collapsed">Информация о выбранном проекте</Label>
+                            <StackPanel Orientation="Horizontal">
+                                <Label  Name="infoContractCustomerinfoLabel" Content="Заказчик:" />
+                                <TextBox Name="infoContractCustomerinfo" HorizontalContentAlignment="Left"  Margin="5" Visibility="Collapsed" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label  Name="infoContractCustomerinfoLabel1" Content="Контактное Лицо" />
+                                <TextBox Name="infoContractCustomerinfo1" HorizontalContentAlignment="Left"  Margin="5" Visibility="Collapsed" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label  Name="infoContractCustomerinfoLabel2" Content="Номер Телефона" />
+                                <TextBox Name="infoContractCustomerinfo2" HorizontalContentAlignment="Left"  Margin="5" Visibility="Collapsed" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal">
+                                <Label  Name="infoContractCustomerinfoLabel3" Content="Электронная почта:" />
+                                <TextBox Name="infoContractCustomerinfo3" HorizontalContentAlignment="Left"  Margin="5" Visibility="Collapsed" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label  Name="infoAreaIDLabel" Content="ID Площади:" />
+                                <TextBox Name="infoAreaID" HorizontalContentAlignment="Left" Visibility="Collapsed"  Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label  Name="infoAreaNamedLabel" Content="Название Площади:" />
+                                <TextBox Name="infoAreaName" HorizontalContentAlignment="Left" Visibility="Collapsed"  Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label   Name="infoContractIDLabel" Content="ID Контракта:" />
+                                <TextBox Name="infoContractID" HorizontalContentAlignment="Left" Visibility="Collapsed"  Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label  Name="infoProfileIDLabel" Content="ID Профиля:" />
+                                <TextBox Name="infoProfileID" HorizontalContentAlignment="Left" Visibility="Collapsed"   Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label  Name="infoProfileNameLabel" Content="Название Профиля:" />
+                                <TextBox Name="infoProfileName" HorizontalContentAlignment="Left" Visibility="Collapsed" Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label  Name="infoProfileTypeLabel" Content="Тип Профиля:" />
+                                <TextBox Name="infoProfileType" HorizontalContentAlignment="Left" Visibility="Collapsed" Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label  Name="infoAreaLabel" Content="Площадь:" />
+                                <TextBox Name="infoArea" HorizontalContentAlignment="Left" Visibility="Collapsed" Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label  Name="infoPicketIDLabel" Content="ID Пикета:" />
+                                <TextBox Name="infoPicketID" HorizontalContentAlignment="Left" Visibility="Collapsed" Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label  Name="infoCoordinateLabel" Content="Координаты:" />
+                                <TextBox Name="infoCoordinate" HorizontalContentAlignment="Left" Visibility="Collapsed" Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label  Name="infoChannelLabel" Content="Канал:" />
+                                <TextBox Name="infoChannel" HorizontalContentAlignment="Left" Visibility="Collapsed" Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label  Name="infoProfiledLabel" Content="Профиль:" />
+                                <TextBox Name="infoProfile" HorizontalContentAlignment="Left" Visibility="Collapsed" Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
+                            </StackPanel>
+
+                            <StackPanel Orientation="Horizontal">
+                                <Label  Name="infoGammaSpectrometerLabel" Content="Гамма-спектрометр:" />
+                                <TextBox Name="infoGammaSpectrometer" HorizontalContentAlignment="Left" Visibility="Collapsed" Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
+                            </StackPanel>
+
+                        </StackPanel>
+                      
 
 
 
@@ -297,7 +375,7 @@
 
                         <Label  Name="labelProfileCoordinatesHeader" Content="Коорднаты выбранного профиля" Visibility="Collapsed" HorizontalAlignment="Center"></Label>
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                            <ListView Name="listViewProfileCoordinates" ItemsSource="{Binding ProfileCoordinates}">
+                            <ListView Name="listViewProfileCoordinates" ItemsSource="{Binding ProfileCoordinates}" Visibility="Collapsed">
                                 <ListView.View>
                                     <GridView>
                                         <GridViewColumn Header="X">
@@ -322,7 +400,7 @@
 
                         <Label  Name="labelAreaCoordinatesHeader" Content="Коорднаты выбранной площади" Visibility="Collapsed" HorizontalAlignment="Center"></Label>
 
-                        <ListView Name="listViewAreaCoordinates" ItemsSource="{Binding AreaCoordinates}">
+                        <ListView Name="listViewAreaCoordinates" ItemsSource="{Binding AreaCoordinates}" Visibility="Collapsed">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="X">
@@ -345,9 +423,9 @@
 
 
 
-                        <Label  Name="labelOperatorsHeader" Content="Операторы этого выбранного элемента" HorizontalAlignment="Center" Visibility="Visible"  ></Label>
+                        <Label  Name="labelOperatorsHeader" Content="Операторы этого выбранного элемента" HorizontalAlignment="Center" Visibility="Collapsed"  ></Label>
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                            <ListView Name="listViewOperators" Height="120" Visibility="Visible">
+                            <ListView Name="listViewOperators" Height="120" Visibility="Collapsed">
                                 <ListView.View>
                                     <GridView>
                                         <GridViewColumn Header="ID оператора" DisplayMemberBinding="{Binding OperatorID}">

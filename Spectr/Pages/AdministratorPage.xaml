@@ -161,13 +161,13 @@
                 </StackPanel>
                 <ScrollViewer  Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" >
                     <StackPanel Orientation="Vertical" >
-                        <StackPanel Orientation="Vertical" >
+                       
                             <Label Name="infoLabel" HorizontalContentAlignment="Center">Выберите Проект</Label>
                             <StackPanel Orientation="Horizontal">
                                 <Label Name="infoContractIdLabel" Content="ID:" />
                                 <TextBox Name="infoContractId" Text="{Binding ContractID,  UpdateSourceTrigger=PropertyChanged}"  HorizontalContentAlignment="Left" Margin="5" Visibility="Collapsed" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent"  />
                             </StackPanel>
-
+                            
                             <StackPanel Orientation="Horizontal">
                                 <Label  Name="infoContractDateLabel" Content="Дата заключения контракта:" />
                                 <TextBox Name="infoContractDate" Text="{Binding StartDate,  UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Left" Margin="5" Visibility="Collapsed" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" LostFocus="TextBox_LostFocus" />
@@ -183,82 +183,112 @@
 
                             <StackPanel Orientation="Horizontal">
                                 <Label  Name="infoContractCustomerinfoLabel" Content="Заказчик:" />
-                                <TextBox Name="infoContractCustomerinfo" HorizontalContentAlignment="Left"  Margin="5" Visibility="Collapsed" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
+                            <TextBox Name="infoContractCustomerinfo" LostFocus="TextBox_LostFocus" Text="{Binding Customer.CompanyName,  UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Left"  Margin="5" Visibility="Collapsed" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label  Name="infoContractCustomerinfoLabel1" Content="Контактное Лицо" />
-                                <TextBox Name="infoContractCustomerinfo1" HorizontalContentAlignment="Left"  Margin="5" Visibility="Collapsed" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                            <TextBox Name="infoContractCustomerinfo1" LostFocus="TextBox_LostFocus" Text="{Binding Customer.ContactPerson,  UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Left"  Margin="5" Visibility="Collapsed" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label  Name="infoContractCustomerinfoLabel2" Content="Номер Телефона" />
-                                <TextBox Name="infoContractCustomerinfo2" HorizontalContentAlignment="Left"  Margin="5" Visibility="Collapsed" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                            <TextBox Name="infoContractCustomerinfo2" LostFocus="TextBox_LostFocus" Text="{Binding Customer.PhoneNumber,  UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Left"  Margin="5" Visibility="Collapsed" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal">
                                 <Label  Name="infoContractCustomerinfoLabel3" Content="Электронная почта:" />
-                                <TextBox Name="infoContractCustomerinfo3" HorizontalContentAlignment="Left"  Margin="5" Visibility="Collapsed" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                            <TextBox Name="infoContractCustomerinfo3" LostFocus="TextBox_LostFocus" Text="{Binding Customer.Email,  UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Left"  Margin="5" Visibility="Collapsed" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
                             </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label  Name="infoContractCustomerinfoLabel4" Content="Адрес:" />
+                            <TextBox Name="infoContractCustomerinfo4" LostFocus="TextBox_LostFocus" Text="{Binding Customer.Address,  UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Left"  Margin="5" Visibility="Collapsed" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                        </StackPanel>
 
-                            <StackPanel Orientation="Horizontal">
+
+
+                        <StackPanel Orientation="Horizontal">
                                 <Label  Name="infoAreaIDLabel" Content="ID Площади:" />
-                                <TextBox Name="infoAreaID" HorizontalContentAlignment="Left" Visibility="Collapsed"  Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
+                            <TextBox Name="infoAreaID" HorizontalContentAlignment="Left" Text="{Binding AreaID,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed"  Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal">
                                 <Label  Name="infoAreaNamedLabel" Content="Название Площади:" />
-                                <TextBox Name="infoAreaName" HorizontalContentAlignment="Left" Visibility="Collapsed"  Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
+                            <TextBox Name="infoAreaName" HorizontalContentAlignment="Left" LostFocus="TextBox_LostFocus" Text="{Binding AreaName,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed"  Margin="5" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
                             </StackPanel>
 
-                            <StackPanel Orientation="Horizontal">
-                                <Label   Name="infoContractIDLabel" Content="ID Контракта:" />
-                                <TextBox Name="infoContractID" HorizontalContentAlignment="Left" Visibility="Collapsed"  Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
-                            </StackPanel>
+                  
+
+                        
 
                             <StackPanel Orientation="Horizontal">
                                 <Label  Name="infoProfileIDLabel" Content="ID Профиля:" />
-                                <TextBox Name="infoProfileID" HorizontalContentAlignment="Left" Visibility="Collapsed"   Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
+                            <TextBox Name="infoProfileID" HorizontalContentAlignment="Left" Text="{Binding ProfileID,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed"   Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal">
                                 <Label  Name="infoProfileNameLabel" Content="Название Профиля:" />
-                                <TextBox Name="infoProfileName" HorizontalContentAlignment="Left" Visibility="Collapsed" Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
+                            <TextBox Name="infoProfileName" HorizontalContentAlignment="Left"  LostFocus="TextBox_LostFocus" Text="{Binding ProfileName,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Margin="5" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
                             </StackPanel>
 
                             <StackPanel Orientation="Horizontal">
                                 <Label  Name="infoProfileTypeLabel" Content="Тип Профиля:" />
-                                <TextBox Name="infoProfileType" HorizontalContentAlignment="Left" Visibility="Collapsed" Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
-                            </StackPanel>
+                            <TextBox Name="infoProfileType" HorizontalContentAlignment="Left"  LostFocus="TextBox_LostFocus" Text="{Binding ProfileType,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Margin="5" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                       
 
-                            <StackPanel Orientation="Horizontal">
-                                <Label  Name="infoAreaLabel" Content="Площадь:" />
-                                <TextBox Name="infoArea" HorizontalContentAlignment="Left" Visibility="Collapsed" Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
-                            </StackPanel>
+                            
+                            
+                      
 
-                            <StackPanel Orientation="Horizontal">
-                                <Label  Name="infoPicketIDLabel" Content="ID Пикета:" />
-                                <TextBox Name="infoPicketID" HorizontalContentAlignment="Left" Visibility="Collapsed" Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
-                            </StackPanel>
+                            
+                            
+                           
 
-                            <StackPanel Orientation="Horizontal">
-                                <Label  Name="infoCoordinateLabel" Content="Координаты:" />
-                                <TextBox Name="infoCoordinate" HorizontalContentAlignment="Left" Visibility="Collapsed" Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
-                            </StackPanel>
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal">
+                                    <Label  Name="infoPicketIDLabel" Content="ID Пикета:" />
+                                    <TextBox Name="infoPicketID" HorizontalContentAlignment="Left"  LostFocus="TextBox_LostFocus" Text="{Binding PicketID,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
+                                </StackPanel>
+                                
+                                <StackPanel Orientation="Horizontal">
+                                    <Label  Name="infoCoordinateLabel1" Content="Координаты Y:" />
+                                    <TextBox Name="infoCoordinate1" HorizontalContentAlignment="Left"  LostFocus="TextBox_LostFocus" Text="{Binding CoordinateX,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Margin="5" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
 
-                            <StackPanel Orientation="Horizontal">
-                                <Label  Name="infoChannelLabel" Content="Канал:" />
-                                <TextBox Name="infoChannel" HorizontalContentAlignment="Left" Visibility="Collapsed" Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
-                            </StackPanel>
+                                    <Label  Name="infoCoordinateLabel2" Content="Координаты X:" />
+                                    <TextBox Name="infoCoordinate2" HorizontalContentAlignment="Left"  LostFocus="TextBox_LostFocus" Text="{Binding CoordinateY,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Margin="5" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                                </StackPanel>
 
-                            <StackPanel Orientation="Horizontal">
-                                <Label  Name="infoProfiledLabel" Content="Профиль:" />
-                                <TextBox Name="infoProfile" HorizontalContentAlignment="Left" Visibility="Collapsed" Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
+                                <StackPanel Orientation="Horizontal">
+                                    <Label  Name="infoChannelLabel1" Content="Канал1:" />
+                                    <TextBox Name="infoChannel1" HorizontalContentAlignment="Left"  LostFocus="TextBox_LostFocus" Text="{Binding Channel1,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Margin="5" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                                    <Label  Name="infoChannelLabel2" Content="Канал2:" />
+                                    <TextBox Name="infoChannel2" HorizontalContentAlignment="Left"  LostFocus="TextBox_LostFocus" Text="{Binding Channel2,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Margin="5" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                                    <Label  Name="infoChannelLabel3" Content="Канал3:" />
+                                    <TextBox Name="infoChannel3" HorizontalContentAlignment="Left"  LostFocus="TextBox_LostFocus" Text="{Binding Channel3,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Margin="5" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label  Name="infoGammaSpectrometerIDLabel" Content="ID Гамма-спектрометра:" />
+                                    <TextBox Name="infoGammaSpectrometerID" HorizontalContentAlignment="Left"   Text="{Binding GammaSpectrometer.GammaSpectrometerID,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label  Name="infoGammaSpectrometerCommissioningDateLabel" Content="Дата ввода Гамма-спектромета:" />
+                                    <TextBox Name="infoGammaSpectrometerCommissioningDate" HorizontalContentAlignment="Left"  LostFocus="TextBox_LostFocus" Text="{Binding GammaSpectrometer.CommissioningDate,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Margin="5" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label  Name="infoGammaSpectrometerDecommissioningDateLabel" Content="Дата списания Гамма-спектромета:" />
+                                    <TextBox Name="infoGammaSpectrometerDecommissioningDate" HorizontalContentAlignment="Left"  LostFocus="TextBox_LostFocus" Text="{Binding GammaSpectrometer.DecommissioningDate,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Margin="5" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label  Name="infoGammaSpectrometerMeasurementAccuracyLabel" Content="Точность Гамма-спектромета:" />
+                                    <TextBox Name="infoGammaSpectrometerMeasurementAccuracyDate" HorizontalContentAlignment="Left"  LostFocus="TextBox_LostFocus" Text="{Binding GammaSpectrometer.MeasurementAccuracy,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Margin="5" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label  Name="infoGammaSpectrometerMeasurementTimeLabel" Content="Время измерения Гамма-спектромета:" />
+                                    <TextBox Name="infoGammaSpectrometerMeasurementTime" HorizontalContentAlignment="Left"  LostFocus="TextBox_LostFocus" Text="{Binding GammaSpectrometer.MeasurementTime,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Margin="5" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                                </StackPanel>
                             </StackPanel>
-
-                            <StackPanel Orientation="Horizontal">
-                                <Label  Name="infoGammaSpectrometerLabel" Content="Гамма-спектрометр:" />
-                                <TextBox Name="infoGammaSpectrometer" HorizontalContentAlignment="Left" Visibility="Collapsed" Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
-                            </StackPanel>
-
                         </StackPanel>
+
+
+
+                          
                       
 
 

@@ -56,6 +56,7 @@ namespace Spectr.Db
             contracts = new ObservableCollection<Contract>(
                 context.Contracts
                     .Include(c => c.Customer)
+                    
                     .Include(c => c.Administrator)
                     .Include(c => c.Areas)
                         .ThenInclude(a => a.AreaCoordinates) // Включаем координаты зон
@@ -64,8 +65,12 @@ namespace Spectr.Db
                             .ThenInclude(p => p.ProfileCoordinates) // Включаем координаты профилей
                     .Include(c => c.Areas)
                         .ThenInclude(a => a.Profiles)
-                            .ThenInclude(p => p.Pickets) // Включаем пикеты
+                            .ThenInclude(p => p.Pickets)
                                 .ThenInclude(pk => pk.Operator)
+                      .Include(c => c.Areas)
+                        .ThenInclude(a => a.Profiles)
+                            .ThenInclude(p => p.Pickets)
+                            .ThenInclude(pk => pk.GammaSpectrometer)
                     .Include(c => c.ContractAnalysts) // Включаем связи контракт-аналитик
                         .ThenInclude(ca => ca.Analyst) // Включаем сами объекты аналитиков
                     .ToList() // ✅ Закрываем `ToList()` перед закрытием скобки
@@ -100,6 +105,7 @@ namespace Spectr.Db
 
                 case Picket picket:
                     context.Pickets.Update(picket);
+                    context.GammaSpectrometers.Update(picket.GammaSpectrometer);
                     context.SaveChanges();
      
                     break;
@@ -119,6 +125,7 @@ namespace Spectr.Db
                     context.Operators.Update(_operator);
                     context.SaveChanges();
                     break;
+               
             }
           
 

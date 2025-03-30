@@ -36,6 +36,7 @@ namespace Spectr
             dbHelper = new();
             dbHelper.LoadContract();
             treeView.ItemsSource = dbHelper.contracts;
+            ResetVisibility();
         }
 
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
@@ -125,25 +126,23 @@ namespace Spectr
                 infoContractDate1.Visibility = Visibility.Visible;
                 infoContractDateLabel.Visibility = Visibility.Visible;
                 infoContractDateLabel1.Visibility = Visibility.Visible; 
-                infoContractDate.Text = $"{selectedContract.StartDate.ToShortDateString()}";
-                infoContractDate1.Text = $"{selectedContract.EndDate.ToShortDateString()}";
+            
 
                 infoContractServiceDescription.Visibility = Visibility.Visible;
                 infoContractServiceDescriptionLabel.Visibility = Visibility.Visible;
-                infoContractServiceDescription.Text = $"{selectedContract.ServiceDescription}";
+
 
                 infoContractCustomerinfo.Visibility = Visibility.Visible;
                 infoContractCustomerinfo1.Visibility = Visibility.Visible;
                 infoContractCustomerinfo2.Visibility = Visibility.Visible;
                 infoContractCustomerinfo3.Visibility = Visibility.Visible;
+                infoContractCustomerinfo4.Visibility = Visibility.Visible;
                 infoContractCustomerinfoLabel.Visibility = Visibility.Visible;
                 infoContractCustomerinfoLabel1.Visibility = Visibility.Visible;
                 infoContractCustomerinfoLabel2.Visibility = Visibility.Visible;
                 infoContractCustomerinfoLabel3.Visibility = Visibility.Visible;
-                infoContractCustomerinfo.Text = $"{selectedContract.Customer.CompanyName}";
-                infoContractCustomerinfo1.Text = $"{selectedContract.Customer.ContactPerson}";
-                infoContractCustomerinfo2.Text = $"{selectedContract.Customer.PhoneNumber}";
-                infoContractCustomerinfo3.Text = $"{selectedContract.Customer.Email}";
+                infoContractCustomerinfoLabel4.Visibility = Visibility.Visible;
+
                 labelAnalystHeader.Visibility = Visibility.Visible;
                 labelAnalystHeader.Content = $"Аналитики Контракта: {selectedContract.ContractID}";
 
@@ -177,10 +176,10 @@ namespace Spectr
                 listViewOperators.ItemsSource = allOperators;
 
                 infoAreaID.Visibility = Visibility.Visible;
-                infoAreaID.Text = $"{selectedArea.AreaID}";
+                infoAreaIDLabel.Visibility = Visibility.Visible;
 
                 infoAreaName.Visibility = Visibility.Visible;
-                infoAreaName.Text = $"{selectedArea.AreaName}";
+                infoAreaNamedLabel.Visibility = Visibility.Visible;
 
                 labelProfilesHeader.Visibility = Visibility.Visible;
                 labelProfilesHeader.Content = $"Профили Площади: {selectedArea.AreaName}, {selectedArea.AreaID}";
@@ -214,13 +213,14 @@ namespace Spectr
                 listViewOperators.ItemsSource = allOperators;
 
                 infoProfileID.Visibility = Visibility.Visible;
-                infoProfileID.Text = $"{selectedProfile.ProfileID}";
+                infoProfileIDLabel.Visibility = Visibility.Visible;
 
                 infoProfileName.Visibility = Visibility.Visible;
-                infoProfileName.Text = $"{selectedProfile.ProfileName}";
+                infoProfileNameLabel.Visibility = Visibility.Visible;
+
 
                 infoProfileType.Visibility = Visibility.Visible;
-                infoProfileType.Text = $"{selectedProfile.ProfileType}";
+                infoProfileTypeLabel.Visibility = Visibility.Visible;
 
                 labelPicketsHeader.Visibility = Visibility.Visible;
                 labelPicketsHeader.Content = $"Пикеты Профиля: {selectedProfile.ProfileName}, {selectedProfile.ProfileID}";
@@ -242,22 +242,41 @@ namespace Spectr
             else if (treeView.SelectedItem is Picket selectedPicket)
             {
                 this.DataContext = selectedPicket;
+                Debug.WriteLine(selectedPicket.GammaSpectrometer.CommissioningDate.ToString());
                 infoLabel.Content = $"Информация о Пикете {selectedPicket.PicketID}";
 
                 infoPicketID.Visibility = Visibility.Visible;
-                infoPicketID.Text = $"{selectedPicket.PicketID}";
+                infoPicketIDLabel.Visibility = Visibility.Visible;
 
-                infoCoordinate.Visibility = Visibility.Visible;
-                infoCoordinate.Text = $"Координата Х: {selectedPicket.CoordinateX} Координата Y: {selectedPicket.CoordinateY}";
+                infoCoordinate1.Visibility = Visibility.Visible;
+                infoCoordinate2.Visibility = Visibility.Visible;
+                infoCoordinateLabel1.Visibility = Visibility.Visible;
+                infoCoordinateLabel2.Visibility = Visibility.Visible;
+                infoChannel1.Visibility = Visibility.Visible;
+                infoChannel2.Visibility = Visibility.Visible;
+                infoChannel3.Visibility = Visibility.Visible;
+                infoChannelLabel1.Visibility = Visibility.Visible;
+                infoChannelLabel2.Visibility = Visibility.Visible;
+                infoChannelLabel3.Visibility = Visibility.Visible;
 
-                infoChannel.Visibility = Visibility.Visible;
-                infoChannel.Text = $"Канал 1: {selectedPicket.Channel1} Канал 2: {selectedPicket.Channel2} Канал 3: {selectedPicket.Channel3}";
 
-                infoProfile.Visibility = Visibility.Visible;
-                infoProfile.Text = $"Профиль: {selectedPicket.Profile.ProfileName}";
+                infoGammaSpectrometerID.Visibility = Visibility.Visible;
+                infoGammaSpectrometerIDLabel.Visibility = Visibility.Visible;
+                infoGammaSpectrometerCommissioningDateLabel.Visibility = Visibility.Visible;
+                infoGammaSpectrometerCommissioningDate.Visibility = Visibility.Visible;
+                infoGammaSpectrometerDecommissioningDateLabel.Visibility = Visibility.Visible;
+                infoGammaSpectrometerDecommissioningDate.Visibility = Visibility.Visible;
+                infoGammaSpectrometerMeasurementAccuracyLabel.Visibility = Visibility.Visible;
+                infoGammaSpectrometerMeasurementAccuracyDate.Visibility = Visibility.Visible;
+                infoGammaSpectrometerMeasurementTimeLabel.Visibility = Visibility.Visible;
+                infoGammaSpectrometerMeasurementTime.Visibility = Visibility.Visible;
+               
+              
+               
 
-                infoGammaSpectrometer.Visibility = Visibility.Visible;
-                infoGammaSpectrometer.Text = $"{selectedPicket.GammaSpectrometer}";
+
+
+
 
                 List<Operator> allOperators = new List<Operator> { selectedPicket.Operator };
 
@@ -296,18 +315,30 @@ namespace Spectr
 
             infoAreaID.Visibility = Visibility.Collapsed;
             infoAreaName.Visibility = Visibility.Collapsed;
-            infoContractID.Visibility = Visibility.Collapsed;
+
 
             infoProfileID.Visibility = Visibility.Collapsed;
             infoProfileName.Visibility = Visibility.Collapsed;
             infoProfileType.Visibility = Visibility.Collapsed;
-            infoArea.Visibility = Visibility.Collapsed;
 
             infoPicketID.Visibility = Visibility.Collapsed;
-            infoCoordinate.Visibility = Visibility.Collapsed;
-            infoChannel.Visibility = Visibility.Collapsed;
-            infoProfile.Visibility = Visibility.Collapsed;
-            infoGammaSpectrometer.Visibility = Visibility.Collapsed;
+            infoCoordinate1.Visibility = Visibility.Collapsed;
+            infoCoordinate2.Visibility = Visibility.Collapsed;
+            infoCoordinateLabel1.Visibility = Visibility.Collapsed;
+            infoCoordinateLabel2.Visibility = Visibility.Collapsed;
+
+
+
+            infoChannel1.Visibility = Visibility.Collapsed;
+            infoChannel2.Visibility = Visibility.Collapsed;
+            infoChannel3.Visibility = Visibility.Collapsed;
+
+            infoChannelLabel1.Visibility = Visibility.Collapsed;
+            infoChannelLabel2.Visibility = Visibility.Collapsed;
+            infoChannelLabel3.Visibility = Visibility.Collapsed;
+
+
+           
 
             infoContractIdLabel.Visibility = Visibility.Collapsed;
             infoContractDateLabel.Visibility = Visibility.Collapsed;
@@ -315,20 +346,42 @@ namespace Spectr
             infoContractCustomerinfoLabel.Visibility = Visibility.Collapsed;
             infoAreaIDLabel.Visibility = Visibility.Collapsed;
             infoAreaNamedLabel.Visibility = Visibility.Collapsed;
-            infoContractIDLabel.Visibility= Visibility.Collapsed;
+         
             infoProfileIDLabel.Visibility = Visibility.Collapsed;
             infoProfileNameLabel.Visibility = Visibility.Collapsed;
             infoProfileTypeLabel.Visibility = Visibility.Collapsed;
-            infoAreaLabel.Visibility = Visibility.Collapsed;
+          
             infoPicketIDLabel.Visibility = Visibility.Collapsed;
-            infoCoordinateLabel.Visibility = Visibility.Collapsed;
-            infoChannelLabel.Visibility = Visibility.Collapsed;
-            infoProfiledLabel.Visibility = Visibility.Collapsed;
-            infoGammaSpectrometerLabel.Visibility = Visibility.Collapsed;
+            infoCoordinateLabel1.Visibility = Visibility.Collapsed;
+            infoCoordinateLabel2.Visibility = Visibility.Collapsed;
+            infoCoordinate1.Visibility = Visibility.Collapsed;
+            infoCoordinate2.Visibility = Visibility.Collapsed;
+
+          
+        
             infoContractServiceDescriptionLabel.Visibility = Visibility.Collapsed;
 
+            infoContractCustomerinfo.Visibility = Visibility.Collapsed;
+            infoContractCustomerinfo1.Visibility = Visibility.Collapsed;
+            infoContractCustomerinfo2.Visibility = Visibility.Collapsed;
+            infoContractCustomerinfo3.Visibility = Visibility.Collapsed;
+            infoContractCustomerinfo4.Visibility = Visibility.Collapsed;
 
+            infoContractCustomerinfoLabel1.Visibility = Visibility.Collapsed;
+            infoContractCustomerinfoLabel2.Visibility = Visibility.Collapsed;
+            infoContractCustomerinfoLabel3.Visibility = Visibility.Collapsed;
+            infoContractCustomerinfoLabel4.Visibility = Visibility.Collapsed;
 
+            infoGammaSpectrometerID.Visibility = Visibility.Collapsed;
+            infoGammaSpectrometerIDLabel.Visibility = Visibility.Collapsed;
+            infoGammaSpectrometerCommissioningDateLabel.Visibility = Visibility.Collapsed;
+            infoGammaSpectrometerCommissioningDate.Visibility = Visibility.Collapsed;
+            infoGammaSpectrometerDecommissioningDateLabel.Visibility= Visibility.Collapsed;
+            infoGammaSpectrometerDecommissioningDate.Visibility= Visibility.Collapsed;
+            infoGammaSpectrometerMeasurementAccuracyLabel.Visibility = Visibility.Collapsed;
+            infoGammaSpectrometerMeasurementAccuracyDate.Visibility= Visibility.Collapsed;
+            infoGammaSpectrometerMeasurementTimeLabel.Visibility = Visibility.Collapsed;
+            infoGammaSpectrometerMeasurementTime.Visibility= Visibility.Collapsed;
         }
         private void TextBox_LostFocus(object sender, RoutedEventArgs e)
         {

@@ -47,40 +47,147 @@ namespace Spectr.Data
         public List<Contract> Contracts { get; set; }
     }
     [Index(nameof(CustomerLogin), IsUnique = true)]
-    public class Customer
+
+    public class Customer : INotifyPropertyChanged
     {
+        private int _customerID;
+        private string _companyName;
+        private string _phoneNumber;
+        private string _contactPerson;
+        private string _email;
+        private string _address;
+        private string _customerLogin;
+        private string _customerPassword;
+  
+
         [Key]
-        public int CustomerID { get; set; }
+        public int CustomerID
+        {
+            get { return _customerID; }
+            set
+            {
+                if (_customerID != value)
+                {
+                    _customerID = value;
+                    OnPropertyChanged(nameof(CustomerID));
+                }
+            }
+        }
 
         [Required]
         [MaxLength(255)]
-        public string CompanyName { get; set; }
+        public string CompanyName
+        {
+            get { return _companyName; }
+            set
+            {
+                if (_companyName != value)
+                {
+                    _companyName = value;
+                    OnPropertyChanged(nameof(CompanyName));
+                }
+            }
+        }
 
         [Required]
         [MaxLength(50)]
-        public string PhoneNumber { get; set; }
+        public string PhoneNumber
+        {
+            get { return _phoneNumber; }
+            set
+            {
+                if (_phoneNumber != value)
+                {
+                    _phoneNumber = value;
+                    OnPropertyChanged(nameof(PhoneNumber));
+                }
+            }
+        }
 
         [Required]
         [MaxLength(255)]
-        public string ContactPerson { get; set; }
+        public string ContactPerson
+        {
+            get { return _contactPerson; }
+            set
+            {
+                if (_contactPerson != value)
+                {
+                    _contactPerson = value;
+                    OnPropertyChanged(nameof(ContactPerson));
+                }
+            }
+        }
 
         [MaxLength(255)]
-        public string Email { get; set; }
+        public string Email
+        {
+            get { return _email; }
+            set
+            {
+                if (_email != value)
+                {
+                    _email = value;
+                    OnPropertyChanged(nameof(Email));
+                }
+            }
+        }
 
         [Required]
         [MaxLength(255)]
-        public string Address { get; set; }
+        public string Address
+        {
+            get { return _address; }
+            set
+            {
+                if (_address != value)
+                {
+                    _address = value;
+                    OnPropertyChanged(nameof(Address));
+                }
+            }
+        }
 
         [Required]
         [MaxLength(50)]
-        public string CustomerLogin { get; set; }
+        public string CustomerLogin
+        {
+            get { return _customerLogin; }
+            set
+            {
+                if (_customerLogin != value)
+                {
+                    _customerLogin = value;
+                    OnPropertyChanged(nameof(CustomerLogin));
+                }
+            }
+        }
 
         [Required]
         [MaxLength(36)]
-        public string CustomerPassword { get; set; }
+        public string CustomerPassword
+        {
+            get { return _customerPassword; }
+            set
+            {
+                if (_customerPassword != value)
+                {
+                    _customerPassword = value;
+                    OnPropertyChanged(nameof(CustomerPassword));
+                }
+            }
+        }
 
         public List<Contract> Contracts { get; set; }
+
+  
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
+
 
     public class Contract : INotifyPropertyChanged
     {
@@ -348,24 +455,94 @@ namespace Spectr.Data
         public List<ProfileOperator> ProfileOperators { get; set; }
     }
 
-    public class GammaSpectrometer
+
+
+    public class GammaSpectrometer : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        private int _gammaSpectrometerID;
+        private DateTime _commissioningDate;
+        private DateTime? _decommissioningDate;
+        private float _measurementAccuracy;
+        private int _measurementTime;
+   
+
         [Key]
-        public int GammaSpectrometerID { get; set; }
+        public int GammaSpectrometerID
+        {
+            get { return _gammaSpectrometerID; }
+            set
+            {
+                if (_gammaSpectrometerID != value)
+                {
+                    _gammaSpectrometerID = value;
+                    OnPropertyChanged(nameof(GammaSpectrometerID));
+                }
+            }
+        }
 
         [Required]
-        public DateTime CommissioningDate { get; set; }
+        public DateTime CommissioningDate
+        {
+            get { return _commissioningDate; }
+            set
+            {
+                if (_commissioningDate != value)
+                {
+                    _commissioningDate = value;
+                    OnPropertyChanged(nameof(CommissioningDate));
+                }
+            }
+        }
 
-        public DateTime? DecommissioningDate { get; set; }
+        public DateTime? DecommissioningDate
+        {
+            get { return _decommissioningDate; }
+            set
+            {
+                if (_decommissioningDate != value)
+                {
+                    _decommissioningDate = value;
+                    OnPropertyChanged(nameof(DecommissioningDate));
+                }
+            }
+        }
 
         [Required]
-        public float MeasurementAccuracy { get; set; }
+        public float MeasurementAccuracy
+        {
+            get { return _measurementAccuracy; }
+            set
+            {
+                if (_measurementAccuracy != value)
+                {
+                    _measurementAccuracy = value;
+                    OnPropertyChanged(nameof(MeasurementAccuracy));
+                }
+            }
+        }
 
         [Required]
-        public int MeasurementTime { get; set; }
+        public int MeasurementTime
+        {
+            get { return _measurementTime; }
+            set
+            {
+                if (_measurementTime != value)
+                {
+                    _measurementTime = value;
+                    OnPropertyChanged(nameof(MeasurementTime));
+                }
+            }
+        }
 
         public List<Picket> Pickets { get; set; }
+      
     }
+
 
     public class Picket : INotifyPropertyChanged
     {

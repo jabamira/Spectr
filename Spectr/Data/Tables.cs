@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 namespace Spectr.Data
 {
@@ -44,7 +45,7 @@ namespace Spectr.Data
         [MaxLength(36)]
         public string AdministratorPassword { get; set; }
 
-        public List<Contract> Contracts { get; set; }
+        public ObservableCollection<Contract> Contracts { get; set; }
     }
     [Index(nameof(CustomerLogin), IsUnique = true)]
 
@@ -178,7 +179,7 @@ namespace Spectr.Data
             }
         }
 
-        public List<Contract> Contracts { get; set; }
+        public ObservableCollection<Contract> Contracts { get; set; }
 
   
 
@@ -260,9 +261,9 @@ namespace Spectr.Data
         public int AdministratorID { get; set; }
         public Administrator Administrator { get; set; }
 
-        public List<Area> Areas { get; set; }
+        public ObservableCollection<Area> Areas { get; set; }
 
-        public List<ContractAnalyst> ContractAnalysts { get; set; }
+        public ObservableCollection<ContractAnalyst> ContractAnalysts { get; set; }
 
         // INotifyPropertyChanged implementation
         public event PropertyChangedEventHandler PropertyChanged;
@@ -299,8 +300,8 @@ namespace Spectr.Data
         public int ContractID { get; set; }
         public Contract Contract { get; set; }
 
-        public List<AreaCoordinates> AreaCoordinates { get; set; }
-        public List<Profile> Profiles { get; set; }
+        public ObservableCollection<AreaCoordinates> AreaCoordinates { get; set; }
+        public ObservableCollection<Profile> Profiles { get; set; }
     }
 
     public class AreaCoordinates : INotifyPropertyChanged
@@ -380,8 +381,8 @@ namespace Spectr.Data
         public int AreaID { get; set; }
         public Area Area { get; set; }
 
-        public List<ProfileCoordinates> ProfileCoordinates { get; set; }
-        public List<Picket> Pickets { get; set; }
+        public ObservableCollection<ProfileCoordinates> ProfileCoordinates { get; set; }
+        public ObservableCollection<Picket> Pickets { get; set; }
     }
 
     public class ProfileCoordinates : INotifyPropertyChanged
@@ -451,8 +452,8 @@ namespace Spectr.Data
         [MaxLength(36)]
         public string OperatorPassword { get; set; }
 
-        public List<Picket> Pickets { get; set; }
-        public List<ProfileOperator> ProfileOperators { get; set; }
+        public ObservableCollection<Picket> Pickets { get; set; }
+        public ObservableCollection<ProfileOperator> ProfileOperators { get; set; }
     }
 
 
@@ -539,7 +540,7 @@ namespace Spectr.Data
             }
         }
 
-        public List<Picket> Pickets { get; set; }
+        public ObservableCollection<Picket> Pickets { get; set; }
       
     }
 
@@ -655,7 +656,7 @@ namespace Spectr.Data
         public string AnalystPassword { get; set; }
 
         // Связь многие ко многим
-        public List<ContractAnalyst> ContractAnalysts { get; set; }
+        public ObservableCollection<ContractAnalyst> ContractAnalysts { get; set; }
     }
     public class ContractAnalyst
     {

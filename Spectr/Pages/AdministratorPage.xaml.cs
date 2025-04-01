@@ -18,6 +18,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Contract = Spectr.Data.Contract;
 using Spectr.Db;
+using System.Collections.ObjectModel;
 namespace Spectr
 {
     /// <summary>
@@ -54,9 +55,57 @@ namespace Spectr
 
         private void BtnDelete_Click(object sender, RoutedEventArgs e)
         {
-            dbHelper.DeleteProject((object)treeView.SelectedItem);
-            treeView.Items.Refresh();
+
+            if (treeView.SelectedItem == null) return; // Если ничего не выбрано — выход
+
+            MessageBoxResult result = MessageBox.Show(
+                "Вы уверены, что хотите удалить этот элемент?",
+                "Подтверждение удаления",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                var itemToDelete = treeView.SelectedItem;
+                dbHelper.DeleteProject(itemToDelete);
+               
+            }
         }
+     
+        private void btnDeleteInTreeview_Click(object sender, RoutedEventArgs e)
+        {
+
+
+
+         
+
+            MessageBoxResult result = MessageBox.Show(
+                "Вы уверены, что хотите удалить этот элемент?",
+                "Подтверждение удаления",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+               
+             
+                if (sender is Button button)
+                {
+
+                    var itemToRemove = button.DataContext;
+
+                    if (itemToRemove != null)
+                    {
+                        dbHelper.DeleteProject(itemToRemove);
+                  
+                    }
+                }
+
+             
+            }
+        }
+
+        
         private void BtnEdit_Click(object sender, RoutedEventArgs e)
         {
 
@@ -393,6 +442,7 @@ namespace Spectr
                 
             }
         }
+
 
 
 

@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System;
 using System.Diagnostics;
+using System.Diagnostics.Contracts;
+using Contract = Spectr.Data.Contract;
 namespace Spectr.Db
 {
     public class Db_Helper
@@ -38,18 +40,24 @@ namespace Spectr.Db
 
                 case Area area:
                     context.Areas.Remove(area);
+
+                    area.Contract.Areas.Remove(area);
+
                     break;
 
                 case Profile profile:
                     context.Profiles.Remove(profile);
+                    profile.Area.Profiles.Remove(profile);
                     break;
 
                 case Picket picket:
                     context.Pickets.Remove(picket);
+                    picket.Profile.Pickets.Remove(picket);
                     break;
+              
             }
-
             context.SaveChanges();
+
         }
         public void LoadContract()
         {

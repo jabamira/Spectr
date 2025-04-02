@@ -44,9 +44,9 @@ namespace Spectr.Db
                     area.Contract.Areas.Remove(area);
 
                     break;
-
-                case Profile profile:
-                    context.Profiles.Remove(profile);
+                    { }
+                case Profile profile: 
+                    context.Profiles.Remove(profile); 
                     profile.Area.Profiles.Remove(profile);
                     break;
 

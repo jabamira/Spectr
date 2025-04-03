@@ -56,9 +56,57 @@ namespace Spectr
         }
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
-
-        }
        
+            if (sender is Button button)
+            {
+                string tagValue = button.Tag as string;
+
+               
+                switch (tagValue) 
+                {
+                    case "Area":
+                        Area newArea = new Area { AreaName = "Введите Имя" };
+                        areas.Add(newArea); 
+                        break;
+
+                    case "Profile":
+                        Profile newProfile = new Profile { ProfileType= "Ведите тип профиля" , ProfileName= "Введите имя профиля"};
+                        profiles.Add(newProfile); // Используем свойство Profiles
+                        break;
+
+                    case "Picket":
+                        Picket newPicket = new Picket { /* Заполните свойства Picket */ };
+                        pickets.Add(newPicket);  // Используем свойство Pickets
+                        break;
+
+                    case "Operator":
+                        Operator newOperator = new Operator { /* Заполните свойства Operator */ };
+                        operators.Add(newOperator); // Используем свойство Operators
+                        break;
+
+                    case "Analyst":
+                        Analyst newAnalyst = new Analyst { /* Заполните свойства Analyst */ };
+                        analysts.Add(newAnalyst); // Используем свойство Analysts
+                        break;
+
+                    case "AreaCoordinates":
+                        AreaCoordinates newAreaCoordinate = new AreaCoordinates { /* Заполните свойства AreaCoordinates */ };
+                        areaCcoordinates.Add(newAreaCoordinate); // Используем свойство AreaCoordinatesCollection
+                        break;
+
+                    case "ProfileCoordinates":
+                        ProfileCoordinates newProfileCoordinate = new ProfileCoordinates { /* Заполните свойства ProfileCoordinates */ };
+                        profileCoordinates.Add(newProfileCoordinate); // Используем свойство ProfileCoordinatesCollection
+                        break;
+
+                    default:
+                        MessageBox.Show("Неизвестный тип данных для добавления.");
+                        break;
+                }
+            }
+        }
+
+
 
         private void BtnDelete_Click(object sender, RoutedEventArgs e)
         {
@@ -249,6 +297,13 @@ namespace Spectr
                 operators = CollectionExtensions.ToObservableCollection(list);
                 listViewOperators.ItemsSource = operators;
 
+             
+                addAreaBtn.Visibility = Visibility.Visible;
+
+                analystAddBtn.Visibility = Visibility.Visible;
+                operatorAddBtn.Visibility = Visibility.Visible;
+                
+
                 infoContractId.Visibility = Visibility.Visible;
                 infoContractIdLabel.Visibility = Visibility.Visible;
                // infoContractId.Text =  selectedContract.ContractID.ToString();
@@ -309,6 +364,14 @@ namespace Spectr
 
                 listViewOperators.ItemsSource = allOperators;
 
+                
+                addProfileBtn.Visibility = Visibility.Visible;
+
+                areaCoordinateAddBtn.Visibility = Visibility.Visible;
+            
+                operatorAddBtn.Visibility = Visibility.Visible;
+               
+
                 infoAreaID.Visibility = Visibility.Visible;
                 infoAreaIDLabel.Visibility = Visibility.Visible;
 
@@ -348,6 +411,13 @@ namespace Spectr
                 operators = CollectionExtensions.ToObservableCollection(allOperators);
                 listViewOperators.ItemsSource = operators;
 
+                addPiketBtn.Visibility = Visibility.Visible;
+               
+          
+                profileCoordinateAddBtn.Visibility = Visibility.Visible;
+           
+                operatorAddBtn.Visibility = Visibility.Visible;
+
                 infoProfileID.Visibility = Visibility.Visible;
                 infoProfileIDLabel.Visibility = Visibility.Visible;
 
@@ -380,6 +450,11 @@ namespace Spectr
                 this.DataContext = selectedPicket;
                 Debug.WriteLine(selectedPicket.GammaSpectrometer.CommissioningDate.ToString());
                 infoLabel.Content = $"Информация о Пикете {selectedPicket.PicketID}";
+
+            
+                
+                operatorAddBtn.Visibility = Visibility.Visible;
+            
 
                 infoPicketID.Visibility = Visibility.Visible;
                 infoPicketIDLabel.Visibility = Visibility.Visible;
@@ -518,6 +593,14 @@ namespace Spectr
             infoGammaSpectrometerMeasurementAccuracyDate.Visibility= Visibility.Collapsed;
             infoGammaSpectrometerMeasurementTimeLabel.Visibility = Visibility.Collapsed;
             infoGammaSpectrometerMeasurementTime.Visibility= Visibility.Collapsed;
+
+            addPiketBtn.Visibility = Visibility.Collapsed;
+            addProfileBtn.Visibility = Visibility.Collapsed;
+            addAreaBtn.Visibility = Visibility.Collapsed;
+            profileCoordinateAddBtn.Visibility = Visibility.Collapsed;
+            analystAddBtn.Visibility = Visibility.Collapsed;
+            operatorAddBtn.Visibility = Visibility.Collapsed;
+            areaCoordinateAddBtn.Visibility = Visibility.Collapsed;
         }
         private void TextBox_LostFocus(object sender, RoutedEventArgs e)
         {

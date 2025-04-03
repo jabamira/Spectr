@@ -368,7 +368,7 @@
                                         <GridViewColumn Header="Удалить">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <Button Background="Black" Width="20" Foreground="Red" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnDeleteListview_Click">
+                                                    <Button Background="Black" Width="20" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnDeleteListview_Click">
                                                         <Viewbox Stretch="Uniform">
                                                             <TextBlock Text="Х" />
                                                         </Viewbox>
@@ -376,14 +376,19 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
+                                        
 
 
                                     </GridView>
                                 </ListView.View>
                             </ListView>
-
+                           
                         </ScrollViewer>
-
+                        <Button x:Name="addPiketBtn" Tag="Picket"  Background="Black"  Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnAdd_Click">
+                            <Viewbox Stretch="Uniform">
+                                <TextBlock Text="Добавить Пикет" />
+                            </Viewbox>
+                        </Button>
                         <Label  Name="labelProfilesHeader" Content="Профили выбранной площади" Visibility="Collapsed" HorizontalAlignment="Center"></Label>
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
 
@@ -410,7 +415,7 @@
                                         <GridViewColumn Header="Удалить">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <Button Background="Black" Width="20" Foreground="Red" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnDeleteListview_Click">
+                                                    <Button Background="Black" Width="20" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnDeleteListview_Click">
                                                         <Viewbox Stretch="Uniform">
                                                             <TextBlock Text="Х" />
                                                         </Viewbox>
@@ -421,8 +426,14 @@
                                     </GridView>
                                 </ListView.View>
                             </ListView>
+                            
 
                         </ScrollViewer>
+                        <Button x:Name="addProfileBtn" Tag="Profile"  Background="Black"  Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnAdd_Click">
+                            <Viewbox Stretch="Uniform">
+                                <TextBlock Text="Добавить Профиль" />
+                            </Viewbox>
+                        </Button>
 
                         <Label  Name="labelAreaHeader" Content="Площади выбранного контракта" Visibility="Collapsed" HorizontalAlignment="Center"></Label>
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
@@ -443,7 +454,7 @@
                                         <GridViewColumn Header="Удалить">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <Button Background="Black" Width="20" Foreground="Red" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnDeleteListview_Click">
+                                                    <Button Background="Black" Width="20" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnDeleteListview_Click">
                                                         <Viewbox Stretch="Uniform">
                                                             <TextBlock Text="Х" />
                                                         </Viewbox>
@@ -454,14 +465,20 @@
                                     </GridView>
                                 </ListView.View>
                             </ListView>
-
+                                
                         </ScrollViewer>
-
+                        <Button x:Name="addAreaBtn" Tag="Area"  Background="Black"  Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnAdd_Click">
+                            <Viewbox Stretch="Uniform">
+                                <TextBlock Text="Добавить Площадь" />
+                            </Viewbox>
+                        </Button>
+                   
                         <Label  Name="labelProfileCoordinatesHeader" Content="Коорднаты выбранного профиля" Visibility="Collapsed" HorizontalAlignment="Center"></Label>
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                             <ListView Name="listViewProfileCoordinates" ItemsSource="{Binding ProfileCoordinates}" Visibility="Collapsed">
                                 <ListView.View>
                                     <GridView>
+                                      
                                         <GridViewColumn Header="X">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
@@ -479,7 +496,7 @@
                                         <GridViewColumn Header="Удалить">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <Button Background="Black" Width="20" Foreground="Red" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnDeleteListview_Click">
+                                                    <Button Background="Black" Width="20" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnDeleteListview_Click">
                                                         <Viewbox Stretch="Uniform">
                                                             <TextBlock Text="Х" />
                                                         </Viewbox>
@@ -492,7 +509,11 @@
                             </ListView>
 
                         </ScrollViewer>
-
+                        <Button x:Name="profileCoordinateAddBtn" Tag="ProfileCoordinates"  Background="Black"  Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnAdd_Click">
+                            <Viewbox Stretch="Uniform">
+                                <TextBlock Text="Добавить Координаты Профиля" />
+                            </Viewbox>
+                        </Button>
                         <Label  Name="labelAreaCoordinatesHeader" Content="Коорднаты выбранной площади" Visibility="Collapsed" HorizontalAlignment="Center"></Label>
 
                         <ListView Name="listViewAreaCoordinates" ItemsSource="{Binding AreaCoordinates}" Visibility="Collapsed">
@@ -515,7 +536,7 @@
                                     <GridViewColumn Header="Удалить">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <Button Background="Black" Width="20" Foreground="Red" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnDeleteListview_Click">
+                                                <Button Background="Black" Width="20" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnDeleteListview_Click">
                                                     <Viewbox Stretch="Uniform">
                                                         <TextBlock Text="Х" />
                                                     </Viewbox>
@@ -526,7 +547,11 @@
                                 </GridView>
                             </ListView.View>
                         </ListView>
-
+                        <Button x:Name="areaCoordinateAddBtn" Tag="AreaCoordinates"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnAdd_Click">
+                            <Viewbox Stretch="Uniform">
+                                <TextBlock Text="Добавить Координаты Площади" />
+                            </Viewbox>
+                        </Button>
 
 
                         <Label  Name="labelOperatorsHeader" Content="Операторы этого выбранного элемента" HorizontalAlignment="Center" Visibility="Collapsed"  ></Label>
@@ -568,7 +593,7 @@
                                         <GridViewColumn Header="Удалить">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <Button Background="Black" Width="20" Foreground="Red" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnDeleteListview_Click">
+                                                    <Button Background="Black" Width="20" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnDeleteListview_Click">
                                                         <Viewbox Stretch="Uniform">
                                                             <TextBlock Text="Х" />
                                                         </Viewbox>
@@ -580,6 +605,11 @@
                                 </ListView.View>
                             </ListView>
                         </ScrollViewer>
+                        <Button x:Name="operatorAddBtn"  Tag="Operator" Background="Black"  Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnAdd_Click">
+                            <Viewbox Stretch="Uniform">
+                                <TextBlock Text="Добавить Оператора" />
+                            </Viewbox>
+                        </Button>
 
                         <Label  Name="labelAnalystHeader" Content="Аналитики этого контракта" HorizontalAlignment="Center" Visibility="Collapsed"></Label>
 
@@ -618,10 +648,11 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
+                                        
                                         <GridViewColumn Header="Удалить">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <Button Background="Black" Width="20" Foreground="Red" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnDeleteListview_Click">
+                                                    <Button Background="Black" Width="20" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnDeleteListview_Click">
                                                         <Viewbox Stretch="Uniform">
                                                             <TextBlock Text="Х" />
                                                         </Viewbox>
@@ -633,6 +664,11 @@
                                 </ListView.View>
                             </ListView>
                         </ScrollViewer>
+                        <Button x:Name="analystAddBtn" Tag="Analyst"  Background="Black"  Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnAdd_Click">
+                            <Viewbox Stretch="Uniform">
+                                <TextBlock Text="Добавить Аналитика" />
+                            </Viewbox>
+                        </Button>
                     </StackPanel>
 
                 </ScrollViewer>

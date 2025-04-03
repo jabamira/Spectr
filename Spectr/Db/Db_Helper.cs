@@ -13,11 +13,12 @@ using System;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using Contract = Spectr.Data.Contract;
+using System.Windows;
 namespace Spectr.Db
 {
     public class Db_Helper
     {
-        ApplicationContext context;
+        public ApplicationContext context;
         public ObservableCollection<Contract> contracts;
         public Db_Helper() 
         {
@@ -44,7 +45,7 @@ namespace Spectr.Db
                     area.Contract.Areas.Remove(area);
 
                     break;
-                    { }
+                    
                 case Profile profile: 
                     context.Profiles.Remove(profile); 
                     profile.Area.Profiles.Remove(profile);
@@ -54,7 +55,29 @@ namespace Spectr.Db
                     context.Pickets.Remove(picket);
                     picket.Profile.Pickets.Remove(picket);
                     break;
-              
+                
+                case Operator @operator: 
+                    context.Operators.Remove(@operator);
+                    break;
+
+                case Analyst analyst:
+                    context.Analysts.Remove(analyst);
+                    break;
+
+                case AreaCoordinates areaCoordinate:
+           
+                    context.AreaCoordinates.Remove(areaCoordinate);
+                    break;
+
+                case ProfileCoordinates profileCoordinate:
+                
+                    context.ProfileCoordinates.Remove(profileCoordinate);
+                    break;
+
+                default:
+                    MessageBox.Show("Неизвестный тип данных для удаления.");
+                    break;
+
             }
             context.SaveChanges();
 

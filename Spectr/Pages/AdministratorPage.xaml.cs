@@ -28,7 +28,14 @@ namespace Spectr
     {
         Administrator Administrator;
         Db_Helper dbHelper;
-        
+        ObservableCollection<Area> areas = new ObservableCollection<Area>();
+        ObservableCollection<Profile> profiles = new ObservableCollection<Profile>();
+        ObservableCollection<Picket> pickets = new ObservableCollection<Picket>();
+        ObservableCollection<Operator> operators = new ObservableCollection<Operator>();
+        ObservableCollection<Analyst> analysts = new ObservableCollection<Analyst>();
+        ObservableCollection<AreaCoordinates> areaCcoordinates = new ObservableCollection<AreaCoordinates>();
+        ObservableCollection<ProfileCoordinates> profileCoordinates = new ObservableCollection<ProfileCoordinates>();
+
         public AdministratorPage(Administrator administrator)
         {
             Administrator = administrator;
@@ -56,7 +63,7 @@ namespace Spectr
         private void BtnDelete_Click(object sender, RoutedEventArgs e)
         {
 
-            if (treeView.SelectedItem == null) return; // Если ничего не выбрано — выход
+            if (treeView.SelectedItem == null) return; 
 
             MessageBoxResult result = MessageBox.Show(
                 "Вы уверены, что хотите удалить этот элемент?",
@@ -71,7 +78,73 @@ namespace Spectr
                
             }
         }
-     
+
+        private void BtnDeleteListview_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button)
+            {
+ 
+                var itemToDelete = button.DataContext;
+
+                if (itemToDelete == null) return;
+
+                MessageBoxResult result = MessageBox.Show(
+                    "Вы уверены, что хотите удалить этот элемент?",
+                    "Подтверждение удаления",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning
+                );
+
+                if (result == MessageBoxResult.Yes)
+                {
+                   
+                    switch (itemToDelete)
+                    {
+                        case Area area:
+                            dbHelper.DeleteProject(area); 
+                            areas.Remove(area);
+                            break;
+
+                        case Profile profile:
+                            dbHelper.DeleteProject(profile);
+                            profiles.Remove(profile);
+                            break;
+
+                        case Picket picket:
+                            dbHelper.DeleteProject(picket);
+                            pickets.Remove(picket);
+                            break;
+
+                        case Operator @operator: // Используем @ перед operator, чтобы избежать конфликта с ключевым словом
+                            dbHelper.DeleteProject(@operator);
+                            operators.Remove(@operator);
+                            break;
+
+                        case Analyst analyst:
+                            dbHelper.DeleteProject(analyst);
+                            analysts.Remove(analyst);
+                            break;
+
+                        case AreaCoordinates areaCoordinate:
+                            dbHelper.DeleteProject(areaCoordinate);
+                            areaCcoordinates.Remove(areaCoordinate);
+                            break;
+
+                        case ProfileCoordinates profileCoordinate:
+                            dbHelper.DeleteProject(profileCoordinate);
+                            profileCoordinates.Remove(profileCoordinate);
+                            break;
+
+                        default:
+                            MessageBox.Show("Неизвестный тип данных для удаления.");
+                            break;
+                    }
+                }
+            }
+        }
+
+
+
         private void btnDeleteInTreeview_Click(object sender, RoutedEventArgs e)
         {
 
@@ -151,21 +224,30 @@ namespace Spectr
             {
                 this.DataContext = selectedContract;
                 infoLabel.Content = $"Информация о контракте {selectedContract.ContractID}";
-                listViewArea.ItemsSource = selectedContract.Areas;
+                areas = selectedContract.Areas;
+                listViewArea.ItemsSource = areas;
 
-                listViewAnalysts.ItemsSource = selectedContract.ContractAnalysts
-                   .Select(ca => ca.Analyst)
-                   .Distinct()
-                   .ToList();
+                var analystsList = selectedContract.ContractAnalysts
+      .Select(ca => ca.Analyst)
+      .Distinct()
+      .ToList();
 
-                List<Operator> allOperators = selectedContract.Areas
+
+                analysts.Clear(); 
+                foreach (var analyst in selectedContract.ContractAnalysts.Select(ca => ca.Analyst).Distinct())
+                {
+                    analysts.Add(analyst);
+                }
+                listViewAnalysts.ItemsSource = analysts;
+
+                List<Operator>list = selectedContract.Areas
                    .SelectMany(a => a.Profiles)
                    .SelectMany(p => p.Pickets)
                    .Select(pk => pk.Operator)
                    .Distinct()
                    .ToList();
-
-                listViewOperators.ItemsSource = allOperators;
+                operators = CollectionExtensions.ToObservableCollection(list);
+                listViewOperators.ItemsSource = operators;
 
                 infoContractId.Visibility = Visibility.Visible;
                 infoContractIdLabel.Visibility = Visibility.Visible;
@@ -213,8 +295,11 @@ namespace Spectr
             {
                 this.DataContext = selectedArea;
                 infoLabel.Content = $"Информация о Площади {selectedArea.AreaName}, {selectedArea.AreaID}";
-                listViewProfile.ItemsSource = selectedArea.Profiles;
-                listViewAreaCoordinates.ItemsSource = selectedArea.AreaCoordinates;
+                profiles = selectedArea.Profiles;
+                listViewProfile.ItemsSource = profiles;
+                areaCcoordinates = selectedArea.AreaCoordinates;
+                listViewAreaCoordinates.ItemsSource = areaCcoordinates;
+
 
                 List<Operator> allOperators = selectedArea.Profiles
                    .SelectMany(p => p.Pickets)
@@ -251,15 +336,17 @@ namespace Spectr
             {
                 this.DataContext = selectedProfile;
                 infoLabel.Content = $"Информация о Профиле {selectedProfile.ProfileName}, {selectedProfile.ProfileID}";
-                listViewPickets.ItemsSource = selectedProfile.Pickets;
-                listViewProfileCoordinates.ItemsSource = selectedProfile.ProfileCoordinates;
+                pickets = selectedProfile.Pickets;
+                listViewPickets.ItemsSource =pickets;
+                selectedProfile.ProfileCoordinates = profileCoordinates;
+                listViewProfileCoordinates.ItemsSource = profileCoordinates;
 
                 List<Operator> allOperators = selectedProfile.Pickets
                    .Select(pk => pk.Operator)
                    .Distinct()
                    .ToList();
-
-                listViewOperators.ItemsSource = allOperators;
+                operators = CollectionExtensions.ToObservableCollection(allOperators);
+                listViewOperators.ItemsSource = operators;
 
                 infoProfileID.Visibility = Visibility.Visible;
                 infoProfileIDLabel.Visibility = Visibility.Visible;
@@ -328,11 +415,11 @@ namespace Spectr
 
 
                 List<Operator> allOperators = new List<Operator> { selectedPicket.Operator };
-
+                operators = CollectionExtensions.ToObservableCollection(allOperators);
                 labelOperatorsHeader.Visibility = Visibility.Visible;
                 labelOperatorsHeader.Content = $"Оператор пикета: {selectedPicket.PicketID}";
 
-                listViewOperators.ItemsSource = allOperators;
+                listViewOperators.ItemsSource = operators;
                 listViewOperators.Visibility = Visibility.Visible;
 
                 listViewOperators.Items.Refresh();

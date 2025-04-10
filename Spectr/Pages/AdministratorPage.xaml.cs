@@ -65,7 +65,7 @@ namespace Spectr
                 switch (tagValue) 
                 {
                     case "Area":
-                        Area newArea = new Area { AreaName = "Введите Имя" };
+                        Area newArea = new Area { AreaName = "Введите Имя"};
                         areas.Add(newArea); 
                         break;
 
@@ -80,7 +80,7 @@ namespace Spectr
                         break;
 
                     case "Operator":
-                        Operator newOperator = new Operator { /* Заполните свойства Operator */ };
+                        Operator newOperator = new Operator { OperatorLogin = "0", OperatorPassword="0"};
                         operators.Add(newOperator); // Используем свойство Operators
                         break;
 
@@ -259,10 +259,7 @@ namespace Spectr
 
         }
 
-        private void listView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-          
-        }
+
 
         private void treeView_SelectedItemChanged_1(object sender, RoutedPropertyChangedEventArgs<object> e)
         {

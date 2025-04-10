@@ -107,61 +107,88 @@ namespace Spectr.Db
                     .ToList() // ✅ Закрываем `ToList()` перед закрытием скобки
             );
         }
-        public void SaveProject(object project) 
+        public void SaveProject(object project)
         {
             if (project == null) return;
 
-
-            Debug.WriteLine(project.GetType());
-            switch (project)
+            try
             {
-                case Contract contract:
-                    context.Contracts.Update(contract);
-                    Debug.WriteLine( contract.StartDate);
-                    context.SaveChanges();
- 
-                    break;
+                switch (project)
+                {
+                    case Contract contract:
+                        if (contract.ContractID == 0)
+                            context.Contracts.Add(contract);
+                        else
+                            context.Contracts.Update(contract);
+                        break;
 
-                case Area area:
-                    context.Areas.Update(area);
-                    context.SaveChanges();
+                    case Area area:
+                        if (area.AreaID == 0)
+                            context.Areas.Add(area);
+                        else
+                            context.Areas.Update(area);
+                        break;
 
-                    break;
+                    case Profile profile:
+                        if (profile.ProfileID == 0)
+                            context.Profiles.Add(profile);
+                        else
+                            context.Profiles.Update(profile);
+                        break;
 
-                case Profile profile:
-                    context.Profiles.Update(profile);
-                    context.SaveChanges();
-   
-                    break;
+                    case Picket picket:
+                        if (picket.PicketID == 0)
+                            context.Pickets.Add(picket);
+                        else
+                            context.Pickets.Update(picket);
 
-                case Picket picket:
-                    context.Pickets.Update(picket);
-                    context.GammaSpectrometers.Update(picket.GammaSpectrometer);
-                    context.SaveChanges();
-     
-                    break;
-                case AreaCoordinates areaCoordinate:
-                    context.AreaCoordinates.Update(areaCoordinate);
-                    context.SaveChanges();
-                    break;
-                case ProfileCoordinates profileCoordinate:
-                    context.ProfileCoordinates.Update(profileCoordinate);
-                    context.SaveChanges();
-                    break;
-                case Analyst analyst:
-                    context.Analysts.Update(analyst);
-                    context.SaveChanges();
-                    break;
-                case Operator _operator:
-                    context.Operators.Update(_operator);
-                    context.SaveChanges();
-                    break;
-               
+                        if (picket.GammaSpectrometer != null)
+                        {
+                            if (picket.GammaSpectrometer.GammaSpectrometerID == 0)
+                                context.GammaSpectrometers.Add(picket.GammaSpectrometer);
+                            else
+                                context.GammaSpectrometers.Update(picket.GammaSpectrometer);
+                        }
+                        break;
+
+                    case AreaCoordinates areaCoordinate:
+                        if (areaCoordinate.AreaCoordinatesID == 0)
+                            context.AreaCoordinates.Add(areaCoordinate);
+                        else
+                            context.AreaCoordinates.Update(areaCoordinate);
+                        break;
+
+                    case ProfileCoordinates profileCoordinate:
+                        if (profileCoordinate.ProfileCoordinatesID == 0)
+                            context.ProfileCoordinates.Add(profileCoordinate);
+                        else
+                            context.ProfileCoordinates.Update(profileCoordinate);
+                        break;
+
+                    case Analyst analyst:
+                        if (analyst.AnalystID == 0)
+                            context.Analysts.Add(analyst);
+                        else
+                            context.Analysts.Update(analyst);
+                        break;
+
+                    case Operator _operator:
+                        if (_operator.OperatorID == null)
+                            context.Operators.Add(_operator);
+                        else
+                            context.Operators.Update(_operator);
+                        break;
+                }
+
+                context.SaveChanges();
             }
-          
-
-
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+                MessageBox.Show($"Произошла ошибка при сохранении данных:\n{ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
+
 
 
 

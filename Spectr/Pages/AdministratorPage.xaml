@@ -559,9 +559,9 @@
                             <ListView Name="listViewOperators" Height="120" Visibility="Collapsed">
                                 <ListView.View>
                                     <GridView>
-                                        <GridViewColumn Header="ID оператора" DisplayMemberBinding="{Binding OperatorID}">
+                                    
                                           
-                                        </GridViewColumn>
+                                        
                                         <GridViewColumn Header="ФИО">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>

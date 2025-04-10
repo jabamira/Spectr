@@ -23,9 +23,9 @@ namespace Spectr.Data
         public DbSet<Picket> Pickets { get; set; }
         public DbSet<Analyst> Analysts { get; set; }
 
-        static string servername = "DBSRV\\ag2024";
+        static string servername_ = "DBSRV\\ag2024";
         static string dbName = "LesnikovAA_2207g2_spectr4";
-        static string servername_ = "ZALMAN\\MSSQLSERVER01";
+        static string servername = "ZALMAN\\MSSQLSERVER01";
         public string connectionString = $"Server={servername};Database={dbName};Integrated Security=True;TrustServerCertificate=True;";
 
 

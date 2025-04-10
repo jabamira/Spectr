@@ -192,24 +192,14 @@ namespace Spectr.Data
 
     public class Contract : INotifyPropertyChanged
     {
-        private int _contractID;
+       
         private DateTime _startDate;
         private DateTime _endDate;
         private string _serviceDescription;
 
         [Key]
-        public int ContractID
-        {
-            get { return _contractID; }
-            set
-            {
-                if (_contractID != value)
-                {
-                    _contractID = value;
-                    OnPropertyChanged(nameof(ContractID));
-                }
-            }
-        }
+        public int ContractID { get; set; }
+        
 
         [Required]
         public DateTime StartDate
@@ -423,34 +413,113 @@ namespace Spectr.Data
         public Profile Profile { get; set; }
     }
     [Index(nameof(OperatorLogin), IsUnique = true)]
-    public class Operator
+    public class Operator : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+       
+        private string _fullName;
+        private string _phoneNumber;
+        private string _email;
+        private string _jobTitle;
+        private string _operatorLogin;
+        private string _operatorPassword;
+
         [Key]
         public int OperatorID { get; set; }
 
+
         [Required]
         [MaxLength(255)]
-        public string FullName { get; set; }
+        public string FullName
+        {
+            get => _fullName;
+            set
+            {
+                if (_fullName != value)
+                {
+                    _fullName = value;
+                    OnPropertyChanged(nameof(FullName));
+                }
+            }
+        }
 
         [Required]
         [MaxLength(50)]
-        public string PhoneNumber { get; set; }
+        public string PhoneNumber
+        {
+            get => _phoneNumber;
+            set
+            {
+                if (_phoneNumber != value)
+                {
+                    _phoneNumber = value;
+                    OnPropertyChanged(nameof(PhoneNumber));
+                }
+            }
+        }
 
         [Required]
         [MaxLength(255)]
-        public string Email { get; set; }
+        public string Email
+        {
+            get => _email;
+            set
+            {
+                if (_email != value)
+                {
+                    _email = value;
+                    OnPropertyChanged(nameof(Email));
+                }
+            }
+        }
 
         [Required]
         [MaxLength(100)]
-        public string JobTitle { get; set; }
+        public string JobTitle
+        {
+            get => _jobTitle;
+            set
+            {
+                if (_jobTitle != value)
+                {
+                    _jobTitle = value;
+                    OnPropertyChanged(nameof(JobTitle));
+                }
+            }
+        }
 
         [Required]
         [MaxLength(50)]
-        public string OperatorLogin { get; set; }
+        public string OperatorLogin
+        {
+            get => _operatorLogin;
+            set
+            {
+                if (_operatorLogin != value)
+                {
+                    _operatorLogin = value;
+                    OnPropertyChanged(nameof(OperatorLogin));
+                }
+            }
+        }
 
         [Required]
         [MaxLength(36)]
-        public string OperatorPassword { get; set; }
+        public string OperatorPassword
+        {
+            get => _operatorPassword;
+            set
+            {
+                if (_operatorPassword != value)
+                {
+                    _operatorPassword = value;
+                    OnPropertyChanged(nameof(OperatorPassword));
+                }
+            }
+        }
 
         public ObservableCollection<Picket> Pickets { get; set; }
         public ObservableCollection<ProfileOperator> ProfileOperators { get; set; }
@@ -472,18 +541,7 @@ namespace Spectr.Data
    
 
         [Key]
-        public int GammaSpectrometerID
-        {
-            get { return _gammaSpectrometerID; }
-            set
-            {
-                if (_gammaSpectrometerID != value)
-                {
-                    _gammaSpectrometerID = value;
-                    OnPropertyChanged(nameof(GammaSpectrometerID));
-                }
-            }
-        }
+        public int GammaSpectrometerID        { get; set; }
 
         [Required]
         public DateTime CommissioningDate
@@ -626,36 +684,113 @@ namespace Spectr.Data
     }
 
     [Index(nameof(AnalystLogin), IsUnique = true)]
-    public class Analyst
+    public class Analyst : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged(string propertyName) =>
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+      
+        private string _fullName;
+        private string _phoneNumber;
+        private string _email;
+        private string _jobTitle;
+        private string _analystLogin;
+        private string _analystPassword;
+
         [Key]
-        public int AnalystID { get; set; }
+        public int AnalystID       { get; set; }
 
         [Required]
         [MaxLength(255)]
-        public string FullName { get; set; }
+        public string FullName
+        {
+            get => _fullName;
+            set
+            {
+                if (_fullName != value)
+                {
+                    _fullName = value;
+                    OnPropertyChanged(nameof(FullName));
+                }
+            }
+        }
 
         [Required]
         [MaxLength(50)]
-        public string PhoneNumber { get; set; }
+        public string PhoneNumber
+        {
+            get => _phoneNumber;
+            set
+            {
+                if (_phoneNumber != value)
+                {
+                    _phoneNumber = value;
+                    OnPropertyChanged(nameof(PhoneNumber));
+                }
+            }
+        }
 
         [Required]
         [MaxLength(255)]
-        public string Email { get; set; }
+        public string Email
+        {
+            get => _email;
+            set
+            {
+                if (_email != value)
+                {
+                    _email = value;
+                    OnPropertyChanged(nameof(Email));
+                }
+            }
+        }
 
         [Required]
         [MaxLength(100)]
-        public string JobTitle { get; set; }
+        public string JobTitle
+        {
+            get => _jobTitle;
+            set
+            {
+                if (_jobTitle != value)
+                {
+                    _jobTitle = value;
+                    OnPropertyChanged(nameof(JobTitle));
+                }
+            }
+        }
 
         [Required]
         [MaxLength(50)]
-        public string AnalystLogin { get; set; }
+        public string AnalystLogin
+        {
+            get => _analystLogin;
+            set
+            {
+                if (_analystLogin != value)
+                {
+                    _analystLogin = value;
+                    OnPropertyChanged(nameof(AnalystLogin));
+                }
+            }
+        }
 
         [Required]
         [MaxLength(36)]
-        public string AnalystPassword { get; set; }
+        public string AnalystPassword
+        {
+            get => _analystPassword;
+            set
+            {
+                if (_analystPassword != value)
+                {
+                    _analystPassword = value;
+                    OnPropertyChanged(nameof(AnalystPassword));
+                }
+            }
+        }
 
-        // Связь многие ко многим
         public ObservableCollection<ContractAnalyst> ContractAnalysts { get; set; }
     }
     public class ContractAnalyst

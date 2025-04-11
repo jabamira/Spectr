@@ -20,6 +20,7 @@ namespace Spectr.Db
     {
         public ApplicationContext context;
         public ObservableCollection<Contract> contracts;
+        public ObservableCollection<Operator> operators;
         public Db_Helper() 
         {
           
@@ -109,8 +110,15 @@ namespace Spectr.Db
                 .ThenInclude(ca => ca.Analyst)
             .ToList()
     );
-}
 
+}
+        public void LoadOperators()
+        {
+            operators = new ObservableCollection<Operator>(
+                context.Operators.ToList()
+            );
+
+        }
 
         public void SaveProject(object project)
         {
@@ -180,13 +188,13 @@ namespace Spectr.Db
                     case Operator _operator:
                         if (_operator.OperatorID == 0)
                         {
-                            _operator.OperatorLogin = _operator.FullName;
+                       
                             context.Operators.Add(_operator);
                         }
 
                         else 
                         {
-                            _operator.OperatorLogin = _operator.FullName;
+                         
                             context.Operators.Update(_operator);
                         }
                            

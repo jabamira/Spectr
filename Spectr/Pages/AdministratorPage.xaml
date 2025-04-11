@@ -146,24 +146,13 @@
 
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Button x:Name="BtnAdd" Height="20" Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnAdd_Click">
+                        <Button x:Name="BtnManagmentWorkers" Height="20" Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnManagmentWorkers_Click">
 
                             <Viewbox Stretch="Uniform">
-                                <TextBlock Text="Добавить" />
+                                <TextBlock Text="Управлять работниками" />
                             </Viewbox>
                         </Button>
 
-                        <Button x:Name="BtnEdit" Height="20"  Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnEdit_Click">
-                            <Viewbox Stretch="Uniform">
-                                <TextBlock Text="  Редактировать" />
-                            </Viewbox>
-
-                        </Button>
-                        <Button x:Name="BtnDelete" Height="20"  Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnDelete_Click">
-                            <Viewbox Stretch="Uniform">
-                                <TextBlock Text="Удалить" />
-                            </Viewbox>
-                        </Button>
                         <Button x:Name="BtnExport" Height="20"  Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnExport_Click">
 
                             <Viewbox Stretch="Uniform">
@@ -565,35 +554,50 @@
                                         <GridViewColumn Header="ФИО">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBox Text="{Binding FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+                                                    <TextBox Text="{Binding FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="OperatorWasEdited" />
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
                                         <GridViewColumn Header="Электронная почта">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBox Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+                                                    <TextBox Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  LostFocus="OperatorWasEdited"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
                                         <GridViewColumn Header="Номер телефона">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBox Text="{Binding PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+                                                    <TextBox Text="{Binding PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  LostFocus="OperatorWasEdited"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
                                         <GridViewColumn Header="Название работы">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBox Text="{Binding JobTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+                                                    <TextBox Text="{Binding JobTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="OperatorWasEdited" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                      
+                                        <GridViewColumn Header="Логин">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding OperatorLogin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="OperatorWasEdited" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Пароль">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding OperatorPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="OperatorWasEdited" />
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
                                         <GridViewColumn Header="Удалить">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <Button Background="Black" Width="20" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnDeleteListview_Click">
+                                                    <Button Background="Black" Width="20" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnDeleteOperator_Click">
                                                         <Viewbox Stretch="Uniform">
                                                             <TextBlock Text="Х" />
                                                         </Viewbox>
@@ -605,9 +609,14 @@
                                 </ListView.View>
                             </ListView>
                         </ScrollViewer>
-                        <Button x:Name="operatorAddBtn"  Tag="Operator" Background="Black"  Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnAdd_Click">
+                        <Button x:Name="operatorAddBtn"  Tag="OperatorAdd" Background="Black"  Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnAdd_Click">
                             <Viewbox Stretch="Uniform">
                                 <TextBlock Text="Добавить Оператора" />
+                            </Viewbox>
+                        </Button>
+                        <Button x:Name="operatorSaveBtn"   Background="Black"  Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="SaveOperator">
+                            <Viewbox Stretch="Uniform">
+                                <TextBlock Text="Сохранить изменения" />
                             </Viewbox>
                         </Button>
 

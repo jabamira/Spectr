@@ -19,6 +19,7 @@ using System.Windows.Shapes;
 using Contract = Spectr.Data.Contract;
 using Spectr.Db;
 using System.Collections.ObjectModel;
+using Azure;
 namespace Spectr
 {
     /// <summary>
@@ -32,6 +33,8 @@ namespace Spectr
         ObservableCollection<Profile> profiles = new ObservableCollection<Profile>();
         ObservableCollection<Picket> pickets = new ObservableCollection<Picket>();
         ObservableCollection<Operator> operators = new ObservableCollection<Operator>();
+        ObservableCollection<Operator> operatorsNew = new ObservableCollection<Operator>();
+        ObservableCollection<Operator> operatorsDelete = new ObservableCollection<Operator>();
         ObservableCollection<Analyst> analysts = new ObservableCollection<Analyst>();
         ObservableCollection<AreaCoordinates> areaCcoordinates = new ObservableCollection<AreaCoordinates>();
         ObservableCollection<ProfileCoordinates> profileCoordinates = new ObservableCollection<ProfileCoordinates>();
@@ -43,17 +46,13 @@ namespace Spectr
             LabelLogin.Content = administrator.AdministratorLogin;
             dbHelper = new();
             dbHelper.LoadContract();
+         
+            
             treeView.ItemsSource = dbHelper.contracts;
             ResetVisibility();
         }
 
-        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Escape)
-            {
-                this.NavigationService.Navigate(new AuthPage());
-            }
-        }
+      
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
        
@@ -79,19 +78,12 @@ namespace Spectr
                         pickets.Add(newPicket);  // Используем свойство Pickets
                         break;
 
-                    case "Operator":
-                        Profile profile = (Profile)infoProfileID.DataContext;
-                        Operator newOperator = new Operator { FullName = "Введите ФИО", PhoneNumber = "Телефонный номер", Email = "Введиет эл почту", JobTitle = "ВЫполняемая работа", OperatorPassword = "0" };
-                        ProfileOperator newLink = new ProfileOperator
-                        {
-                            Operator = newOperator,
-                            Profile = profile // или создай новый, если надо
-                        };
-                        dbHelper.SaveProject(newLink);
-                      
-                      
-                     
-                        operators.Add(newOperator);
+                    case "OperatorAdd":
+                        Operator newOperator = new Operator { FullName = "Введите ФИО",
+                            PhoneNumber = "Телефонный номер", Email = "Введиет эл почту", 
+                            JobTitle = "ВЫполняемая работа", OperatorPassword = "Введите пароль",
+                            OperatorLogin= "Введите логин" };
+                        dbHelper.operators.Add(newOperator);
                         break;
 
                     case "Analyst":
@@ -118,24 +110,7 @@ namespace Spectr
 
 
 
-        private void BtnDelete_Click(object sender, RoutedEventArgs e)
-        {
-
-            if (treeView.SelectedItem == null) return; 
-
-            MessageBoxResult result = MessageBox.Show(
-                "Вы уверены, что хотите удалить этот элемент?",
-                "Подтверждение удаления",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Warning);
-
-            if (result == MessageBoxResult.Yes)
-            {
-                var itemToDelete = treeView.SelectedItem;
-                dbHelper.DeleteProject(itemToDelete);
-               
-            }
-        }
+     
 
         private void BtnDeleteListview_Click(object sender, RoutedEventArgs e)
         {
@@ -201,6 +176,31 @@ namespace Spectr
             }
         }
 
+        private void BtnManagmentWorkers_Click(object sender, RoutedEventArgs e)
+        {
+            dbHelper.LoadOperators();
+            ResetVisibility();
+            labelOperatorsHeader.Visibility = Visibility.Visible;
+            operatorSaveBtn.Visibility = Visibility.Visible;
+            infoLabel.Visibility = Visibility.Collapsed;
+            listViewOperators.Visibility = Visibility.Visible;
+            operatorAddBtn.Visibility = Visibility.Visible;
+        
+            listViewOperators.ItemsSource = dbHelper.operators;
+        }
+
+        private void SaveOperator(object sender, RoutedEventArgs e)
+        {
+            foreach (var op in operatorsNew)
+            {
+                dbHelper.SaveProject(op); // Предполагается, что SaveProject сохраняет одного оператора
+            }
+            foreach (var op in operatorsDelete)
+            {
+                dbHelper.DeleteProject(op); // Предполагается, что SaveProject сохраняет одного оператора
+            }
+            MessageBox.Show("Все операторы успешно сохранены.");
+        }
 
 
         private void btnDeleteInTreeview_Click(object sender, RoutedEventArgs e)
@@ -235,8 +235,17 @@ namespace Spectr
              
             }
         }
+        private void BtnDeleteOperator_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button)
+            {
+                Operator @operator = (Operator)button.DataContext;
+                operatorsDelete.Add(@operator);
+                dbHelper.operators.Remove(@operator);
+            }
+            
+        }
 
-        
         private void BtnEdit_Click(object sender, RoutedEventArgs e)
         {
 
@@ -283,9 +292,9 @@ namespace Spectr
                 listViewArea.ItemsSource = areas;
 
                 var analystsList = selectedContract.ContractAnalysts
-      .Select(ca => ca.Analyst)
-      .Distinct()
-      .ToList();
+                  .Select(ca => ca.Analyst)
+                  .Distinct()
+                  .ToList();
 
 
                 analysts.Clear(); 
@@ -396,6 +405,7 @@ namespace Spectr
                 listViewProfileCoordinates.ItemsSource = profileCoordinates;
 
                 operators.Clear();
+
                 foreach (var @operator in selectedProfile.ProfileOperators.Select(ca => ca.Operator).Distinct())
                 {
                     operators.Add(@operator);
@@ -494,8 +504,11 @@ namespace Spectr
             Debug.WriteLine(1);
         }
         private void ResetVisibility()
+
         {
+            infoLabel.Visibility = Visibility.Visible;
             labelOperatorsHeader.Visibility= Visibility.Collapsed;
+            operatorSaveBtn.Visibility = Visibility.Collapsed;
             listViewOperators.Visibility = Visibility.Collapsed;
             operatorAddBtn.Visibility = Visibility.Collapsed;
             listViewArea.Visibility = Visibility.Collapsed;
@@ -606,9 +619,23 @@ namespace Spectr
                 
             }
         }
+        private void OperatorWasEdited(object sender, RoutedEventArgs e)
+        {
+            if (sender is TextBox textBox && textBox.DataContext is Operator _operator)
+            {
+                operatorsNew.Add(_operator);
 
+            }
+        }
 
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                this.NavigationService.Navigate(new AuthPage());
+            }
+        }
 
-
+       
     }
 }

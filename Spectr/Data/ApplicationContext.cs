@@ -20,6 +20,7 @@ namespace Spectr.Data
         public DbSet<ProfileCoordinates> ProfileCoordinates { get; set; }
         public DbSet<Operator> Operators { get; set; }
         public DbSet<GammaSpectrometer> GammaSpectrometers { get; set; }
+        public DbSet<ProfileOperator> ProfileOperator { get; set; }
         public DbSet<Picket> Pickets { get; set; }
         public DbSet<Analyst> Analysts { get; set; }
 

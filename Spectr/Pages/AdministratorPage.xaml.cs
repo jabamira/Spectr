@@ -80,8 +80,18 @@ namespace Spectr
                         break;
 
                     case "Operator":
-                        Operator newOperator = new Operator { OperatorLogin = "0", OperatorPassword="0"};
-                        operators.Add(newOperator); // Используем свойство Operators
+                        Profile profile = (Profile)infoProfileID.DataContext;
+                        Operator newOperator = new Operator { FullName = "Введите ФИО", PhoneNumber = "Телефонный номер", Email = "Введиет эл почту", JobTitle = "ВЫполняемая работа", OperatorPassword = "0" };
+                        ProfileOperator newLink = new ProfileOperator
+                        {
+                            Operator = newOperator,
+                            Profile = profile // или создай новый, если надо
+                        };
+                        dbHelper.SaveProject(newLink);
+                      
+                      
+                     
+                        operators.Add(newOperator);
                         break;
 
                     case "Analyst":
@@ -285,20 +295,14 @@ namespace Spectr
                 }
                 listViewAnalysts.ItemsSource = analysts;
 
-                List<Operator>list = selectedContract.Areas
-                   .SelectMany(a => a.Profiles)
-                   .SelectMany(p => p.Pickets)
-                   .Select(pk => pk.Operator)
-                   .Distinct()
-                   .ToList();
-                operators = CollectionExtensions.ToObservableCollection(list);
-                listViewOperators.ItemsSource = operators;
+             
+              
 
              
                 addAreaBtn.Visibility = Visibility.Visible;
 
                 analystAddBtn.Visibility = Visibility.Visible;
-                operatorAddBtn.Visibility = Visibility.Visible;
+          
                 
 
                 infoContractId.Visibility = Visibility.Visible;
@@ -332,16 +336,13 @@ namespace Spectr
                 labelAreaHeader.Visibility = Visibility.Visible;
                 labelAreaHeader.Content = $"Площади Контракта: {selectedContract.ContractID}";
 
-                labelOperatorsHeader.Visibility = Visibility.Visible;
-                labelOperatorsHeader.Content = $"Операторы задействованные в контракте: {selectedContract.ContractID}";
-
                 listViewArea.Visibility = Visibility.Visible;
                 listViewAnalysts.Visibility = Visibility.Visible;
-                listViewOperators.Visibility = Visibility.Visible;
+              
 
                 listViewAnalysts.Items.Refresh();
                 listViewArea.Items.Refresh();
-                listViewOperators.Items.Refresh();
+             
             }
             else if (treeView.SelectedItem is Area selectedArea)
             {
@@ -353,20 +354,14 @@ namespace Spectr
                 listViewAreaCoordinates.ItemsSource = areaCcoordinates;
 
 
-                List<Operator> allOperators = selectedArea.Profiles
-                   .SelectMany(p => p.Pickets)
-                   .Select(pk => pk.Operator)
-                   .Distinct()
-                   .ToList();
 
-                listViewOperators.ItemsSource = allOperators;
-
+   
                 
                 addProfileBtn.Visibility = Visibility.Visible;
 
                 areaCoordinateAddBtn.Visibility = Visibility.Visible;
             
-                operatorAddBtn.Visibility = Visibility.Visible;
+        
                
 
                 infoAreaID.Visibility = Visibility.Visible;
@@ -381,16 +376,15 @@ namespace Spectr
                 labelAreaCoordinatesHeader.Visibility = Visibility.Visible;
                 labelAreaCoordinatesHeader.Content = $"Координаты Площади: {selectedArea.AreaName}, {selectedArea.AreaID}";
 
-                labelOperatorsHeader.Visibility = Visibility.Visible;
-                labelOperatorsHeader.Content = $"Операторы на Площади: {selectedArea.AreaName}, {selectedArea.AreaID}";
+            
 
                 listViewProfile.Visibility = Visibility.Visible;
                 listViewAreaCoordinates.Visibility = Visibility.Visible;
-                listViewOperators.Visibility = Visibility.Visible;
+         
 
                 listViewProfile.Items.Refresh();
                 listViewAreaCoordinates.Items.Refresh();
-                listViewOperators.Items.Refresh();
+           
             }
             else if (treeView.SelectedItem is Profile selectedProfile)
             {
@@ -401,11 +395,13 @@ namespace Spectr
                 selectedProfile.ProfileCoordinates = profileCoordinates;
                 listViewProfileCoordinates.ItemsSource = profileCoordinates;
 
-                List<Operator> allOperators = selectedProfile.Pickets
-                   .Select(pk => pk.Operator)
-                   .Distinct()
-                   .ToList();
-                operators = CollectionExtensions.ToObservableCollection(allOperators);
+                operators.Clear();
+                foreach (var @operator in selectedProfile.ProfileOperators.Select(ca => ca.Operator).Distinct())
+                {
+                    operators.Add(@operator);
+                }
+                listViewAnalysts.ItemsSource = analysts;
+       
                 listViewOperators.ItemsSource = operators;
 
                 addPiketBtn.Visibility = Visibility.Visible;
@@ -449,9 +445,6 @@ namespace Spectr
                 infoLabel.Content = $"Информация о Пикете {selectedPicket.PicketID}";
 
             
-                
-                operatorAddBtn.Visibility = Visibility.Visible;
-            
 
                 infoPicketID.Visibility = Visibility.Visible;
                 infoPicketIDLabel.Visibility = Visibility.Visible;
@@ -493,6 +486,7 @@ namespace Spectr
 
                 listViewOperators.ItemsSource = operators;
                 listViewOperators.Visibility = Visibility.Visible;
+                operatorAddBtn.Visibility = Visibility.Visible;
 
                 listViewOperators.Items.Refresh();
             }
@@ -501,6 +495,9 @@ namespace Spectr
         }
         private void ResetVisibility()
         {
+            labelOperatorsHeader.Visibility= Visibility.Collapsed;
+            listViewOperators.Visibility = Visibility.Collapsed;
+            operatorAddBtn.Visibility = Visibility.Collapsed;
             listViewArea.Visibility = Visibility.Collapsed;
             listViewPickets.Visibility = Visibility.Collapsed;
             listViewProfile.Visibility = Visibility.Collapsed;

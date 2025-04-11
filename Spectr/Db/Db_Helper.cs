@@ -82,31 +82,36 @@ namespace Spectr.Db
             context.SaveChanges();
 
         }
-        public void LoadContract()
-        {
-            contracts = new ObservableCollection<Contract>(
-                context.Contracts
-                    .Include(c => c.Customer)
-                    
-                    .Include(c => c.Administrator)
-                    .Include(c => c.Areas)
-                        .ThenInclude(a => a.AreaCoordinates) // Включаем координаты зон
-                    .Include(c => c.Areas)
-                        .ThenInclude(a => a.Profiles)
-                            .ThenInclude(p => p.ProfileCoordinates) // Включаем координаты профилей
-                    .Include(c => c.Areas)
-                        .ThenInclude(a => a.Profiles)
-                            .ThenInclude(p => p.Pickets)
-                                .ThenInclude(pk => pk.Operator)
-                      .Include(c => c.Areas)
-                        .ThenInclude(a => a.Profiles)
-                            .ThenInclude(p => p.Pickets)
-                            .ThenInclude(pk => pk.GammaSpectrometer)
-                    .Include(c => c.ContractAnalysts) // Включаем связи контракт-аналитик
-                        .ThenInclude(ca => ca.Analyst) // Включаем сами объекты аналитиков
-                    .ToList() // ✅ Закрываем `ToList()` перед закрытием скобки
-            );
-        }
+       public void LoadContract()
+{
+    contracts = new ObservableCollection<Contract>(
+        context.Contracts
+            .Include(c => c.Customer)
+            .Include(c => c.Administrator)
+            .Include(c => c.Areas)
+                .ThenInclude(a => a.AreaCoordinates)
+            .Include(c => c.Areas)
+                .ThenInclude(a => a.Profiles)
+                    .ThenInclude(p => p.ProfileCoordinates)
+            .Include(c => c.Areas)
+                .ThenInclude(a => a.Profiles)
+                    .ThenInclude(p => p.Pickets)
+                        .ThenInclude(pk => pk.Operator)
+            .Include(c => c.Areas)
+                .ThenInclude(a => a.Profiles)
+                    .ThenInclude(p => p.Pickets)
+                        .ThenInclude(pk => pk.GammaSpectrometer)
+            .Include(c => c.Areas)
+                .ThenInclude(a => a.Profiles)
+                    .ThenInclude(p => p.ProfileOperators) // 👈 Добавили связь с промежуточной таблицей
+                        .ThenInclude(po => po.Operator)    // 👈 И подгружаем сами объекты Operator
+            .Include(c => c.ContractAnalysts)
+                .ThenInclude(ca => ca.Analyst)
+            .ToList()
+    );
+}
+
+
         public void SaveProject(object project)
         {
             if (project == null) return;
@@ -173,20 +178,35 @@ namespace Spectr.Db
                         break;
 
                     case Operator _operator:
-                        if (_operator.OperatorID == null)
+                        if (_operator.OperatorID == 0)
+                        {
+                            _operator.OperatorLogin = _operator.FullName;
                             context.Operators.Add(_operator);
-                        else
+                        }
+
+                        else 
+                        {
+                            _operator.OperatorLogin = _operator.FullName;
                             context.Operators.Update(_operator);
+                        }
+                           
                         break;
+                    case ProfileOperator profileOperator:
+                        context.ProfileOperator.Add(profileOperator);
+
+                        break;
+
                 }
 
                 context.SaveChanges();
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex);
-                MessageBox.Show($"Произошла ошибка при сохранении данных:\n{ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                var innerMessage = ex.InnerException?.Message ?? ex.Message;
+                Debug.WriteLine(ex); // Показывает полную трассировку
+                MessageBox.Show($"Произошла ошибка при сохранении данных:\n{innerMessage}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+
         }
 
 

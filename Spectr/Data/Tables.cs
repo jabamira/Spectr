@@ -372,6 +372,7 @@ namespace Spectr.Data
         public Area Area { get; set; }
 
         public ObservableCollection<ProfileCoordinates> ProfileCoordinates { get; set; }
+        public ObservableCollection<ProfileOperator> ProfileOperators { get; set; }
         public ObservableCollection<Picket> Pickets { get; set; }
     }
 
@@ -428,6 +429,7 @@ namespace Spectr.Data
         private string _operatorPassword;
 
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int OperatorID { get; set; }
 
 

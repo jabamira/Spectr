@@ -83,7 +83,39 @@ namespace Spectr.Db
             context.SaveChanges();
 
         }
-       public void LoadContract()
+        public void DeleteProfileOperator(int profileId, int operatorId)
+        {
+            var profileOperator = context.ProfileOperator
+                .FirstOrDefault(po => po.ProfileID == profileId && po.OperatorID == operatorId);
+
+            if (profileOperator != null)
+            {
+                context.Remove(profileOperator);
+                context.SaveChanges();
+            }
+        }
+        public void AddProfileOperator(int profileId, int operatorId)
+        {
+    
+            var exists = context.ProfileOperator
+                .Any(po => po.ProfileID == profileId && po.OperatorID == operatorId);
+
+            if (!exists)
+            {
+                var profileOperator = new ProfileOperator
+                {
+                    ProfileID = profileId,
+                    OperatorID = operatorId
+                };
+
+                context.ProfileOperator.Add(profileOperator);
+                context.SaveChanges();
+            }
+        }
+    
+
+
+        public void LoadContract()
 {
     contracts = new ObservableCollection<Contract>(
         context.Contracts

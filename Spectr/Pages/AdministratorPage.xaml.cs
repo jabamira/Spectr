@@ -32,7 +32,7 @@ namespace Spectr
         ObservableCollection<Area> areas = new ObservableCollection<Area>();
         ObservableCollection<Profile> profiles = new ObservableCollection<Profile>();
         ObservableCollection<Picket> pickets = new ObservableCollection<Picket>();
-        ObservableCollection<Operator> operators = new ObservableCollection<Operator>();
+        ObservableCollection<Operator> operatorsProfile = new ObservableCollection<Operator>();
         ObservableCollection<Operator> operatorsNew = new ObservableCollection<Operator>();
         ObservableCollection<Operator> operatorsDelete = new ObservableCollection<Operator>();
         ObservableCollection<Analyst> analysts = new ObservableCollection<Analyst>();
@@ -149,8 +149,9 @@ namespace Spectr
                             break;
 
                         case Operator @operator: // Используем @ перед operator, чтобы избежать конфликта с ключевым словом
-                            dbHelper.DeleteProject(@operator);
-                            operators.Remove(@operator);
+                            Profile _profile = (Profile)infoProfileID.DataContext; 
+                            dbHelper.DeleteProfileOperator(_profile.ProfileID,@operator.OperatorID);
+                            operatorsProfile.Remove(@operator);
                             break;
 
                         case Analyst analyst:
@@ -404,22 +405,38 @@ namespace Spectr
                 selectedProfile.ProfileCoordinates = profileCoordinates;
                 listViewProfileCoordinates.ItemsSource = profileCoordinates;
 
-                operators.Clear();
+                operatorsProfile.Clear();
 
                 foreach (var @operator in selectedProfile.ProfileOperators.Select(ca => ca.Operator).Distinct())
                 {
-                    operators.Add(@operator);
+                    operatorsProfile.Add(@operator);
                 }
                 listViewAnalysts.ItemsSource = analysts;
        
-                listViewOperators.ItemsSource = operators;
+                listViewOperatorsProfile.ItemsSource = operatorsProfile;
+                dbHelper.LoadOperators();
+                listViewOperatorsAdd.ItemsSource = dbHelper.operators;
+            
+                labelPicketsHeader.Content = $"Пикеты Профиля: {selectedProfile.ProfileName}, {selectedProfile.ProfileID}";
 
+                labelProfilesHeader.Visibility = Visibility.Visible;
+                labelProfilesHeader.Content = $"Координаты Профиля: {selectedProfile.ProfileName}, {selectedProfile.ProfileID}";
+
+        
+            
+
+                listViewPickets.Visibility = Visibility.Visible;
+                listViewProfileCoordinates.Visibility = Visibility.Visible;
+                listViewOperatorsAdd.Visibility = Visibility.Visible;
+                listViewOperatorsProfile.Visibility = Visibility.Visible;
+                labelOperatorsProfile.Visibility = Visibility.Visible;
+                labelOperatorsAdd.Visibility = Visibility.Visible;
                 addPiketBtn.Visibility = Visibility.Visible;
-               
-          
+
+
                 profileCoordinateAddBtn.Visibility = Visibility.Visible;
-           
-                operatorAddBtn.Visibility = Visibility.Visible;
+
+
 
                 infoProfileID.Visibility = Visibility.Visible;
                 infoProfileIDLabel.Visibility = Visibility.Visible;
@@ -432,21 +449,10 @@ namespace Spectr
                 infoProfileTypeLabel.Visibility = Visibility.Visible;
 
                 labelPicketsHeader.Visibility = Visibility.Visible;
-                labelPicketsHeader.Content = $"Пикеты Профиля: {selectedProfile.ProfileName}, {selectedProfile.ProfileID}";
-
-                labelProfilesHeader.Visibility = Visibility.Visible;
-                labelProfilesHeader.Content = $"Координаты Профиля: {selectedProfile.ProfileName}, {selectedProfile.ProfileID}";
-
-                labelOperatorsHeader.Visibility = Visibility.Visible;
-                labelOperatorsHeader.Content = $"Операторы на Профиле: {selectedProfile.ProfileName}, {selectedProfile.ProfileID}";
-
-                listViewPickets.Visibility = Visibility.Visible;
-                listViewProfileCoordinates.Visibility = Visibility.Visible;
-                listViewOperators.Visibility = Visibility.Visible;
-
                 listViewPickets.Items.Refresh();
+                listViewOperatorsProfile.Items.Refresh();
                 listViewProfileCoordinates.Items.Refresh();
-                listViewOperators.Items.Refresh();
+                listViewOperatorsAdd.Items.Refresh();
             }
             else if (treeView.SelectedItem is Picket selectedPicket)
             {
@@ -489,14 +495,7 @@ namespace Spectr
 
 
 
-                List<Operator> allOperators = new List<Operator> { selectedPicket.Operator };
-                operators = CollectionExtensions.ToObservableCollection(allOperators);
-                labelOperatorsHeader.Visibility = Visibility.Visible;
-                labelOperatorsHeader.Content = $"Оператор пикета: {selectedPicket.PicketID}";
-
-                listViewOperators.ItemsSource = operators;
-                listViewOperators.Visibility = Visibility.Visible;
-                operatorAddBtn.Visibility = Visibility.Visible;
+              
 
                 listViewOperators.Items.Refresh();
             }
@@ -506,6 +505,10 @@ namespace Spectr
         private void ResetVisibility()
 
         {
+            listViewOperatorsAdd.Visibility = Visibility.Collapsed;
+            labelOperatorsAdd.Visibility = Visibility.Collapsed;
+            listViewOperatorsProfile.Visibility = Visibility.Collapsed;
+            labelOperatorsProfile.Visibility = Visibility.Collapsed;
             infoLabel.Visibility = Visibility.Visible;
             labelOperatorsHeader.Visibility= Visibility.Collapsed;
             operatorSaveBtn.Visibility = Visibility.Collapsed;
@@ -636,6 +639,30 @@ namespace Spectr
             }
         }
 
-       
+        private void BtnAddOperatorListview_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.DataContext is Operator _operator)
+            {
+
+                Profile profile = (Profile)infoProfileID.DataContext;
+
+              
+                dbHelper.AddProfileOperator(profile.ProfileID, _operator.OperatorID);
+
+              
+                bool alreadyExists = operatorsProfile.Any(op => op.OperatorID == _operator.OperatorID);
+
+                if (!alreadyExists)
+                {
+                    operatorsProfile.Add(_operator);
+                }
+                else 
+                {
+                    MessageBox.Show("Оператор уже добавлен!");
+                }
+
+            }
+
+        }
     }
 }

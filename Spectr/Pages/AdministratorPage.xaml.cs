@@ -20,6 +20,7 @@ using Contract = Spectr.Data.Contract;
 using Spectr.Db;
 using System.Collections.ObjectModel;
 using Azure;
+using System.Windows.Media.Animation;
 namespace Spectr
 {
     /// <summary>
@@ -32,12 +33,13 @@ namespace Spectr
         ObservableCollection<Area> areas = new ObservableCollection<Area>();
         ObservableCollection<Profile> profiles = new ObservableCollection<Profile>();
         ObservableCollection<Picket> pickets = new ObservableCollection<Picket>();
-        ObservableCollection<Operator> operatorsProfile = new ObservableCollection<Operator>();
+        public ObservableCollection<Operator> operatorsProfile = new ObservableCollection<Operator>();
         ObservableCollection<Operator> operatorsNew = new ObservableCollection<Operator>();
         ObservableCollection<Operator> operatorsDelete = new ObservableCollection<Operator>();
         ObservableCollection<Analyst> analysts = new ObservableCollection<Analyst>();
         ObservableCollection<AreaCoordinates> areaCcoordinates = new ObservableCollection<AreaCoordinates>();
         ObservableCollection<ProfileCoordinates> profileCoordinates = new ObservableCollection<ProfileCoordinates>();
+   
 
         public AdministratorPage(Administrator administrator)
         {
@@ -74,9 +76,43 @@ namespace Spectr
                         break;
 
                     case "Picket":
-                        Picket newPicket = new Picket { /* Заполните свойства Picket */ };
-                        pickets.Add(newPicket);  // Используем свойство Pickets
+                        if (infoProfileID.DataContext is Profile profile)
+                        {
+                            if (pickets == null)
+                            {
+                                pickets = new ObservableCollection<Picket>();
+                                listViewPickets.ItemsSource = pickets;
+
+                            }
+
+                            Picket newPicket = new Picket
+                            {
+                                CoordinateX = 0f,
+                                CoordinateY = 0f,
+                                Channel1 = 0,
+                                Channel2 = 0,
+                                Channel3 = 0,
+                                ProfileID = profile.ProfileID,
+                                Profile = profile,
+
+                                OperatorID = profile.ProfileOperators?.FirstOrDefault()?.OperatorID ?? 1,
+                                Operator = profile.ProfileOperators?.FirstOrDefault()?.Operator,
+
+                                SpectrometerID = 1,
+                             
+                            };
+                            
+
+                            pickets.Add(newPicket);
+                            
+                     
+                        }
+                        else
+                        {
+                            MessageBox.Show("Выберите профиль перед добавлением пикета.");
+                        }
                         break;
+
 
                     case "OperatorAdd":
                         Operator newOperator = new Operator { FullName = "Введите ФИО",
@@ -407,10 +443,17 @@ namespace Spectr
 
                 operatorsProfile.Clear();
 
-                foreach (var @operator in selectedProfile.ProfileOperators.Select(ca => ca.Operator).Distinct())
+                if (selectedProfile.ProfileOperators != null)
                 {
-                    operatorsProfile.Add(@operator);
+                    foreach (var @operator in selectedProfile.ProfileOperators
+                                                            .Where(ca => ca.Operator != null)
+                                                            .Select(ca => ca.Operator)
+                                                            .Distinct())
+                    {
+                        operatorsProfile.Add(@operator);
+                    }
                 }
+
                 listViewAnalysts.ItemsSource = analysts;
        
                 listViewOperatorsProfile.ItemsSource = operatorsProfile;
@@ -457,7 +500,7 @@ namespace Spectr
             else if (treeView.SelectedItem is Picket selectedPicket)
             {
                 this.DataContext = selectedPicket;
-                Debug.WriteLine(selectedPicket.GammaSpectrometer.CommissioningDate.ToString());
+            
                 infoLabel.Content = $"Информация о Пикете {selectedPicket.PicketID}";
 
             
@@ -664,5 +707,20 @@ namespace Spectr
             }
 
         }
+
+        private void BtnOperatorOnPicketListview_Click(object sender, RoutedEventArgs e)
+        {
+            Picket picket = (Picket)listViewPickets.SelectedItem;
+            if (picket != null) { } 
+            if (sender is Button btn && btn.DataContext is Operator _operator)
+            {
+                picket.Operator = _operator;
+            }
+            dbHelper.SaveProject(picket);
+            listViewPickets.Items.Refresh();
+
+
+        }
+
     }
 }

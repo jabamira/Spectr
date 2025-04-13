@@ -21,6 +21,7 @@ namespace Spectr.Db
         public ApplicationContext context;
         public ObservableCollection<Contract> contracts;
         public ObservableCollection<Operator> operators;
+        public ObservableCollection<Analyst> analysts;
         public Db_Helper() 
         {
           
@@ -94,25 +95,74 @@ namespace Spectr.Db
                 context.SaveChanges();
             }
         }
-        public void AddProfileOperator(int profileId, int operatorId)
+        public void DeleteContractAnalyst(int contractId, int analystId)
         {
-    
-            var exists = context.ProfileOperator
-                .Any(po => po.ProfileID == profileId && po.OperatorID == operatorId);
+            var сontractAnalyst = context.ContractAnalyst
+                .FirstOrDefault(po => po.ContractID == contractId && po.AnalystID == analystId);
 
-            if (!exists)
+            if (сontractAnalyst != null)
             {
-                var profileOperator = new ProfileOperator
-                {
-                    ProfileID = profileId,
-                    OperatorID = operatorId
-                };
-
-                context.ProfileOperator.Add(profileOperator);
+                context.ContractAnalyst.Remove(сontractAnalyst);
                 context.SaveChanges();
             }
         }
-    
+        public void AddProfileOperator(int profileId, int operatorId)
+        {
+            try
+            {
+                // Проверяем, существует ли такой оператор
+                bool operatorExists = context.Operators.Any(op => op.OperatorID == operatorId);
+                if (!operatorExists)
+                {
+                    throw new InvalidOperationException($"Оператор с ID = {operatorId} не существует.");
+                }
+
+                // Проверяем, существует ли уже связь
+                var exists = context.ProfileOperator
+                    .Any(po => po.ProfileID == profileId && po.OperatorID == operatorId);
+
+                if (!exists)
+                {
+                    var profileOperator = new ProfileOperator
+                    {
+                        ProfileID = profileId,
+                        OperatorID = operatorId
+                    };
+
+                    context.ProfileOperator.Add(profileOperator);
+                    context.SaveChanges();
+                }
+            }
+            catch (DbUpdateException ex)
+            {
+                // Например, логирование или сообщение пользователю
+                MessageBox.Show("Ошибка при сохранении связи профиль-оператор: " + ex.InnerException?.Message);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ошибка: " + ex.Message);
+            }
+        }
+
+        public void AddContractAnalyst(int contractId,int analystId)
+        {
+
+            var exists = context.ContractAnalyst
+                .Any(c => c.ContractID== contractId && c.AnalystID == analystId);
+
+            if (!exists)
+            {
+                var contractAnalyst = new ContractAnalyst
+                {
+                    ContractID = contractId,
+                    AnalystID = analystId
+                };
+
+                context.ContractAnalyst.Add(contractAnalyst);
+                context.SaveChanges();
+            }
+        }
+
 
 
         public void LoadContract()
@@ -151,6 +201,13 @@ namespace Spectr.Db
             );
 
         }
+        public void LoadAnalyst()
+        {
+            analysts = new ObservableCollection<Analyst>(
+                context.Analysts.ToList()
+            );
+
+        }
 
         public void SaveProject(object project)
         {
@@ -182,18 +239,9 @@ namespace Spectr.Db
                         break;
 
                     case Picket picket:
-                        if (picket.PicketID == 0)
-                            context.Pickets.Add(picket);
-                        else
+                      
                             context.Pickets.Update(picket);
 
-                        if (picket.GammaSpectrometer != null)
-                        {
-                            if (picket.GammaSpectrometer.GammaSpectrometerID == 0)
-                                context.GammaSpectrometers.Add(picket.GammaSpectrometer);
-                            else
-                                context.GammaSpectrometers.Update(picket.GammaSpectrometer);
-                        }
                         break;
 
                     case AreaCoordinates areaCoordinate:
@@ -231,10 +279,7 @@ namespace Spectr.Db
                         }
                            
                         break;
-                    case ProfileOperator profileOperator:
-                        context.ProfileOperator.Add(profileOperator);
-
-                        break;
+                
 
                 }
 

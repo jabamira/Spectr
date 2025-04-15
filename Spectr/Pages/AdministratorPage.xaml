@@ -551,7 +551,7 @@
 
                         <Label  Name="labelOperatorsHeader" Content="Операторы этого выбранного элемента" HorizontalAlignment="Center" Visibility="Collapsed"  ></Label>
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                            <ListView Name="listViewOperators" Height="320" Visibility="Collapsed" Margin="100 0 0 0">
+                            <ListView Name="listViewOperators" Height="320" Visibility="Collapsed" Margin="20 0 20 0">
                                 <ListView.View>
                                     <GridView>
                                     
@@ -630,7 +630,7 @@
                             <StackPanel Orientation="Vertical">
                                 <Label  Name="labelOperatorsAdd" Content="Выберите оператора для добавления" HorizontalAlignment="Center" Visibility="Collapsed"  ></Label>
                                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                                    <ListView Name="listViewOperatorsAdd" Height="320" Width="200" Visibility="Collapsed">
+                                    <ListView Name="listViewOperatorsAdd" Height="320"  Width="200" Visibility="Collapsed">
                                         <ListView.View>
                                             <GridView>
                                                 <GridViewColumn  Header="Операторы" DisplayMemberBinding="{Binding FullName}">
@@ -657,7 +657,7 @@
                             <StackPanel Orientation="Vertical">
                                 <Label  Name="labelOperatorsProfile"  Content="Операторы этого выбранного элемента" HorizontalAlignment="Center" Visibility="Collapsed"  ></Label>
                                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                                    <ListView Name="listViewOperatorsProfile" Height="320" Visibility="Collapsed">
+                                    <ListView Name="listViewOperatorsProfile" Margin="50 0 0 0" Height="320" Visibility="Collapsed">
                                         <ListView.View>
                                             <GridView>
                                                 <GridViewColumn Header="ID оператора" DisplayMemberBinding="{Binding OperatorID}">

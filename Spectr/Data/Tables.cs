@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Spectr.Data
 {
     public enum UserType
     {
-        Администратор,Оператор,Заказчик,Аналитик
+        Администратор, Оператор, Заказчик, Аналитик
     }
     [Index(nameof(AdministratorLogin), IsUnique = true)]
     public class Administrator
@@ -59,7 +54,7 @@ namespace Spectr.Data
         private string _address;
         private string _customerLogin;
         private string _customerPassword;
-  
+
 
         [Key]
         public int CustomerID
@@ -181,7 +176,7 @@ namespace Spectr.Data
 
         public ObservableCollection<Contract> Contracts { get; set; }
 
-  
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -192,14 +187,14 @@ namespace Spectr.Data
 
     public class Contract : INotifyPropertyChanged
     {
-       
+
         private DateTime _startDate;
         private DateTime _endDate;
         private string _serviceDescription;
 
         [Key]
         public int ContractID { get; set; }
-        
+
 
         [Required]
         public DateTime StartDate
@@ -420,7 +415,7 @@ namespace Spectr.Data
         private void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-       
+
         private string _fullName;
         private string _phoneNumber;
         private string _email;
@@ -540,10 +535,10 @@ namespace Spectr.Data
         private DateTime? _decommissioningDate;
         private float _measurementAccuracy;
         private int _measurementTime;
-   
+
 
         [Key]
-        public int GammaSpectrometerID        { get; set; }
+        public int GammaSpectrometerID { get; set; }
 
         [Required]
         public DateTime CommissioningDate
@@ -601,7 +596,7 @@ namespace Spectr.Data
         }
 
         public ObservableCollection<Picket> Pickets { get; set; }
-      
+
     }
 
 
@@ -692,7 +687,7 @@ namespace Spectr.Data
         private void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-      
+
         private string _fullName;
         private string _phoneNumber;
         private string _email;
@@ -701,7 +696,7 @@ namespace Spectr.Data
         private string _analystPassword;
 
         [Key]
-        public int AnalystID       { get; set; }
+        public int AnalystID { get; set; }
 
         [Required]
         [MaxLength(255)]

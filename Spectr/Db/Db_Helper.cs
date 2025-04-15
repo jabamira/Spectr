@@ -1,19 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Abstractions;
 using Spectr.Data;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System;
 using System.Diagnostics;
-using System.Diagnostics.Contracts;
-using Contract = Spectr.Data.Contract;
 using System.Windows;
+using Contract = Spectr.Data.Contract;
 namespace Spectr.Db
 {
     public class Db_Helper
@@ -22,17 +12,17 @@ namespace Spectr.Db
         public ObservableCollection<Contract> contracts;
         public ObservableCollection<Operator> operators;
         public ObservableCollection<Analyst> analysts;
-        public Db_Helper() 
+        public Db_Helper()
         {
-          
+
             context = new ApplicationContext();
-           
+
         }
         public void DeleteProject(object project)
         {
             if (project == null) return;
 
-     
+
 
             switch (project)
             {
@@ -47,9 +37,9 @@ namespace Spectr.Db
                     area.Contract.Areas.Remove(area);
 
                     break;
-                    
-                case Profile profile: 
-                    context.Profiles.Remove(profile); 
+
+                case Profile profile:
+                    context.Profiles.Remove(profile);
                     profile.Area.Profiles.Remove(profile);
                     break;
 
@@ -57,8 +47,8 @@ namespace Spectr.Db
                     context.Pickets.Remove(picket);
                     picket.Profile.Pickets.Remove(picket);
                     break;
-                
-                case Operator @operator: 
+
+                case Operator @operator:
                     context.Operators.Remove(@operator);
                     break;
 
@@ -67,12 +57,12 @@ namespace Spectr.Db
                     break;
 
                 case AreaCoordinates areaCoordinate:
-           
+
                     context.AreaCoordinates.Remove(areaCoordinate);
                     break;
 
                 case ProfileCoordinates profileCoordinate:
-                
+
                     context.ProfileCoordinates.Remove(profileCoordinate);
                     break;
 
@@ -144,11 +134,11 @@ namespace Spectr.Db
             }
         }
 
-        public void AddContractAnalyst(int contractId,int analystId)
+        public void AddContractAnalyst(int contractId, int analystId)
         {
 
             var exists = context.ContractAnalyst
-                .Any(c => c.ContractID== contractId && c.AnalystID == analystId);
+                .Any(c => c.ContractID == contractId && c.AnalystID == analystId);
 
             if (!exists)
             {
@@ -166,34 +156,34 @@ namespace Spectr.Db
 
 
         public void LoadContract()
-{
-    contracts = new ObservableCollection<Contract>(
-        context.Contracts
-            .Include(c => c.Customer)
-            .Include(c => c.Administrator)
-            .Include(c => c.Areas)
-                .ThenInclude(a => a.AreaCoordinates)
-            .Include(c => c.Areas)
-                .ThenInclude(a => a.Profiles)
-                    .ThenInclude(p => p.ProfileCoordinates)
-            .Include(c => c.Areas)
-                .ThenInclude(a => a.Profiles)
-                    .ThenInclude(p => p.Pickets)
-                        .ThenInclude(pk => pk.Operator)
-            .Include(c => c.Areas)
-                .ThenInclude(a => a.Profiles)
-                    .ThenInclude(p => p.Pickets)
-                        .ThenInclude(pk => pk.GammaSpectrometer)
-            .Include(c => c.Areas)
-                .ThenInclude(a => a.Profiles)
-                    .ThenInclude(p => p.ProfileOperators) // 👈 Добавили связь с промежуточной таблицей
-                        .ThenInclude(po => po.Operator)    // 👈 И подгружаем сами объекты Operator
-            .Include(c => c.ContractAnalysts)
-                .ThenInclude(ca => ca.Analyst)
-            .ToList()
-    );
+        {
+            contracts = new ObservableCollection<Contract>(
+                context.Contracts
+                    .Include(c => c.Customer)
+                    .Include(c => c.Administrator)
+                    .Include(c => c.Areas)
+                        .ThenInclude(a => a.AreaCoordinates)
+                    .Include(c => c.Areas)
+                        .ThenInclude(a => a.Profiles)
+                            .ThenInclude(p => p.ProfileCoordinates)
+                    .Include(c => c.Areas)
+                        .ThenInclude(a => a.Profiles)
+                            .ThenInclude(p => p.Pickets)
+                                .ThenInclude(pk => pk.Operator)
+                    .Include(c => c.Areas)
+                        .ThenInclude(a => a.Profiles)
+                            .ThenInclude(p => p.Pickets)
+                                .ThenInclude(pk => pk.GammaSpectrometer)
+                    .Include(c => c.Areas)
+                        .ThenInclude(a => a.Profiles)
+                            .ThenInclude(p => p.ProfileOperators) // 👈 Добавили связь с промежуточной таблицей
+                                .ThenInclude(po => po.Operator)    // 👈 И подгружаем сами объекты Operator
+                    .Include(c => c.ContractAnalysts)
+                        .ThenInclude(ca => ca.Analyst)
+                    .ToList()
+            );
 
-}
+        }
         public void LoadOperators()
         {
             operators = new ObservableCollection<Operator>(
@@ -239,8 +229,8 @@ namespace Spectr.Db
                         break;
 
                     case Picket picket:
-                      
-                            context.Pickets.Update(picket);
+
+                        context.Pickets.Update(picket);
 
                         break;
 
@@ -268,18 +258,18 @@ namespace Spectr.Db
                     case Operator _operator:
                         if (_operator.OperatorID == 0)
                         {
-                       
+
                             context.Operators.Add(_operator);
                         }
 
-                        else 
+                        else
                         {
-                         
+
                             context.Operators.Update(_operator);
                         }
-                           
+
                         break;
-                
+
 
                 }
 

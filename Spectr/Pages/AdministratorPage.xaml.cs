@@ -1,26 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Spectr.Data;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using Contract = Spectr.Data.Contract;
+﻿using Spectr.Data;
 using Spectr.Db;
 using System.Collections.ObjectModel;
-using Azure;
-using System.Windows.Media.Animation;
+using System.Diagnostics;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using Contract = Spectr.Data.Contract;
 namespace Spectr
 {
     /// <summary>
@@ -39,7 +24,7 @@ namespace Spectr
         ObservableCollection<Analyst> analysts = new ObservableCollection<Analyst>();
         ObservableCollection<AreaCoordinates> areaCcoordinates = new ObservableCollection<AreaCoordinates>();
         ObservableCollection<ProfileCoordinates> profileCoordinates = new ObservableCollection<ProfileCoordinates>();
-   
+
 
         public AdministratorPage(Administrator administrator)
         {
@@ -48,30 +33,30 @@ namespace Spectr
             LabelLogin.Content = administrator.AdministratorLogin;
             dbHelper = new();
             dbHelper.LoadContract();
-         
-            
+
+
             treeView.ItemsSource = dbHelper.contracts;
             ResetVisibility();
         }
 
-      
+
         private void BtnAdd_Click(object sender, RoutedEventArgs e)
         {
-       
+
             if (sender is Button button)
             {
                 string tagValue = button.Tag as string;
 
-               
-                switch (tagValue) 
+
+                switch (tagValue)
                 {
                     case "Area":
-                        Area newArea = new Area { AreaName = "Введите Имя"};
-                        areas.Add(newArea); 
+                        Area newArea = new Area { AreaName = "Введите Имя" };
+                        areas.Add(newArea);
                         break;
 
                     case "Profile":
-                        Profile newProfile = new Profile { ProfileType= "Ведите тип профиля" , ProfileName= "Введите имя профиля"};
+                        Profile newProfile = new Profile { ProfileType = "Ведите тип профиля", ProfileName = "Введите имя профиля" };
                         profiles.Add(newProfile); // Используем свойство Profiles
                         break;
 
@@ -99,13 +84,13 @@ namespace Spectr
                                 Operator = profile.ProfileOperators?.FirstOrDefault()?.Operator,
 
                                 SpectrometerID = 1,
-                             
+
                             };
-                            
+
 
                             pickets.Add(newPicket);
-                            
-                     
+
+
                         }
                         else
                         {
@@ -115,10 +100,15 @@ namespace Spectr
 
 
                     case "OperatorAdd":
-                        Operator newOperator = new Operator { FullName = "Введите ФИО",
-                            PhoneNumber = "Телефонный номер", Email = "Введиет эл почту", 
-                            JobTitle = "ВЫполняемая работа", OperatorPassword = "Введите пароль",
-                            OperatorLogin= "Введите логин" };
+                        Operator newOperator = new Operator
+                        {
+                            FullName = "Введите ФИО",
+                            PhoneNumber = "Телефонный номер",
+                            Email = "Введиет эл почту",
+                            JobTitle = "ВЫполняемая работа",
+                            OperatorPassword = "Введите пароль",
+                            OperatorLogin = "Введите логин"
+                        };
                         dbHelper.operators.Add(newOperator);
                         break;
 
@@ -146,13 +136,13 @@ namespace Spectr
 
 
 
-     
+
 
         private void BtnDeleteListview_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button)
             {
- 
+
                 var itemToDelete = button.DataContext;
 
                 if (itemToDelete == null) return;
@@ -166,11 +156,11 @@ namespace Spectr
 
                 if (result == MessageBoxResult.Yes)
                 {
-                   
+
                     switch (itemToDelete)
                     {
                         case Area area:
-                            dbHelper.DeleteProject(area); 
+                            dbHelper.DeleteProject(area);
                             areas.Remove(area);
                             break;
 
@@ -185,8 +175,8 @@ namespace Spectr
                             break;
 
                         case Operator @operator: // Используем @ перед operator, чтобы избежать конфликта с ключевым словом
-                            Profile _profile = (Profile)infoProfileID.DataContext; 
-                            dbHelper.DeleteProfileOperator(_profile.ProfileID,@operator.OperatorID);
+                            Profile _profile = (Profile)infoProfileID.DataContext;
+                            dbHelper.DeleteProfileOperator(_profile.ProfileID, @operator.OperatorID);
                             operatorsProfile.Remove(@operator);
                             break;
 
@@ -222,7 +212,7 @@ namespace Spectr
             infoLabel.Visibility = Visibility.Collapsed;
             listViewOperators.Visibility = Visibility.Visible;
             operatorAddBtn.Visibility = Visibility.Visible;
-        
+
             listViewOperators.ItemsSource = dbHelper.operators;
         }
 
@@ -245,7 +235,7 @@ namespace Spectr
 
 
 
-         
+
 
             MessageBoxResult result = MessageBox.Show(
                 "Вы уверены, что хотите удалить этот элемент?",
@@ -255,8 +245,8 @@ namespace Spectr
 
             if (result == MessageBoxResult.Yes)
             {
-               
-             
+
+
                 if (sender is Button button)
                 {
 
@@ -265,11 +255,11 @@ namespace Spectr
                     if (itemToRemove != null)
                     {
                         dbHelper.DeleteProject(itemToRemove);
-                  
+
                     }
                 }
 
-             
+
             }
         }
         private void BtnDeleteOperator_Click(object sender, RoutedEventArgs e)
@@ -280,7 +270,7 @@ namespace Spectr
                 operatorsDelete.Add(@operator);
                 dbHelper.operators.Remove(@operator);
             }
-            
+
         }
 
         private void BtnEdit_Click(object sender, RoutedEventArgs e)
@@ -308,7 +298,7 @@ namespace Spectr
 
         }
 
-       
+
 
         private void BtnExport_Click(object sender, RoutedEventArgs e)
         {
@@ -334,32 +324,32 @@ namespace Spectr
                   .ToList();
 
 
-                analysts.Clear(); 
+                analysts.Clear();
                 foreach (var analyst in selectedContract.ContractAnalysts.Select(ca => ca.Analyst).Distinct())
                 {
                     analysts.Add(analyst);
                 }
                 listViewAnalysts.ItemsSource = analysts;
 
-             
-              
 
-             
+
+
+
                 addAreaBtn.Visibility = Visibility.Visible;
 
                 analystAddBtn.Visibility = Visibility.Visible;
-          
-                
+
+
 
                 infoContractId.Visibility = Visibility.Visible;
                 infoContractIdLabel.Visibility = Visibility.Visible;
-               // infoContractId.Text =  selectedContract.ContractID.ToString();
+                // infoContractId.Text =  selectedContract.ContractID.ToString();
 
                 infoContractDate.Visibility = Visibility.Visible;
                 infoContractDate1.Visibility = Visibility.Visible;
                 infoContractDateLabel.Visibility = Visibility.Visible;
-                infoContractDateLabel1.Visibility = Visibility.Visible; 
-            
+                infoContractDateLabel1.Visibility = Visibility.Visible;
+
 
                 infoContractServiceDescription.Visibility = Visibility.Visible;
                 infoContractServiceDescriptionLabel.Visibility = Visibility.Visible;
@@ -384,11 +374,11 @@ namespace Spectr
 
                 listViewArea.Visibility = Visibility.Visible;
                 listViewAnalysts.Visibility = Visibility.Visible;
-              
+
 
                 listViewAnalysts.Items.Refresh();
                 listViewArea.Items.Refresh();
-             
+
             }
             else if (treeView.SelectedItem is Area selectedArea)
             {
@@ -401,14 +391,14 @@ namespace Spectr
 
 
 
-   
-                
+
+
                 addProfileBtn.Visibility = Visibility.Visible;
 
                 areaCoordinateAddBtn.Visibility = Visibility.Visible;
-            
-        
-               
+
+
+
 
                 infoAreaID.Visibility = Visibility.Visible;
                 infoAreaIDLabel.Visibility = Visibility.Visible;
@@ -422,22 +412,22 @@ namespace Spectr
                 labelAreaCoordinatesHeader.Visibility = Visibility.Visible;
                 labelAreaCoordinatesHeader.Content = $"Координаты Площади: {selectedArea.AreaName}, {selectedArea.AreaID}";
 
-            
+
 
                 listViewProfile.Visibility = Visibility.Visible;
                 listViewAreaCoordinates.Visibility = Visibility.Visible;
-         
+
 
                 listViewProfile.Items.Refresh();
                 listViewAreaCoordinates.Items.Refresh();
-           
+
             }
             else if (treeView.SelectedItem is Profile selectedProfile)
             {
                 this.DataContext = selectedProfile;
                 infoLabel.Content = $"Информация о Профиле {selectedProfile.ProfileName}, {selectedProfile.ProfileID}";
                 pickets = selectedProfile.Pickets;
-                listViewPickets.ItemsSource =pickets;
+                listViewPickets.ItemsSource = pickets;
                 selectedProfile.ProfileCoordinates = profileCoordinates;
                 listViewProfileCoordinates.ItemsSource = profileCoordinates;
 
@@ -455,18 +445,18 @@ namespace Spectr
                 }
 
                 listViewAnalysts.ItemsSource = analysts;
-       
+
                 listViewOperatorsProfile.ItemsSource = operatorsProfile;
                 dbHelper.LoadOperators();
                 listViewOperatorsAdd.ItemsSource = dbHelper.operators;
-            
+
                 labelPicketsHeader.Content = $"Пикеты Профиля: {selectedProfile.ProfileName}, {selectedProfile.ProfileID}";
 
                 labelProfilesHeader.Visibility = Visibility.Visible;
                 labelProfilesHeader.Content = $"Координаты Профиля: {selectedProfile.ProfileName}, {selectedProfile.ProfileID}";
 
-        
-            
+
+
 
                 listViewPickets.Visibility = Visibility.Visible;
                 listViewProfileCoordinates.Visibility = Visibility.Visible;
@@ -500,10 +490,10 @@ namespace Spectr
             else if (treeView.SelectedItem is Picket selectedPicket)
             {
                 this.DataContext = selectedPicket;
-            
+
                 infoLabel.Content = $"Информация о Пикете {selectedPicket.PicketID}";
 
-            
+
 
                 infoPicketID.Visibility = Visibility.Visible;
                 infoPicketIDLabel.Visibility = Visibility.Visible;
@@ -530,15 +520,15 @@ namespace Spectr
                 infoGammaSpectrometerMeasurementAccuracyDate.Visibility = Visibility.Visible;
                 infoGammaSpectrometerMeasurementTimeLabel.Visibility = Visibility.Visible;
                 infoGammaSpectrometerMeasurementTime.Visibility = Visibility.Visible;
-               
-              
-               
 
 
 
 
 
-              
+
+
+
+
 
                 listViewOperators.Items.Refresh();
             }
@@ -553,7 +543,7 @@ namespace Spectr
             listViewOperatorsProfile.Visibility = Visibility.Collapsed;
             labelOperatorsProfile.Visibility = Visibility.Collapsed;
             infoLabel.Visibility = Visibility.Visible;
-            labelOperatorsHeader.Visibility= Visibility.Collapsed;
+            labelOperatorsHeader.Visibility = Visibility.Collapsed;
             operatorSaveBtn.Visibility = Visibility.Collapsed;
             listViewOperators.Visibility = Visibility.Collapsed;
             operatorAddBtn.Visibility = Visibility.Collapsed;
@@ -602,7 +592,7 @@ namespace Spectr
             infoChannelLabel3.Visibility = Visibility.Collapsed;
 
 
-           
+
 
             infoContractIdLabel.Visibility = Visibility.Collapsed;
             infoContractDateLabel.Visibility = Visibility.Collapsed;
@@ -610,19 +600,19 @@ namespace Spectr
             infoContractCustomerinfoLabel.Visibility = Visibility.Collapsed;
             infoAreaIDLabel.Visibility = Visibility.Collapsed;
             infoAreaNamedLabel.Visibility = Visibility.Collapsed;
-         
+
             infoProfileIDLabel.Visibility = Visibility.Collapsed;
             infoProfileNameLabel.Visibility = Visibility.Collapsed;
             infoProfileTypeLabel.Visibility = Visibility.Collapsed;
-          
+
             infoPicketIDLabel.Visibility = Visibility.Collapsed;
             infoCoordinateLabel1.Visibility = Visibility.Collapsed;
             infoCoordinateLabel2.Visibility = Visibility.Collapsed;
             infoCoordinate1.Visibility = Visibility.Collapsed;
             infoCoordinate2.Visibility = Visibility.Collapsed;
 
-          
-        
+
+
             infoContractServiceDescriptionLabel.Visibility = Visibility.Collapsed;
 
             infoContractCustomerinfo.Visibility = Visibility.Collapsed;
@@ -640,12 +630,12 @@ namespace Spectr
             infoGammaSpectrometerIDLabel.Visibility = Visibility.Collapsed;
             infoGammaSpectrometerCommissioningDateLabel.Visibility = Visibility.Collapsed;
             infoGammaSpectrometerCommissioningDate.Visibility = Visibility.Collapsed;
-            infoGammaSpectrometerDecommissioningDateLabel.Visibility= Visibility.Collapsed;
-            infoGammaSpectrometerDecommissioningDate.Visibility= Visibility.Collapsed;
+            infoGammaSpectrometerDecommissioningDateLabel.Visibility = Visibility.Collapsed;
+            infoGammaSpectrometerDecommissioningDate.Visibility = Visibility.Collapsed;
             infoGammaSpectrometerMeasurementAccuracyLabel.Visibility = Visibility.Collapsed;
-            infoGammaSpectrometerMeasurementAccuracyDate.Visibility= Visibility.Collapsed;
+            infoGammaSpectrometerMeasurementAccuracyDate.Visibility = Visibility.Collapsed;
             infoGammaSpectrometerMeasurementTimeLabel.Visibility = Visibility.Collapsed;
-            infoGammaSpectrometerMeasurementTime.Visibility= Visibility.Collapsed;
+            infoGammaSpectrometerMeasurementTime.Visibility = Visibility.Collapsed;
 
             addPiketBtn.Visibility = Visibility.Collapsed;
             addProfileBtn.Visibility = Visibility.Collapsed;
@@ -662,7 +652,7 @@ namespace Spectr
             {
                 Debug.WriteLine("here");
                 dbHelper.SaveProject(project);
-                
+
             }
         }
         private void OperatorWasEdited(object sender, RoutedEventArgs e)
@@ -689,17 +679,17 @@ namespace Spectr
 
                 Profile profile = (Profile)infoProfileID.DataContext;
 
-              
+
                 dbHelper.AddProfileOperator(profile.ProfileID, _operator.OperatorID);
 
-              
+
                 bool alreadyExists = operatorsProfile.Any(op => op.OperatorID == _operator.OperatorID);
 
                 if (!alreadyExists)
                 {
                     operatorsProfile.Add(_operator);
                 }
-                else 
+                else
                 {
                     MessageBox.Show("Оператор уже добавлен!");
                 }
@@ -711,7 +701,7 @@ namespace Spectr
         private void BtnOperatorOnPicketListview_Click(object sender, RoutedEventArgs e)
         {
             Picket picket = (Picket)listViewPickets.SelectedItem;
-            if (picket != null) { } 
+            if (picket != null) { }
             if (sender is Button btn && btn.DataContext is Operator _operator)
             {
                 picket.Operator = _operator;

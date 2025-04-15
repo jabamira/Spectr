@@ -1,20 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Spectr.Data;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Xml.Linq;
-using Microsoft.Data.SqlClient;
-using Spectr.Data;
 
 namespace Spectr
 {
@@ -23,17 +9,17 @@ namespace Spectr
     /// </summary>
     public partial class AuthPage : Page
     {
-      
+
         public AuthPage()
         {
-          
-           
+
+
             InitializeComponent();
             typeUserComboBox.ItemsSource = Enum.GetValues(typeof(UserType)).Cast<UserType>();
             typeUserComboBox.SelectedIndex = 0;
             Login_box.Text = "admin_ivan";
             Password_box.Text = "pass_ivan123";
-          
+
 
 
         }
@@ -64,8 +50,8 @@ namespace Spectr
             {
                 MessageBox.Show("Авторизация успешна!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
 
-              
-            
+
+
 
                 switch (selectedUserType)
                 {
@@ -74,10 +60,10 @@ namespace Spectr
                         break;
                     case UserType.Оператор:
                         //this.NavigationService.Navigate(new AdministratorPage());
-                        
+
                         break;
                     case UserType.Заказчик:
-                      //  this.NavigationService.Navigate(new AdministratorPage());
+                        //  this.NavigationService.Navigate(new AdministratorPage());
                         break;
                     case UserType.Аналитик:
                         //this.NavigationService.Navigate(new AdministratorPage());
@@ -87,7 +73,7 @@ namespace Spectr
                         return;
                 }
 
-               
+
             }
             else
             {

@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Spectr.Data;
+﻿using Spectr.Data;
 
 
 public class AuthService

@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Spectr.Data
 {
@@ -42,7 +35,7 @@ namespace Spectr.Data
         {
             if (UseSqlLite)
             {
-                
+
                 optionsBuilder.UseSqlite($"Data Source={DatabasePath}");
             }
             else

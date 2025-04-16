@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure.Identity;
+using Microsoft.EntityFrameworkCore;
 using Spectr.Data;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -10,70 +11,76 @@ namespace Spectr.Db
     {
         public ApplicationContext context;
         public ObservableCollection<Contract> contracts;
+        public ObservableCollection<Profile> profiles;// для операторов
         public ObservableCollection<Operator> operators;
         public ObservableCollection<Analyst> analysts;
+      
         public Db_Helper()
         {
 
             context = new ApplicationContext();
 
         }
+
         public void DeleteProject(object project)
         {
             if (project == null) return;
 
-
-
-            switch (project)
+            try
             {
-                case Contract contract:
-                    context.Contracts.Remove(contract);
-                    contracts.Remove(contract);
-                    break;
+                switch (project)
+                {
+                    case Contract contract:
+                        context.Contracts.Remove(contract);
+                        contracts.Remove(contract);
+                        break;
 
-                case Area area:
-                    context.Areas.Remove(area);
+                    case Area area:
+                        context.Areas.Remove(area);
+                        area.Contract?.Areas?.Remove(area);
+                        break;
 
-                    area.Contract.Areas.Remove(area);
+                    case Profile profile:
+                        context.Profiles.Remove(profile);
+                        profile.Area?.Profiles?.Remove(profile);
+                        break;
 
-                    break;
+                    case Picket picket:
+                        context.Pickets.Remove(picket);
+                        picket.Profile?.Pickets?.Remove(picket);
+                        break;
 
-                case Profile profile:
-                    context.Profiles.Remove(profile);
-                    profile.Area.Profiles.Remove(profile);
-                    break;
+                    case Operator @operator:
+                        context.Operators.Remove(@operator);
+                        break;
 
-                case Picket picket:
-                    context.Pickets.Remove(picket);
-                    picket.Profile.Pickets.Remove(picket);
-                    break;
+                    case Analyst analyst:
+                        context.Analysts.Remove(analyst);
+                        break;
 
-                case Operator @operator:
-                    context.Operators.Remove(@operator);
-                    break;
+                    case AreaCoordinates areaCoordinate:
+                        context.AreaCoordinates.Remove(areaCoordinate);
+                        break;
 
-                case Analyst analyst:
-                    context.Analysts.Remove(analyst);
-                    break;
+                    case ProfileCoordinates profileCoordinate:
+                        context.ProfileCoordinates.Remove(profileCoordinate);
+                        break;
 
-                case AreaCoordinates areaCoordinate:
+                    default:
+                        MessageBox.Show("Неизвестный тип данных для удаления.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                }
 
-                    context.AreaCoordinates.Remove(areaCoordinate);
-                    break;
-
-                case ProfileCoordinates profileCoordinate:
-
-                    context.ProfileCoordinates.Remove(profileCoordinate);
-                    break;
-
-                default:
-                    MessageBox.Show("Неизвестный тип данных для удаления.");
-                    break;
-
+                context.SaveChanges();
             }
-            context.SaveChanges();
-
+            catch (Exception ex)
+            {
+                var innerMessage = ex.InnerException?.Message ?? ex.Message;
+                Debug.WriteLine(ex); // вывод полной трассировки в Output
+                MessageBox.Show($"Произошла ошибка при удалении:\n{innerMessage}", "Ошибка удаления", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
+
         public void DeleteProfileOperator(int profileId, int operatorId)
         {
             var profileOperator = context.ProfileOperator
@@ -184,6 +191,87 @@ namespace Spectr.Db
             );
 
         }
+        public void LoadContractsForAnalyst(int analystId)
+        {
+            contracts = new ObservableCollection<Contract>(
+                context.Contracts
+                    .Include(c => c.Customer)
+                    .Include(c => c.Administrator)
+                    .Include(c => c.Areas)
+                        .ThenInclude(a => a.AreaCoordinates)
+                    .Include(c => c.Areas)
+                        .ThenInclude(a => a.Profiles)
+                            .ThenInclude(p => p.ProfileCoordinates)
+                    .Include(c => c.Areas)
+                        .ThenInclude(a => a.Profiles)
+                            .ThenInclude(p => p.Pickets)
+                                .ThenInclude(pk => pk.Operator)
+                    .Include(c => c.Areas)
+                        .ThenInclude(a => a.Profiles)
+                            .ThenInclude(p => p.Pickets)
+                                .ThenInclude(pk => pk.GammaSpectrometer)
+                    .Include(c => c.Areas)
+                        .ThenInclude(a => a.Profiles)
+                            .ThenInclude(p => p.ProfileOperators)
+                                .ThenInclude(po => po.Operator)
+                    .Include(c => c.ContractAnalysts)
+                        .ThenInclude(ca => ca.Analyst)
+                    .Where(c => c.ContractAnalysts.Any(ca => ca.AnalystID == analystId))
+                    .ToList()
+            );
+        }
+        public void LoadProfilesForOperator(int operatorId)
+        {
+            profiles = new ObservableCollection<Profile>(
+                context.Profiles
+                    .Include(p => p.ProfileCoordinates)
+                    .Include(p => p.Pickets)
+                        .ThenInclude(pk => pk.GammaSpectrometer)
+                    .Include(p => p.Pickets)
+                        .ThenInclude(pk => pk.Operator)
+                    .Include(p => p.ProfileOperators)
+                        .ThenInclude(po => po.Operator)
+                    .Include(p => p.Area)
+                        .ThenInclude(a => a.Contract)
+                            .ThenInclude(c => c.Customer)
+                    .Where(p => p.ProfileOperators.Any(po => po.OperatorID == operatorId))
+                    .ToList()
+            );
+
+         
+        }
+
+        public void LoadContractsForCustomerById(int customerId)
+        {
+            contracts = new ObservableCollection<Contract>(
+                context.Contracts
+                    .Include(c => c.Customer)
+                    .Include(c => c.Administrator)
+                    .Include(c => c.Areas)
+                        .ThenInclude(a => a.AreaCoordinates)
+                    .Include(c => c.Areas)
+                        .ThenInclude(a => a.Profiles)
+                            .ThenInclude(p => p.ProfileCoordinates)
+                    .Include(c => c.Areas)
+                        .ThenInclude(a => a.Profiles)
+                            .ThenInclude(p => p.Pickets)
+                                .ThenInclude(pk => pk.Operator)
+                    .Include(c => c.Areas)
+                        .ThenInclude(a => a.Profiles)
+                            .ThenInclude(p => p.Pickets)
+                                .ThenInclude(pk => pk.GammaSpectrometer)
+                    .Include(c => c.Areas)
+                        .ThenInclude(a => a.Profiles)
+                            .ThenInclude(p => p.ProfileOperators)
+                                .ThenInclude(po => po.Operator)
+                    .Include(c => c.ContractAnalysts)
+                        .ThenInclude(ca => ca.Analyst)
+                    .Where(c => c.Customer.CustomerID == customerId)
+                    .ToList()
+            );
+        }
+
+
         public void LoadOperators()
         {
             operators = new ObservableCollection<Operator>(
@@ -222,10 +310,19 @@ namespace Spectr.Db
                         break;
 
                     case Profile profile:
-                        if (profile.ProfileID == 0)
+                        if (profile.ProfileID == null)
+                        {
                             context.Profiles.Add(profile);
-                        else
+                            Debug.WriteLine(profile.ProfileID);
+                            Debug.WriteLine("null");
+                        }
+
+                        else 
+                        {
                             context.Profiles.Update(profile);
+                            Debug.WriteLine(profile.ProfileID);
+                        }
+                           
                         break;
 
                     case Picket picket:
@@ -267,13 +364,14 @@ namespace Spectr.Db
 
                             context.Operators.Update(_operator);
                         }
-
+                        
                         break;
 
 
                 }
 
                 context.SaveChanges();
+                
             }
             catch (Exception ex)
             {

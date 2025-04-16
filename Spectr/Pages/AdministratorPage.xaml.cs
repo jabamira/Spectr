@@ -18,13 +18,17 @@ namespace Spectr
         ObservableCollection<Area> areas = new ObservableCollection<Area>();
         ObservableCollection<Profile> profiles = new ObservableCollection<Profile>();
         ObservableCollection<Picket> pickets = new ObservableCollection<Picket>();
-        public ObservableCollection<Operator> operatorsProfile = new ObservableCollection<Operator>();
-        ObservableCollection<Operator> operatorsNew = new ObservableCollection<Operator>();
-        ObservableCollection<Operator> operatorsDelete = new ObservableCollection<Operator>();
-        ObservableCollection<Analyst> analysts = new ObservableCollection<Analyst>();
+
+
         ObservableCollection<AreaCoordinates> areaCcoordinates = new ObservableCollection<AreaCoordinates>();
         ObservableCollection<ProfileCoordinates> profileCoordinates = new ObservableCollection<ProfileCoordinates>();
 
+        public ObservableCollection<Operator> operatorsProfile = new ObservableCollection<Operator>();
+        ObservableCollection<Operator> operatorsNew = new ObservableCollection<Operator>();
+        ObservableCollection<Operator> operatorsDelete = new ObservableCollection<Operator>();
+        ObservableCollection<Analyst> analystsContract = new ObservableCollection<Analyst>();
+        ObservableCollection<Analyst> analystsNew = new ObservableCollection<Analyst>();
+        ObservableCollection<Analyst> analystsDelete = new ObservableCollection<Analyst>();
 
         public AdministratorPage(Administrator administrator)
         {
@@ -33,6 +37,7 @@ namespace Spectr
             LabelLogin.Content = administrator.AdministratorLogin;
             dbHelper = new();
             dbHelper.LoadContract();
+
 
 
             treeView.ItemsSource = dbHelper.contracts;
@@ -57,6 +62,12 @@ namespace Spectr
 
                     case "Profile":
                         Profile newProfile = new Profile { ProfileType = "Ведите тип профиля", ProfileName = "Введите имя профиля" };
+                        if (profiles == null)
+                        {
+                            profiles = new ObservableCollection<Profile>();
+                        
+
+                        }
                         profiles.Add(newProfile); // Используем свойство Profiles
                         break;
 
@@ -113,8 +124,17 @@ namespace Spectr
                         break;
 
                     case "Analyst":
-                        Analyst newAnalyst = new Analyst { /* Заполните свойства Analyst */ };
-                        analysts.Add(newAnalyst); // Используем свойство Analysts
+                        Analyst newAnalyst = new Analyst
+                        {
+                            FullName = "Введите Фио",
+                            PhoneNumber = "Телефонный номер",
+                            Email = "Введиет эл почту",
+                            JobTitle = "ВЫполняемая работа",
+                            AnalystLogin = "Login",
+                            AnalystPassword = Guid.NewGuid().ToString(), 
+                            ContractAnalysts = new ObservableCollection<ContractAnalyst>() 
+                        };
+                        dbHelper.analysts.Add(newAnalyst); 
                         break;
 
                     case "AreaCoordinates":
@@ -181,8 +201,9 @@ namespace Spectr
                             break;
 
                         case Analyst analyst:
-                            dbHelper.DeleteProject(analyst);
-                            analysts.Remove(analyst);
+                            Contract contract = (Contract)infoContractIdLabel.DataContext;
+                            dbHelper.DeleteContractAnalyst(contract.ContractID,analyst.AnalystID);
+                            analystsContract.Remove(analyst);
                             break;
 
                         case AreaCoordinates areaCoordinate:
@@ -206,27 +227,40 @@ namespace Spectr
         private void BtnManagmentWorkers_Click(object sender, RoutedEventArgs e)
         {
             dbHelper.LoadOperators();
+            dbHelper.LoadAnalyst();
             ResetVisibility();
             labelOperatorsHeader.Visibility = Visibility.Visible;
             operatorSaveBtn.Visibility = Visibility.Visible;
             infoLabel.Visibility = Visibility.Collapsed;
             listViewOperators.Visibility = Visibility.Visible;
             operatorAddBtn.Visibility = Visibility.Visible;
+            labelAnalystHeader.Visibility = Visibility.Visible;
+            listViewAnalysts.Visibility = Visibility.Visible;
+            analystAddBtn.Visibility = Visibility.Visible;
 
             listViewOperators.ItemsSource = dbHelper.operators;
+            listViewAnalysts.ItemsSource = dbHelper.analysts;
         }
 
-        private void SaveOperator(object sender, RoutedEventArgs e)
+        private void SaveChangeManagment(object sender, RoutedEventArgs e)
         {
             foreach (var op in operatorsNew)
             {
-                dbHelper.SaveProject(op); // Предполагается, что SaveProject сохраняет одного оператора
+                dbHelper.SaveProject(op); 
             }
             foreach (var op in operatorsDelete)
             {
-                dbHelper.DeleteProject(op); // Предполагается, что SaveProject сохраняет одного оператора
+                dbHelper.DeleteProject(op); 
             }
-            MessageBox.Show("Все операторы успешно сохранены.");
+            foreach (var an in analystsNew)
+            {
+                dbHelper.SaveProject(an);
+            }
+            foreach (var an in analystsDelete)
+            {
+                dbHelper.DeleteProject(an);
+            }
+            MessageBox.Show("Все Изменения успешно сохранены.");
         }
 
 
@@ -272,13 +306,23 @@ namespace Spectr
             }
 
         }
+        private void BtnDeleteContract_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button)
+            {
+                Analyst contraa = (Analyst)button.DataContext;
+                analystsDelete.Add(contraa);
+                dbHelper.analysts.Remove(contraa);
+            }
+
+        }
 
         private void BtnEdit_Click(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void BtnInfo_Click(object sender, RoutedEventArgs e)
+        private void BtnGammaSpectr_Click(object sender, RoutedEventArgs e)
         {
 
         }
@@ -313,6 +357,8 @@ namespace Spectr
 
             if (treeView.SelectedItem is Contract selectedContract)
             {
+                dbHelper.LoadAnalyst();
+
                 this.DataContext = selectedContract;
                 infoLabel.Content = $"Информация о контракте {selectedContract.ContractID}";
                 areas = selectedContract.Areas;
@@ -323,21 +369,22 @@ namespace Spectr
                   .Distinct()
                   .ToList();
 
-
-                analysts.Clear();
+                listViewAnalystsAll.ItemsSource = dbHelper.analysts;
+               analystsContract.Clear();
                 foreach (var analyst in selectedContract.ContractAnalysts.Select(ca => ca.Analyst).Distinct())
                 {
-                    analysts.Add(analyst);
+                    analystsContract.Add(analyst);
                 }
-                listViewAnalysts.ItemsSource = analysts;
+                listViewAnalystsContract.ItemsSource = analystsContract;
 
+                labelAnalystContract.Visibility = Visibility.Visible;
+                listViewAnalystsContract.Visibility = Visibility.Visible;
 
-
-
-
+                labelAnalystAll.Visibility = Visibility.Visible;
+                listViewAnalystsAll.Visibility = Visibility.Visible;
                 addAreaBtn.Visibility = Visibility.Visible;
 
-                analystAddBtn.Visibility = Visibility.Visible;
+             
 
 
 
@@ -366,17 +413,17 @@ namespace Spectr
                 infoContractCustomerinfoLabel3.Visibility = Visibility.Visible;
                 infoContractCustomerinfoLabel4.Visibility = Visibility.Visible;
 
-                labelAnalystHeader.Visibility = Visibility.Visible;
-                labelAnalystHeader.Content = $"Аналитики Контракта: {selectedContract.ContractID}";
+               
 
                 labelAreaHeader.Visibility = Visibility.Visible;
                 labelAreaHeader.Content = $"Площади Контракта: {selectedContract.ContractID}";
 
                 listViewArea.Visibility = Visibility.Visible;
-                listViewAnalysts.Visibility = Visibility.Visible;
+
+                listViewAnalystsContract.Items.Refresh();
 
 
-                listViewAnalysts.Items.Refresh();
+
                 listViewArea.Items.Refresh();
 
             }
@@ -428,7 +475,7 @@ namespace Spectr
                 infoLabel.Content = $"Информация о Профиле {selectedProfile.ProfileName}, {selectedProfile.ProfileID}";
                 pickets = selectedProfile.Pickets;
                 listViewPickets.ItemsSource = pickets;
-                selectedProfile.ProfileCoordinates = profileCoordinates;
+                profileCoordinates = selectedProfile.ProfileCoordinates;
                 listViewProfileCoordinates.ItemsSource = profileCoordinates;
 
                 operatorsProfile.Clear();
@@ -444,7 +491,7 @@ namespace Spectr
                     }
                 }
 
-                listViewAnalysts.ItemsSource = analysts;
+                listViewAnalystsContract.ItemsSource = dbHelper.analysts;
 
                 listViewOperatorsProfile.ItemsSource = operatorsProfile;
                 dbHelper.LoadOperators();
@@ -538,6 +585,10 @@ namespace Spectr
         private void ResetVisibility()
 
         {
+            labelAnalystContract.Visibility = Visibility.Collapsed;
+            listViewAnalystsContract.Visibility = Visibility.Collapsed;
+            labelAnalystAll.Visibility = Visibility.Collapsed;
+            listViewAnalystsAll.Visibility = Visibility.Collapsed;
             listViewOperatorsAdd.Visibility = Visibility.Collapsed;
             labelOperatorsAdd.Visibility = Visibility.Collapsed;
             listViewOperatorsProfile.Visibility = Visibility.Collapsed;
@@ -663,6 +714,14 @@ namespace Spectr
 
             }
         }
+        private void AnalystWasEdited(object sender, RoutedEventArgs e)
+        {
+            if (sender is TextBox textBox && textBox.DataContext is Analyst analyst)
+            {
+                analystsNew.Add(analyst);
+
+            }
+        }
 
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
@@ -678,7 +737,7 @@ namespace Spectr
             {
 
                 Profile profile = (Profile)infoProfileID.DataContext;
-
+                
 
                 dbHelper.AddProfileOperator(profile.ProfileID, _operator.OperatorID);
 
@@ -697,17 +756,48 @@ namespace Spectr
             }
 
         }
+        private void BtnAddAnalystListview_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.DataContext is Analyst analyst)
+            {
+
+                Contract contract = (Contract)infoContractIdLabel.DataContext;
+
+
+                dbHelper.AddContractAnalyst(contract.ContractID, analyst.AnalystID);
+
+
+                bool alreadyExists = analystsContract.Any(op => op.AnalystID == analyst.AnalystID);
+
+                if (!alreadyExists)
+                {
+                    analystsContract.Add(analyst);
+                }
+                else
+                {
+                    MessageBox.Show("Аналитик уже добавлен!");
+                }
+
+            }
+
+        }
 
         private void BtnOperatorOnPicketListview_Click(object sender, RoutedEventArgs e)
         {
             Picket picket = (Picket)listViewPickets.SelectedItem;
-            if (picket != null) { }
-            if (sender is Button btn && btn.DataContext is Operator _operator)
+            if (picket != null)
             {
-                picket.Operator = _operator;
+                if (sender is Button btn && btn.DataContext is Operator _operator)
+                {
+                    picket.Operator = _operator;
+                }
+                dbHelper.SaveProject(picket);
+                listViewPickets.Items.Refresh();
             }
-            dbHelper.SaveProject(picket);
-            listViewPickets.Items.Refresh();
+            else 
+            {
+                MessageBox.Show("Выберите Пикет");
+            }
 
 
         }

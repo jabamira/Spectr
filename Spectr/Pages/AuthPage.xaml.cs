@@ -1,4 +1,5 @@
 ﻿using Spectr.Data;
+using Spectr.Pages;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -59,14 +60,14 @@ namespace Spectr
                         this.NavigationService.Navigate(new AdministratorPage((Administrator)user));
                         break;
                     case UserType.Оператор:
-                        //this.NavigationService.Navigate(new AdministratorPage());
+                        this.NavigationService.Navigate(new OperatorPage((Operator)user));
 
                         break;
                     case UserType.Заказчик:
-                        //  this.NavigationService.Navigate(new AdministratorPage());
+                        this.NavigationService.Navigate(new CustomerPage((Customer)user));
                         break;
                     case UserType.Аналитик:
-                        //this.NavigationService.Navigate(new AdministratorPage());
+                        this.NavigationService.Navigate(new AnalystPage((Analyst)user));
                         break;
                     default:
                         MessageBox.Show("Неизвестный тип пользователя!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);

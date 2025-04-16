@@ -124,9 +124,9 @@
                 <StackPanel Grid.Row="0"  Orientation="Vertical">
 
                     <StackPanel Orientation="Horizontal" VerticalAlignment="top" >
-                        <Button x:Name="BtnInfo" Height="20" Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnInfo_Click">
+                        <Button x:Name="BtnInfo" Height="20" Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnGammaSpectr_Click">
                             <Viewbox Stretch="Uniform">
-                                <TextBlock Text="Посмотреть информацию" />
+                                <TextBlock Text="Управлять Гамма-Спектрометрами" />
                             </Viewbox>
                         </Button>
 
@@ -477,14 +477,14 @@
                                         <GridViewColumn Header="X">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBox Text="{Binding X, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus" />
+                                                    <TextBox Text="{Binding X, UpdateSourceTrigger=PropertyChanged}" Width="50" LostFocus="TextBox_LostFocus" />
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
                                         <GridViewColumn Header="Y" >
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBox Text="{Binding Y, UpdateSourceTrigger=PropertyChanged}"  LostFocus="TextBox_LostFocus"/>
+                                                    <TextBox Text="{Binding Y, UpdateSourceTrigger=PropertyChanged}" Width="50" LostFocus="TextBox_LostFocus"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
@@ -620,11 +620,7 @@
                                 <TextBlock Text="Добавить Оператора" />
                             </Viewbox>
                         </Button>
-                        <Button x:Name="operatorSaveBtn"   Background="Black"  Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="SaveOperator">
-                            <Viewbox Stretch="Uniform">
-                                <TextBlock Text="Сохранить изменения" />
-                            </Viewbox>
-                        </Button>
+                     
 
                         <StackPanel Orientation="Horizontal">
                             <StackPanel Orientation="Vertical">
@@ -660,9 +656,7 @@
                                     <ListView Name="listViewOperatorsProfile" Margin="50 0 0 0" Height="320" Visibility="Collapsed">
                                         <ListView.View>
                                             <GridView>
-                                                <GridViewColumn Header="ID оператора" DisplayMemberBinding="{Binding OperatorID}">
-
-                                                </GridViewColumn>
+                                                
                                                 <GridViewColumn Header="ФИО">
                                                     <GridViewColumn.CellTemplate>
                                                         <DataTemplate>
@@ -726,7 +720,7 @@
                        
                     
 
-                        <Label  Name="labelAnalystHeader" Content="Аналитики этого контракта" HorizontalAlignment="Center" Visibility="Collapsed"></Label>
+                        <Label  Name="labelAnalystHeader" Content="Аналитики" HorizontalAlignment="Center" Visibility="Collapsed"></Label>
 
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                             <ListView Name="listViewAnalysts" Height="120" Visibility="Collapsed">
@@ -738,36 +732,50 @@
                                         <GridViewColumn Header="ФИО">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBox Text="{Binding FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+                                                    <TextBox Text="{Binding FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="AnalystWasEdited"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
                                         <GridViewColumn Header="Электронная почта">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBox Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+                                                    <TextBox Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="AnalystWasEdited"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
                                         <GridViewColumn Header="Номер телефона">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBox Text="{Binding PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+                                                    <TextBox Text="{Binding PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="AnalystWasEdited"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
                                         <GridViewColumn Header="Название работы">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <TextBox Text="{Binding JobTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+                                                    <TextBox Text="{Binding JobTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="AnalystWasEdited"/>
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        
+                                        <GridViewColumn Header="Пароль">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding AnalystPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="AnalystWasEdited"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Логин">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding AnalystLogin, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="AnalystWasEdited"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+
                                         <GridViewColumn Header="Удалить">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
-                                                    <Button Background="Black" Width="20" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnDeleteListview_Click">
+                                                    <Button Background="Black" Width="20" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnDeleteContract_Click">
                                                         <Viewbox Stretch="Uniform">
                                                             <TextBlock Text="Х" />
                                                         </Viewbox>
@@ -784,6 +792,108 @@
                                 <TextBlock Text="Добавить Аналитика" />
                             </Viewbox>
                         </Button>
+                        
+                        <Button x:Name="operatorSaveBtn"   Background="Black"  Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="SaveChangeManagment">
+                            <Viewbox Stretch="Uniform">
+                                <TextBlock Text="Сохранить изменения" />
+                            </Viewbox>
+                        </Button>
+
+
+                        <StackPanel Orientation="Horizontal">
+                            <StackPanel Orientation="Vertical">
+                                
+                                <Label  Name="labelAnalystAll" Content="Все аналитики" HorizontalAlignment="Center" Visibility="Collapsed"></Label>
+
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                                    <ListView Name="listViewAnalystsAll" Height="120" Margin="0 0 0 0"  Visibility="Collapsed">
+                                        <ListView.View>
+                                            <GridView>
+                                                <GridViewColumn Header="ID Аналитика" DisplayMemberBinding="{Binding AnalystID}">
+
+                                                </GridViewColumn>
+                                                <GridViewColumn Header="ФИО">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <TextBox Text="{Binding FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+
+                                                <GridViewColumn Header="Добавить Аналитиков">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <Button Background="Black" Width="20" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnAddAnalystListview_Click">
+                                                                <Viewbox Stretch="Uniform">
+                                                                    <TextBlock Text="+" />
+                                                                </Viewbox>
+                                                            </Button>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
+                                </ScrollViewer>
+                            </StackPanel>
+                            <StackPanel Orientation="Vertical">
+                                <Label  Name="labelAnalystContract" Content="Аналитики Контракта" HorizontalAlignment="Center" Visibility="Collapsed"></Label>
+
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                                    <ListView Name="listViewAnalystsContract" Height="120" Margin="100 0 0 0" Visibility="Collapsed">
+                                        <ListView.View>
+                                            <GridView>
+                                                <GridViewColumn Header="ID Аналитика" DisplayMemberBinding="{Binding AnalystID}">
+
+                                                </GridViewColumn>
+                                                <GridViewColumn Header="ФИО">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <TextBox Text="{Binding FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+                                                <GridViewColumn Header="Электронная почта">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <TextBox Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+                                                <GridViewColumn Header="Номер телефона">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <TextBox Text="{Binding PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+                                                <GridViewColumn Header="Название работы">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <TextBox Text="{Binding JobTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" LostFocus="TextBox_LostFocus"/>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+
+                                                <GridViewColumn Header="Удалить">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <Button Background="Black" Width="20" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnDeleteListview_Click">
+                                                                <Viewbox Stretch="Uniform">
+                                                                    <TextBlock Text="Х" />
+                                                                </Viewbox>
+                                                            </Button>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
+                                </ScrollViewer>
+                            </StackPanel>
+
+                        </StackPanel>
                     </StackPanel>
 
                 </ScrollViewer>

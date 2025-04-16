@@ -1,0 +1,627 @@
+﻿<Page x:Class="Spectr.Pages.OperatorPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Spectr.Data" d:DataContext="{d:DesignInstance Type=local:Area}"
+      
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="OperatorPage">
+    <Page.Resources>
+        <Style TargetType="Button" x:Key="RoundedButtonStyle">
+            <Setter Property="Background" Value="Black"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Height" Value="20"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" 
+                        CornerRadius="7">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="red"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+
+
+    </Page.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Первый столбец -->
+        <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="2" Margin="2" CornerRadius="5" Padding="5" Background="LightGray">
+            <StackPanel Orientation="Vertical">
+                <!-- Ваш контент для первого столбца -->
+                <StackPanel Orientation="Horizontal">
+                    <Label FontWeight="Bold">Выберите проект</Label>
+                    <Button Width="100" Margin="80 2 0 0" Style="{StaticResource RoundedButtonStyle}">Сортировка</Button>
+                </StackPanel>
+                <TreeView x:Name="treeView" ItemsSource="{Binding Profiles}" SelectedItemChanged="treeView_SelectedItemChanged">
+                    <!-- Профили -->
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate DataType="{x:Type local:Profile}" ItemsSource="{Binding Pickets}">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Профиль: " />
+                                <TextBlock Text="{Binding ProfileName}" />
+                            </StackPanel>
+
+                            <!-- Пикеты -->
+                            <HierarchicalDataTemplate.ItemTemplate>
+                                <HierarchicalDataTemplate DataType="{x:Type local:Picket}" ItemsSource="{Binding AreaWrapper}">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Пикет №" />
+                                        <TextBlock Text="{Binding PicketID}" />
+                                    </StackPanel>
+
+                                    <!-- Обёртка для области, чтобы TreeView понимал ItemsSource -->
+                                    <HierarchicalDataTemplate.ItemTemplate>
+                                        <HierarchicalDataTemplate DataType="{x:Type local:Area}" ItemsSource="{Binding ContractWrapper}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="Площадь: " />
+                                                <TextBlock Text="{Binding AreaName}" />
+                                            </StackPanel>
+
+                                            <!-- Контракт -->
+                                            <HierarchicalDataTemplate.ItemTemplate>
+                                                <DataTemplate DataType="{x:Type local:Contract}">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <TextBlock Text="Контракт №" />
+                                                        <TextBlock Text="{Binding ContractID}" />
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </HierarchicalDataTemplate.ItemTemplate>
+                                        </HierarchicalDataTemplate>
+                                    </HierarchicalDataTemplate.ItemTemplate>
+                                </HierarchicalDataTemplate>
+                            </HierarchicalDataTemplate.ItemTemplate>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+
+            </StackPanel>
+        </Border>
+
+
+
+        <Border Grid.Column="1" BorderBrush="Gray" BorderThickness="2" Margin="2" CornerRadius="5" Background="LightGray">
+
+            <Grid>
+                <StackPanel Grid.Row="0"  Orientation="Vertical">
+
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="top" >
+
+
+                    
+                    </StackPanel>
+
+                    <Label x:Name="LabelLogin" Content="User:Login" FontSize="12" HorizontalContentAlignment="Right" Margin="0 0 20 0">
+
+                    </Label>
+
+
+
+
+                </StackPanel>
+                <ScrollViewer  Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" >
+                    <StackPanel Orientation="Vertical" >
+
+                        <Label Name="infoLabel" HorizontalContentAlignment="Center">Выберите Проект</Label>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Name="infoContractIdLabel" Content="ID:" />
+                            <TextBox Name="infoContractId" Text="{Binding ContractID,  UpdateSourceTrigger=PropertyChanged}"  HorizontalContentAlignment="Left" Margin="5" Visibility="Collapsed" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent"  />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Label  Name="infoContractDateLabel" Content="Дата заключения контракта:" />
+                            <TextBox Name="infoContractDate" Text="{Binding StartDate,  UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Left" Margin="5" Visibility="Collapsed" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent"  />
+
+                            <Label  Name="infoContractDateLabel1" Content="Дата Завершения контракта:" />
+                            <TextBox Name="infoContractDate1" Text="{Binding EndDate,  UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Left" Margin="5"  Visibility="Collapsed" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent"  />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Label  Name="infoContractServiceDescriptionLabel" Content="Описание услуги:" />
+                            <TextBox Name="infoContractServiceDescription" Text="{Binding ServiceDescription,  UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Left"  Margin="5" Visibility="Collapsed" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent"  />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Label  Name="infoContractCustomerinfoLabel" Content="Заказчик:" />
+                            <TextBox Name="infoContractCustomerinfo" Text="{Binding Customer.CompanyName,  UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Left"  Margin="5" Visibility="Collapsed" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label  Name="infoContractCustomerinfoLabel1" Content="Контактное Лицо" />
+                            <TextBox Name="infoContractCustomerinfo1" Text="{Binding Customer.ContactPerson,  UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Left"  Margin="5" Visibility="Collapsed" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label  Name="infoContractCustomerinfoLabel2" Content="Номер Телефона" />
+                            <TextBox Name="infoContractCustomerinfo2"  Text="{Binding Customer.PhoneNumber,  UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Left"  Margin="5" Visibility="Collapsed" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label  Name="infoContractCustomerinfoLabel3" Content="Электронная почта:" />
+                            <TextBox Name="infoContractCustomerinfo3"  Text="{Binding Customer.Email,  UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Left"  Margin="5" Visibility="Collapsed" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <Label  Name="infoContractCustomerinfoLabel4" Content="Адрес:" />
+                            <TextBox Name="infoContractCustomerinfo4" Text="{Binding Customer.Address,  UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Left"  Margin="5" Visibility="Collapsed" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                        </StackPanel>
+
+
+
+                        <StackPanel Orientation="Horizontal">
+                            <Label  Name="infoAreaIDLabel" Content="ID Площади:" />
+                            <TextBox Name="infoAreaID" HorizontalContentAlignment="Left" Text="{Binding AreaID,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed"  Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Label  Name="infoAreaNamedLabel" Content="Название Площади:" />
+                            <TextBox Name="infoAreaName" HorizontalContentAlignment="Left" Text="{Binding AreaName,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed"  Margin="5" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                        </StackPanel>
+
+
+
+
+
+                        <StackPanel Orientation="Horizontal">
+                            <Label  Name="infoProfileIDLabel" Content="ID Профиля:" />
+                            <TextBox Name="infoProfileID" HorizontalContentAlignment="Left" Text="{Binding ProfileID,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed"   Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Label  Name="infoProfileNameLabel" Content="Название Профиля:" />
+                            <TextBox Name="infoProfileName" HorizontalContentAlignment="Left"  Text="{Binding ProfileName,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Margin="5" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <Label  Name="infoProfileTypeLabel" Content="Тип Профиля:" />
+                            <TextBox Name="infoProfileType" HorizontalContentAlignment="Left"  Text="{Binding ProfileType,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Margin="5" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+
+
+
+
+
+
+
+
+
+
+                            <StackPanel Orientation="Vertical">
+                                <StackPanel Orientation="Horizontal">
+                                    <Label  Name="infoPicketIDLabel" Content="ID Пикета:" />
+                                    <TextBox Name="infoPicketID" HorizontalContentAlignment="Left"  Text="{Binding PicketID,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <Label  Name="infoCoordinateLabel1" Content="Координаты Y:" />
+                                    <TextBox Name="infoCoordinate1" HorizontalContentAlignment="Left"  Text="{Binding CoordinateX,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Margin="5" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+
+                                    <Label  Name="infoCoordinateLabel2" Content="Координаты X:" />
+                                    <TextBox Name="infoCoordinate2" HorizontalContentAlignment="Left"  Text="{Binding CoordinateY,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Margin="5" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal">
+                                    <Label  Name="infoChannelLabel1" Content="Канал1:" />
+                                    <TextBox Name="infoChannel1" HorizontalContentAlignment="Left"  Text="{Binding Channel1,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Margin="5" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                                    <Label  Name="infoChannelLabel2" Content="Канал2:" />
+                                    <TextBox Name="infoChannel2" HorizontalContentAlignment="Left"  Text="{Binding Channel2,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Margin="5" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                                    <Label  Name="infoChannelLabel3" Content="Канал3:" />
+                                    <TextBox Name="infoChannel3" HorizontalContentAlignment="Left"  Text="{Binding Channel3,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Margin="5" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label  Name="infoGammaSpectrometerIDLabel" Content="ID Гамма-спектрометра:" />
+                                    <TextBox Name="infoGammaSpectrometerID" HorizontalContentAlignment="Left"   Text="{Binding GammaSpectrometer.GammaSpectrometerID,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Margin="5" IsReadOnly="True" BorderBrush="Transparent" Background="Transparent" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label  Name="infoGammaSpectrometerCommissioningDateLabel" Content="Дата ввода Гамма-спектромета:" />
+                                    <TextBox Name="infoGammaSpectrometerCommissioningDate" HorizontalContentAlignment="Left"  Text="{Binding GammaSpectrometer.CommissioningDate,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Margin="5" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label  Name="infoGammaSpectrometerDecommissioningDateLabel" Content="Дата списания Гамма-спектромета:" />
+                                    <TextBox Name="infoGammaSpectrometerDecommissioningDate" HorizontalContentAlignment="Left"  Text="{Binding GammaSpectrometer.DecommissioningDate,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Margin="5" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label  Name="infoGammaSpectrometerMeasurementAccuracyLabel" Content="Точность Гамма-спектромета:" />
+                                    <TextBox Name="infoGammaSpectrometerMeasurementAccuracyDate" HorizontalContentAlignment="Left"  Text="{Binding GammaSpectrometer.MeasurementAccuracy,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Margin="5" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal">
+                                    <Label  Name="infoGammaSpectrometerMeasurementTimeLabel" Content="Время измерения Гамма-спектромета:" />
+                                    <TextBox Name="infoGammaSpectrometerMeasurementTime" HorizontalContentAlignment="Left"  Text="{Binding GammaSpectrometer.MeasurementTime,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Margin="5" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
+
+
+
+
+
+
+
+
+
+
+
+
+                        <Label  Name="labelPicketsHeader" Content="Пикеты выбранного профиля" Visibility="Visible" HorizontalAlignment="Center"></Label>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+
+                            <ListView Name="listViewPickets" Height="280" Visibility="Collapsed" >
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="X">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding CoordinateX, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}"   />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+
+                                        <GridViewColumn Header="Y">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding CoordinateY, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}"  />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+
+                                        <GridViewColumn Header="Канал 1">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding Channel1, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}"  />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+
+                                        <GridViewColumn Header="Канал 2">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding Channel2, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}"  />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+
+                                        <GridViewColumn Header="Канал 3">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding Channel3, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}"  />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Оператор" DisplayMemberBinding="{Binding Operator.FullName}" >
+
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Спектрометр" DisplayMemberBinding="{Binding GammaSpectrometer.GammaSpectrometerID}" >
+
+                                        </GridViewColumn>
+
+
+
+
+
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+
+                        </ScrollViewer>
+
+                        <Label  Name="labelProfilesHeader" Content="Профили выбранной площади" Visibility="Collapsed" HorizontalAlignment="Center"></Label>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+
+                            <ListView Name="listViewProfile" Visibility="Collapsed" Height="120" ItemsSource="{Binding Profiles}">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Название профиля">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding ProfileName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Тип профиля">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding ProfileType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+
+
+                        </ScrollViewer>
+
+
+                        <Label  Name="labelAreaHeader" Content="Площади выбранного контракта" Visibility="Collapsed" HorizontalAlignment="Center"></Label>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+
+                            <ListView Name="listViewArea" Visibility="Collapsed" Height="120" ItemsSource="{Binding Areas}">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="ID" DisplayMemberBinding="{Binding AreaID}">
+
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Имя площади">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding AreaName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+
+                        </ScrollViewer>
+
+
+                        <Label  Name="labelProfileCoordinatesHeader" Content="Коорднаты выбранного профиля" Visibility="Collapsed" HorizontalAlignment="Center"></Label>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                            <ListView Name="listViewProfileCoordinates" ItemsSource="{Binding ProfileCoordinates}" Visibility="Collapsed">
+                                <ListView.View>
+                                    <GridView>
+
+                                        <GridViewColumn Header="X">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding X, UpdateSourceTrigger=PropertyChanged}" Width="50" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Y" >
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding Y, UpdateSourceTrigger=PropertyChanged}" Width="50"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+
+                        </ScrollViewer>
+
+                        <Label  Name="labelAreaCoordinatesHeader" Content="Коорднаты выбранной площади" Visibility="Collapsed" HorizontalAlignment="Center"></Label>
+
+                        <ListView Name="listViewAreaCoordinates" ItemsSource="{Binding AreaCoordinates}" Visibility="Collapsed">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="X">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBox Text="{Binding X, StringFormat=F5, UpdateSourceTrigger=PropertyChanged}"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Y">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBox Text="{Binding Y,StringFormat=F5, UpdateSourceTrigger=PropertyChanged}"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+
+
+
+                        <Label  Name="labelOperatorsHeader" Content="Операторы этого выбранного элемента" HorizontalAlignment="Center" Visibility="Collapsed"  ></Label>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                            <ListView Name="listViewOperators" Height="320" Visibility="Collapsed" Margin="20 0 20 0">
+                                <ListView.View>
+                                    <GridView>
+
+
+
+                                        <GridViewColumn Header="ФИО">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Электронная почта">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Номер телефона">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Название работы">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding JobTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </ScrollViewer>
+
+
+                        <StackPanel Orientation="Horizontal">
+
+                            <StackPanel Orientation="Vertical">
+                                <Label  Name="labelOperatorsProfile"  Content="Операторы этого выбранного элемента" HorizontalAlignment="Center" Visibility="Collapsed"  ></Label>
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                                    <ListView Name="listViewOperatorsProfile" Margin="50 0 0 0" Height="320" Visibility="Collapsed">
+                                        <ListView.View>
+                                            <GridView>
+
+                                                <GridViewColumn Header="ФИО">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <TextBox Text="{Binding FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+                                                <GridViewColumn Header="Электронная почта">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <TextBox Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+                                                <GridViewColumn Header="Номер телефона">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <TextBox Text="{Binding PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+                                                <GridViewColumn Header="Название работы">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <TextBox Text="{Binding JobTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+
+
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
+                                </ScrollViewer>
+
+                            </StackPanel>
+                        </StackPanel>
+
+
+
+
+
+                        <Label  Name="labelAnalystHeader" Content="Аналитики" HorizontalAlignment="Center" Visibility="Collapsed"></Label>
+
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                            <ListView Name="listViewAnalysts" Height="120" Visibility="Collapsed">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="ID Аналитика" DisplayMemberBinding="{Binding AnalystID}">
+
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="ФИО">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Электронная почта">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Номер телефона">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Название работы">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding JobTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+
+
+
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+                        </ScrollViewer>
+
+
+
+                        <StackPanel Orientation="Horizontal">
+
+                            <StackPanel Orientation="Vertical">
+                                <Label  Name="labelAnalystContract" Content="Аналитики Контракта" HorizontalAlignment="Center" Visibility="Collapsed"></Label>
+
+                                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                                    <ListView Name="listViewAnalystsContract" Height="120" Margin="100 0 0 0" Visibility="Collapsed">
+                                        <ListView.View>
+                                            <GridView>
+                                                <GridViewColumn Header="ID Аналитика" DisplayMemberBinding="{Binding AnalystID}">
+
+                                                </GridViewColumn>
+                                                <GridViewColumn Header="ФИО">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <TextBox Text="{Binding FullName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+                                                <GridViewColumn Header="Электронная почта">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <TextBox Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+                                                <GridViewColumn Header="Номер телефона">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <TextBox Text="{Binding PhoneNumber, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+                                                <GridViewColumn Header="Название работы">
+                                                    <GridViewColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <TextBox Text="{Binding JobTitle, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                                        </DataTemplate>
+                                                    </GridViewColumn.CellTemplate>
+                                                </GridViewColumn>
+
+
+                                            </GridView>
+                                        </ListView.View>
+                                    </ListView>
+                                </ScrollViewer>
+                            </StackPanel>
+
+                        </StackPanel>
+                    </StackPanel>
+
+                </ScrollViewer>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <!-- Кнопки -->
+                    <RowDefinition Height="*"/>
+                    <!-- ScrollViewer (вся оставшаяся высота) -->
+                </Grid.RowDefinitions>
+            </Grid>
+
+        </Border>
+
+
+    </Grid>
+</Page>

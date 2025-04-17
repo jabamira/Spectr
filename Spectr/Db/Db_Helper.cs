@@ -381,7 +381,255 @@ namespace Spectr.Db
             }
 
         }
+        Random random = new Random();
 
+        // Функция для генерации случайных координат
+        float GenerateRandomCoordinate(float min, float max)
+        {
+            return (float)(random.NextDouble() * (max - min) + min);
+        }
+        public async Task SeedDatabaseAsync(ApplicationContext context)
+        {
+            
+            context.ProfileOperator.RemoveRange(context.ProfileOperator);
+            context.Pickets.RemoveRange(context.Pickets);
+            context.ProfileCoordinates.RemoveRange(context.ProfileCoordinates);
+            context.Profiles.RemoveRange(context.Profiles);
+            context.AreaCoordinates.RemoveRange(context.AreaCoordinates);
+            context.Areas.RemoveRange(context.Areas);
+            context.ContractAnalyst.RemoveRange(context.ContractAnalyst);
+            context.GammaSpectrometers.RemoveRange(context.GammaSpectrometers);
+            context.Contracts.RemoveRange(context.Contracts);
+            context.Customers.RemoveRange(context.Customers);
+            context.Operators.RemoveRange(context.Operators);
+            context.Analysts.RemoveRange(context.Analysts);
+            context.Administrators.RemoveRange(context.Administrators);
+
+            await context.SaveChangesAsync();
+            var op1 = new Operator { FullName = "Дмитрий Кузнецо Дмитриевич", PhoneNumber = "+79139828461", Email = "d.kuznetsov@work.ru", JobTitle = "Инженер-радиолог", OperatorLogin = "operator_dmitry", OperatorPassword = "op_dmitry123" };
+            var op2 = new Operator { FullName = "Ольга Петрова Ивановна", PhoneNumber = "+79163334455", Email = "o.petrova@work.ru", JobTitle = "Эколог", OperatorLogin = "operator_olga", OperatorPassword = "op_olga123" };
+            var op3 = new Operator { FullName = "Лесников Артем Алексеевич", PhoneNumber = "+891376523929", Email = "l.artem@work.ru", JobTitle = "Инженер-радиолог", OperatorLogin = "Artemka", OperatorPassword = "12" };
+            var op4 = new Operator { FullName = "Всеволод Осипкин Чебупелькин", PhoneNumber = "+7916231212", Email = "o.osipkin@work.ru", JobTitle = "Эколог", OperatorLogin = "SEVA", OperatorPassword = "1" };
+            context.Operators.AddRange(op1, op2, op3, op4);
+            await context.SaveChangesAsync();
+
+            // Связь профили-операторы
+          
+
+            // Оборудование
+            var spectrometers = new List<GammaSpectrometer>
+    {
+        new GammaSpectrometer { CommissioningDate = DateTime.Parse("2023-06-10"), MeasurementAccuracy = 0.98f, MeasurementTime = 120 },
+        new GammaSpectrometer { CommissioningDate = DateTime.Parse("2024-01-12"), MeasurementAccuracy = 0.58f, MeasurementTime = 130 },
+        new GammaSpectrometer { CommissioningDate = DateTime.Parse("2023-03-13"), MeasurementAccuracy = 2.98f, MeasurementTime = 110 },
+        new GammaSpectrometer { CommissioningDate = DateTime.Parse("2023-02-14"), MeasurementAccuracy = 1.98f, MeasurementTime = 140 },
+        new GammaSpectrometer { CommissioningDate = DateTime.Parse("2022-08-20"), MeasurementAccuracy = 0.95f, MeasurementTime = 150 }
+    };
+            context.GammaSpectrometers.AddRange(spectrometers);
+            await context.SaveChangesAsync();
+            // Администраторы
+            var admin1 = new Administrator { FullName = "Ivan Petrov", PhoneNumber = "+79991234567", Email = "ivan.petrov@admin.com", JobTitle = "Главный администратор", AdministratorLogin = "admin_ivan", AdministratorPassword = "pass_ivan123" };
+            var admin2 = new Administrator { FullName = "Elena Sokolova", PhoneNumber = "+79997654321", Email = "elena.sokolova@admin.com", JobTitle = "Менеджер", AdministratorLogin = "admin_elena", AdministratorPassword = "pass_elena123" };
+            context.Administrators.AddRange(admin1, admin2);
+
+            // Клиенты
+            var customer1 = new Customer { CompanyName = "ООО \"ТехноСервис\"", PhoneNumber = "+79261234567", ContactPerson = "Андрей Смирнов", Email = "andrey@technoservice.ru", Address = "Москва, ул. Ленина, 10", CustomerLogin = "techservice", CustomerPassword = "tech123" };
+            var customer2 = new Customer { CompanyName = "АО \"ЭкоМониторинг\"", PhoneNumber = "+79371234568", ContactPerson = "Мария Иванова", Email = "maria@ecomonitor.ru", Address = "Санкт-Петербург, ул. Пушкина, 5", CustomerLogin = "ecomonitor", CustomerPassword = "eco123" };
+            context.Customers.AddRange(customer1, customer2);
+            await context.SaveChangesAsync();
+
+            // Контракты
+            var contract1 = new Contract { StartDate = DateTime.Parse("2024-05-11"), EndDate = DateTime.Parse("2025-01-21"), ServiceDescription = "Мониторинг радиационной безопасности", CustomerID = customer1.CustomerID, AdministratorID = admin1.AdministratorID };
+            var contract2 = new Contract { StartDate = DateTime.Parse("2024-06-11"), EndDate = DateTime.Parse("2025-03-15"), ServiceDescription = "Мониторинг уровня радиации", CustomerID = customer1.CustomerID, AdministratorID = admin1.AdministratorID };
+            var contract3 = new Contract { StartDate = DateTime.Parse("2024-03-11"), EndDate = DateTime.Parse("2025-02-01"), ServiceDescription = "Мониторинг чистоты воздуха", CustomerID = customer2.CustomerID, AdministratorID = admin1.AdministratorID };
+            var contract4 = new Contract { StartDate = DateTime.Parse("2024-02-15"), EndDate = DateTime.Parse("2025-02-18"), ServiceDescription = "Экологический аудит", CustomerID = customer2.CustomerID, AdministratorID = admin1.AdministratorID };
+            context.Contracts.AddRange(contract1, contract2, contract3, contract4);
+            await context.SaveChangesAsync();
+
+            var areas = new List<Area>()
+            {
+            new Area { AreaName = "Зона Север", ContractID = contract1.ContractID },
+            new Area { AreaName = "Зона Запад", ContractID = contract1.ContractID },
+            new Area { AreaName = "Зона Северо-Восток", ContractID = contract1.ContractID },
+            new Area { AreaName = "Зона Восток", ContractID = contract2.ContractID },
+            new Area { AreaName = "Зона Юг", ContractID = contract2.ContractID },
+            new Area { AreaName = "Зона НижнеВартовск", ContractID = contract2.ContractID },
+            new Area { AreaName = "Зона Плоскогорья", ContractID = contract3.ContractID },
+            new Area { AreaName = "Зона Отчуждения", ContractID = contract4.ContractID },
+            };
+
+             context.Areas.AddRange(areas);
+         
+            await context.SaveChangesAsync();
+
+            Random rand = new Random();
+            List<Profile> profiles = new List<Profile>();
+            List<Picket> pickets = new List<Picket>();
+            var operators = new List<Operator> { op1, op2, op3, op4 };
+            int operatorIndex = 0;
+
+            foreach (var area in areas) // areas — список всех площадей
+            {
+                int profileCount = rand.Next(1, 4); // от 1 до 3 профилей
+
+                for (int i = 0; i < profileCount; i++)
+                {
+                    var profile = new Profile
+                    {
+                        ProfileName = (i % 2 == 0) ? "Радиационный контроль" : "Экологический анализ",
+                        ProfileType = (i % 2 == 0) ? "Гамма-спектрометрия" : "Почвенные исследования",
+                        AreaID = area.AreaID
+                    };
+
+                    profiles.Add(profile);
+                }
+            }
+
+            await context.Profiles.AddRangeAsync(profiles);
+            await context.SaveChangesAsync();
+
+            var savedProfiles = await context.Profiles.ToListAsync();
+
+            foreach (var profile in savedProfiles)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    float coordX = GenerateRandomCoordinate(55.0f, 60.0f);
+                    float coordY = GenerateRandomCoordinate(10.0f, 88.0f);
+                    float ch1 = GenerateRandomCoordinate(0.0f, 100.0f);
+                    float ch2 = GenerateRandomCoordinate(0.0f, 100.0f);
+                    float ch3 = GenerateRandomCoordinate(0.0f, 100.0f);
+
+                    var currentOp = operators[operatorIndex % operators.Count];
+                    operatorIndex++;
+
+                    pickets.Add(new Picket
+                    {
+                        CoordinateX = coordX,
+                        CoordinateY = coordY,
+                        Channel1 = ch1,
+                        Channel2 = ch2,
+                        Channel3 = ch3,
+                        ProfileID = profile.ProfileID,
+                        OperatorID = currentOp.OperatorID,
+                        SpectrometerID = spectrometers[0].GammaSpectrometerID
+                    });
+                }
+            }
+
+            await context.Pickets.AddRangeAsync(pickets);
+            await context.SaveChangesAsync();
+
+
+            // Координаты профилей
+            context.ProfileCoordinates.AddRange(
+            new ProfileCoordinates
+            {
+                X = 35.297322f,
+                Y = 327.1235f,
+                ProfileID = profiles[0].ProfileID
+            },
+            new ProfileCoordinates
+            {
+                X = 319.9410f,
+                Y = 32.34525f,
+                ProfileID = profiles[1].ProfileID
+            }
+        );
+            context.ProfileCoordinates.AddRange(
+          new ProfileCoordinates
+          {
+              X = 55.7522f,
+              Y = 37.6155f,
+              ProfileID = profiles[2].ProfileID
+          },
+          new ProfileCoordinates
+          {
+              X = 59.9350f,
+              Y = 30.3375f,
+              ProfileID = profiles[3].ProfileID
+          }
+      );
+            context.ProfileCoordinates.AddRange(
+       new ProfileCoordinates
+       {
+           X = 5.8722f,
+           Y = 7.2155f,
+           ProfileID = profiles[4].ProfileID
+       },
+       new ProfileCoordinates
+       {
+           X = 529.92150f,
+           Y = 320.375f,
+           ProfileID = profiles[5].ProfileID
+       }
+   );
+            context.ProfileCoordinates.AddRange(
+     new ProfileCoordinates
+     {
+         X = 5.8732f,
+         Y = 12.155f,
+         ProfileID = profiles[4].ProfileID
+     },
+     new ProfileCoordinates
+     {
+         X = 19.9350f,
+         Y = 130.35f,
+         ProfileID = profiles[5].ProfileID
+     }
+ );
+
+
+
+            await context.SaveChangesAsync();
+
+            Analyst analyst1 = new Analyst
+            {
+                FullName = "Сергей Николаев",
+                PhoneNumber = "+79112223344",
+                Email = "sergey.nikolaev@analysis.ru",
+                JobTitle = "Аналитик данных",
+                AnalystLogin = "analyst_sergey",
+                AnalystPassword = "analyst_pass1"
+            };
+
+            Analyst analyst2 = new Analyst
+            {
+                FullName = "Анна Козлова",
+                PhoneNumber = "+79114445566",
+                Email = "anna.kozlova@analysis.ru",
+                JobTitle = "Ведущий аналитик",
+                AnalystLogin = "analyst_anna",
+                AnalystPassword = "analyst_pass2"
+            };
+
+            Analyst analyst3 = new Analyst
+            {
+                FullName = "Игорь Смирнов",
+                PhoneNumber = "+79005556677",
+                Email = "igor.smirnov@analysis.ru",
+                JobTitle = "Младший аналитик",
+                AnalystLogin = "analyst_igor",
+                AnalystPassword = "analyst_pass3"
+            };
+
+            await context.Analysts.AddRangeAsync(analyst1, analyst2, analyst3);
+            await context.SaveChangesAsync();
+
+            var contractAnalysts = new List<ContractAnalyst>
+    {
+        new ContractAnalyst { ContractID = contract1.ContractID, AnalystID = analyst1.AnalystID },
+        new ContractAnalyst { ContractID = contract1.ContractID, AnalystID = analyst2.AnalystID },
+        new ContractAnalyst { ContractID = contract2.ContractID, AnalystID = analyst2.AnalystID },
+        new ContractAnalyst { ContractID = contract3.ContractID, AnalystID = analyst1.AnalystID },
+        new ContractAnalyst { ContractID = contract4.ContractID, AnalystID = analyst2.AnalystID },
+          new ContractAnalyst { ContractID = contract4.ContractID, AnalystID = analyst1.AnalystID },
+        new ContractAnalyst { ContractID = contract1.ContractID, AnalystID = analyst3.AnalystID } // Дополнительно: третий аналитик работает с первым контрактом
+    };
+            await context.ContractAnalyst.AddRangeAsync(contractAnalysts);
+            await context.SaveChangesAsync();
+        }
+      
 
 
 

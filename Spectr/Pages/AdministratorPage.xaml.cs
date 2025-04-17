@@ -1,4 +1,5 @@
-﻿using Spectr.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Spectr.Data;
 using Spectr.Db;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -65,7 +66,7 @@ namespace Spectr
                         if (profiles == null)
                         {
                             profiles = new ObservableCollection<Profile>();
-                        
+
 
                         }
                         profiles.Add(newProfile); // Используем свойство Profiles
@@ -131,10 +132,10 @@ namespace Spectr
                             Email = "Введиет эл почту",
                             JobTitle = "ВЫполняемая работа",
                             AnalystLogin = "Login",
-                            AnalystPassword = Guid.NewGuid().ToString(), 
-                            ContractAnalysts = new ObservableCollection<ContractAnalyst>() 
+                            AnalystPassword = Guid.NewGuid().ToString(),
+                            ContractAnalysts = new ObservableCollection<ContractAnalyst>()
                         };
-                        dbHelper.analysts.Add(newAnalyst); 
+                        dbHelper.analysts.Add(newAnalyst);
                         break;
 
                     case "AreaCoordinates":
@@ -202,7 +203,7 @@ namespace Spectr
 
                         case Analyst analyst:
                             Contract contract = (Contract)infoContractIdLabel.DataContext;
-                            dbHelper.DeleteContractAnalyst(contract.ContractID,analyst.AnalystID);
+                            dbHelper.DeleteContractAnalyst(contract.ContractID, analyst.AnalystID);
                             analystsContract.Remove(analyst);
                             break;
 
@@ -246,11 +247,11 @@ namespace Spectr
         {
             foreach (var op in operatorsNew)
             {
-                dbHelper.SaveProject(op); 
+                dbHelper.SaveProject(op);
             }
             foreach (var op in operatorsDelete)
             {
-                dbHelper.DeleteProject(op); 
+                dbHelper.DeleteProject(op);
             }
             foreach (var an in analystsNew)
             {
@@ -370,7 +371,7 @@ namespace Spectr
                   .ToList();
 
                 listViewAnalystsAll.ItemsSource = dbHelper.analysts;
-               analystsContract.Clear();
+                analystsContract.Clear();
                 foreach (var analyst in selectedContract.ContractAnalysts.Select(ca => ca.Analyst).Distinct())
                 {
                     analystsContract.Add(analyst);
@@ -384,7 +385,7 @@ namespace Spectr
                 listViewAnalystsAll.Visibility = Visibility.Visible;
                 addAreaBtn.Visibility = Visibility.Visible;
 
-             
+
 
 
 
@@ -413,7 +414,7 @@ namespace Spectr
                 infoContractCustomerinfoLabel3.Visibility = Visibility.Visible;
                 infoContractCustomerinfoLabel4.Visibility = Visibility.Visible;
 
-               
+
 
                 labelAreaHeader.Visibility = Visibility.Visible;
                 labelAreaHeader.Content = $"Площади Контракта: {selectedContract.ContractID}";
@@ -737,7 +738,7 @@ namespace Spectr
             {
 
                 Profile profile = (Profile)infoProfileID.DataContext;
-                
+
 
                 dbHelper.AddProfileOperator(profile.ProfileID, _operator.OperatorID);
 
@@ -794,13 +795,22 @@ namespace Spectr
                 dbHelper.SaveProject(picket);
                 listViewPickets.Items.Refresh();
             }
-            else 
+            else
             {
                 MessageBox.Show("Выберите Пикет");
             }
 
 
         }
+
+        private async void ResetDatabaset_Click(object sender, RoutedEventArgs e)
+        {
+            await dbHelper.SeedDatabaseAsync(dbHelper.context);
+            dbHelper.LoadContract(); // Загружаем только после завершения вставки
+            treeView.ItemsSource = dbHelper.contracts;
+            Debug.WriteLine("DB reset");
+        }
+
 
     }
 }

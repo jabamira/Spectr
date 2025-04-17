@@ -162,6 +162,13 @@
                                 <TextBlock Text="Экспортировать" />
                             </Viewbox>
                         </Button>
+
+                        <Button x:Name="ResetDatabase" Height="20"  Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="ResetDatabaset_Click">
+
+                            <Viewbox Stretch="Uniform">
+                                <TextBlock Text="Сгенерировать Данные" />
+                            </Viewbox>
+                        </Button>
                     </StackPanel>
 
                     <Label x:Name="LabelLogin" Content="User:Login" FontSize="12" HorizontalContentAlignment="Right" Margin="0 0 20 0">

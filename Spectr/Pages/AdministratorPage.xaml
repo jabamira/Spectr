@@ -124,7 +124,7 @@
                 <StackPanel Grid.Row="0"  Orientation="Vertical">
 
                     <StackPanel Orientation="Horizontal" VerticalAlignment="top" >
-                        <Button x:Name="BtnInfo" Height="20" Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnGammaSpectr_Click">
+                        <Button x:Name="BtnSpectrometrs" Height="20" Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnGammaSpectr_Click">
                             <Viewbox Stretch="Uniform">
                                 <TextBlock Text="Управлять Гамма-Спектрометрами" />
                             </Viewbox>
@@ -308,10 +308,70 @@
 
 
 
-                          
-                      
 
 
+
+                        <Label  Name="labelSpectrometrsHeader" Content="Гамма Спектрометры" Visibility="Visible" HorizontalAlignment="Center"></Label>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+
+                            <ListView Name="listViewSpectrometrs" Height="280" Visibility="Collapsed" >
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Точность измерений">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding MeasurementAccuracy, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}"   LostFocus="TextBox_LostFocus" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+
+                                        <GridViewColumn Header="Время измерения">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding MeasurementTime, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}"  LostFocus="TextBox_LostFocus" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+
+                                        <GridViewColumn Header="Дата ввода в эксплуатацию">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding CommissioningDate, UpdateSourceTrigger=PropertyChanged}"   LostFocus="TextBox_LostFocus"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+
+                                        <GridViewColumn Header="Дата списания">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding DecommissioningDate, UpdateSourceTrigger=PropertyChanged}"  LostFocus="TextBox_LostFocus" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+
+
+                                      
+                                        <GridViewColumn Header="Удалить" >
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Button Background="Black" Width="20" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnDeleteListview_Click">
+                                                        <Viewbox Stretch="Uniform">
+                                                            <TextBlock Text="Х" />
+                                                        </Viewbox>
+                                                    </Button>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+
+                                        </GridViewColumn>
+
+
+
+
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+
+                        </ScrollViewer>
 
 
 

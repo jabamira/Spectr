@@ -216,6 +216,10 @@ namespace Spectr
                             dbHelper.DeleteProject(profileCoordinate);
                             profileCoordinates.Remove(profileCoordinate);
                             break;
+                        case GammaSpectrometer gammaSpectrometer:
+                            dbHelper.DeleteProject(gammaSpectrometer);
+                            dbHelper.gammaSpectrometers.Remove(gammaSpectrometer);
+                            break;
 
                         default:
                             MessageBox.Show("Неизвестный тип данных для удаления.");
@@ -325,6 +329,15 @@ namespace Spectr
 
         private void BtnGammaSpectr_Click(object sender, RoutedEventArgs e)
         {
+            
+           ResetVisibility();
+            infoLabel.Visibility = Visibility.Collapsed;
+            dbHelper.LoadSpectrometrs();
+            listViewSpectrometrs.ItemsSource = dbHelper.gammaSpectrometers;
+            listViewSpectrometrs.Visibility = Visibility.Visible;
+            labelSpectrometrsHeader.Visibility = Visibility.Visible;
+
+
 
         }
 
@@ -586,6 +599,8 @@ namespace Spectr
         private void ResetVisibility()
 
         {
+            labelSpectrometrsHeader.Visibility = Visibility.Collapsed;
+            listViewSpectrometrs.Visibility = Visibility.Collapsed;
             labelAnalystContract.Visibility = Visibility.Collapsed;
             listViewAnalystsContract.Visibility = Visibility.Collapsed;
             labelAnalystAll.Visibility = Visibility.Collapsed;

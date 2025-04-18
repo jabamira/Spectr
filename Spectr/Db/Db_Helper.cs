@@ -14,7 +14,8 @@ namespace Spectr.Db
         public ObservableCollection<Profile> profiles;// для операторов
         public ObservableCollection<Operator> operators;
         public ObservableCollection<Analyst> analysts;
-      
+        public ObservableCollection<GammaSpectrometer> gammaSpectrometers;
+
         public Db_Helper()
         {
 
@@ -64,6 +65,9 @@ namespace Spectr.Db
 
                     case ProfileCoordinates profileCoordinate:
                         context.ProfileCoordinates.Remove(profileCoordinate);
+                        break;
+                    case GammaSpectrometer gammaSpectrometer:
+                        context.GammaSpectrometers.Remove(gammaSpectrometer);
                         break;
 
                     default:
@@ -286,6 +290,13 @@ namespace Spectr.Db
             );
 
         }
+        public void LoadSpectrometrs()
+        {
+            gammaSpectrometers = new ObservableCollection<GammaSpectrometer>(
+                context.GammaSpectrometers.ToList()
+            );
+
+        }
 
         public void SaveProject(object project)
         {
@@ -468,9 +479,9 @@ namespace Spectr.Db
             var operators = new List<Operator> { op1, op2, op3, op4 };
             int operatorIndex = 0;
 
-            foreach (var area in areas) // areas — список всех площадей
+            foreach (var area in areas) 
             {
-                int profileCount = rand.Next(1, 4); // от 1 до 3 профилей
+                int profileCount = rand.Next(1, 4);
 
                 for (int i = 0; i < profileCount; i++)
                 {
@@ -480,19 +491,36 @@ namespace Spectr.Db
                         ProfileType = (i % 2 == 0) ? "Гамма-спектрометрия" : "Почвенные исследования",
                         AreaID = area.AreaID
                     };
+                  
 
                     profiles.Add(profile);
+                }
+            }
+            foreach (var area in areas)
+            {
+                int AreaCoordinatesCount = rand.Next(3, 6);
+
+                for (int i = 0; i < AreaCoordinatesCount; i++)
+                {
+                   context.AreaCoordinates.Add(
+                   new AreaCoordinates
+                   {
+                       X = GenerateRandomCoordinate(0.0f, 300.0f),
+                       Y = GenerateRandomCoordinate(0.0f, 300.0f),
+                       AreaID = area.AreaID
+                   });               
                 }
             }
 
             await context.Profiles.AddRangeAsync(profiles);
             await context.SaveChangesAsync();
-
+        
             var savedProfiles = await context.Profiles.ToListAsync();
 
             foreach (var profile in savedProfiles)
             {
-                for (int i = 0; i < 5; i++)
+                int picketCount = rand.Next(1, 5);
+                for (int i = 0; i < picketCount; i++)
                 {
                     float coordX = GenerateRandomCoordinate(55.0f, 60.0f);
                     float coordY = GenerateRandomCoordinate(10.0f, 88.0f);
@@ -514,74 +542,26 @@ namespace Spectr.Db
                         OperatorID = currentOp.OperatorID,
                         SpectrometerID = spectrometers[0].GammaSpectrometerID
                     });
+                   
                 }
             }
-
+            foreach (var profile in savedProfiles)
+            {
+                int picketCount = rand.Next(3, 6);
+                for (int i = 0; i < picketCount; i++)
+                {
+                    context.ProfileCoordinates.Add(
+                       new ProfileCoordinates
+                       {
+                           X = GenerateRandomCoordinate(0.0f, 300.0f),
+                           Y = GenerateRandomCoordinate(0.0f, 300.0f),
+                           ProfileID = profile.ProfileID
+                       });
+                }
+            }
             await context.Pickets.AddRangeAsync(pickets);
             await context.SaveChangesAsync();
 
-
-            // Координаты профилей
-            context.ProfileCoordinates.AddRange(
-            new ProfileCoordinates
-            {
-                X = 35.297322f,
-                Y = 327.1235f,
-                ProfileID = profiles[0].ProfileID
-            },
-            new ProfileCoordinates
-            {
-                X = 319.9410f,
-                Y = 32.34525f,
-                ProfileID = profiles[1].ProfileID
-            }
-        );
-            context.ProfileCoordinates.AddRange(
-          new ProfileCoordinates
-          {
-              X = 55.7522f,
-              Y = 37.6155f,
-              ProfileID = profiles[2].ProfileID
-          },
-          new ProfileCoordinates
-          {
-              X = 59.9350f,
-              Y = 30.3375f,
-              ProfileID = profiles[3].ProfileID
-          }
-      );
-            context.ProfileCoordinates.AddRange(
-       new ProfileCoordinates
-       {
-           X = 5.8722f,
-           Y = 7.2155f,
-           ProfileID = profiles[4].ProfileID
-       },
-       new ProfileCoordinates
-       {
-           X = 529.92150f,
-           Y = 320.375f,
-           ProfileID = profiles[5].ProfileID
-       }
-   );
-            context.ProfileCoordinates.AddRange(
-     new ProfileCoordinates
-     {
-         X = 5.8732f,
-         Y = 12.155f,
-         ProfileID = profiles[4].ProfileID
-     },
-     new ProfileCoordinates
-     {
-         X = 19.9350f,
-         Y = 130.35f,
-         ProfileID = profiles[5].ProfileID
-     }
- );
-
-
-
-            await context.SaveChangesAsync();
 
             Analyst analyst1 = new Analyst
             {
@@ -628,8 +608,32 @@ namespace Spectr.Db
     };
             await context.ContractAnalyst.AddRangeAsync(contractAnalysts);
             await context.SaveChangesAsync();
+
+
+            var allPickets = await context.Pickets
+        .Select(p => new { p.ProfileID, p.OperatorID })
+        .ToListAsync();
+
+            // Группируем по профилю и получаем уникальные операторов на каждом профиле
+            var profileOperatorLinks = allPickets
+                .GroupBy(p => p.ProfileID)
+                .SelectMany(g => g.Select(p => p.OperatorID).Distinct()
+                    .Select(operatorId => new ProfileOperator
+                    {
+                        ProfileID = g.Key,
+                        OperatorID = operatorId
+                    }))
+                .ToList();
+
+            // Добавляем полученные связи в базу
+            await context.ProfileOperator.AddRangeAsync(profileOperatorLinks);
+            await context.SaveChangesAsync();
+
         }
-      
+
+
+
+
 
 
 

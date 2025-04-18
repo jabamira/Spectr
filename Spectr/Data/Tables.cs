@@ -530,7 +530,6 @@ namespace Spectr.Data
         private void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-        private int _gammaSpectrometerID;
         private DateTime _commissioningDate;
         private DateTime? _decommissioningDate;
         private float _measurementAccuracy;
@@ -599,7 +598,7 @@ namespace Spectr.Data
 
     }
 
-
+    
     public class Picket : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;

@@ -1,5 +1,4 @@
-﻿using Azure.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Spectr.Data;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -242,7 +241,7 @@ namespace Spectr.Db
                     .ToList()
             );
 
-         
+
         }
 
         public void LoadContractsForCustomerById(int customerId)
@@ -328,12 +327,12 @@ namespace Spectr.Db
                             Debug.WriteLine("null");
                         }
 
-                        else 
+                        else
                         {
                             context.Profiles.Update(profile);
                             Debug.WriteLine(profile.ProfileID);
                         }
-                           
+
                         break;
 
                     case Picket picket:
@@ -375,14 +374,14 @@ namespace Spectr.Db
 
                             context.Operators.Update(_operator);
                         }
-                        
+
                         break;
 
 
                 }
 
                 context.SaveChanges();
-                
+
             }
             catch (Exception ex)
             {
@@ -394,14 +393,16 @@ namespace Spectr.Db
         }
         Random random = new Random();
 
-        // Функция для генерации случайных координат
-        float GenerateRandomCoordinate(float min, float max)
+
+        private float GenerateRandomCoordinate(float min, float max)
         {
-            return (float)(random.NextDouble() * (max - min) + min);
+            Random rand = new Random();
+            return (float)(rand.NextDouble() * (max - min) + min);
         }
+        
         public async Task SeedDatabaseAsync(ApplicationContext context)
         {
-            
+            // Очищаем базу
             context.ProfileOperator.RemoveRange(context.ProfileOperator);
             context.Pickets.RemoveRange(context.Pickets);
             context.ProfileCoordinates.RemoveRange(context.ProfileCoordinates);
@@ -417,33 +418,35 @@ namespace Spectr.Db
             context.Administrators.RemoveRange(context.Administrators);
 
             await context.SaveChangesAsync();
+
+            // Создаем операторов
             var op1 = new Operator { FullName = "Дмитрий Кузнецо Дмитриевич", PhoneNumber = "+79139828461", Email = "d.kuznetsov@work.ru", JobTitle = "Инженер-радиолог", OperatorLogin = "operator_dmitry", OperatorPassword = "op_dmitry123" };
             var op2 = new Operator { FullName = "Ольга Петрова Ивановна", PhoneNumber = "+79163334455", Email = "o.petrova@work.ru", JobTitle = "Эколог", OperatorLogin = "operator_olga", OperatorPassword = "op_olga123" };
             var op3 = new Operator { FullName = "Лесников Артем Алексеевич", PhoneNumber = "+891376523929", Email = "l.artem@work.ru", JobTitle = "Инженер-радиолог", OperatorLogin = "Artemka", OperatorPassword = "12" };
             var op4 = new Operator { FullName = "Всеволод Осипкин Чебупелькин", PhoneNumber = "+7916231212", Email = "o.osipkin@work.ru", JobTitle = "Эколог", OperatorLogin = "SEVA", OperatorPassword = "1" };
+
             context.Operators.AddRange(op1, op2, op3, op4);
             await context.SaveChangesAsync();
+            var operators = new List<Operator> { op1, op2, op3, op4 };
 
-            // Связь профили-операторы
-          
-
-            // Оборудование
+            // Спектрометры
             var spectrometers = new List<GammaSpectrometer>
-    {
-        new GammaSpectrometer { CommissioningDate = DateTime.Parse("2023-06-10"), MeasurementAccuracy = 0.98f, MeasurementTime = 120 },
-        new GammaSpectrometer { CommissioningDate = DateTime.Parse("2024-01-12"), MeasurementAccuracy = 0.58f, MeasurementTime = 130 },
-        new GammaSpectrometer { CommissioningDate = DateTime.Parse("2023-03-13"), MeasurementAccuracy = 2.98f, MeasurementTime = 110 },
-        new GammaSpectrometer { CommissioningDate = DateTime.Parse("2023-02-14"), MeasurementAccuracy = 1.98f, MeasurementTime = 140 },
-        new GammaSpectrometer { CommissioningDate = DateTime.Parse("2022-08-20"), MeasurementAccuracy = 0.95f, MeasurementTime = 150 }
-    };
+{
+    new GammaSpectrometer { CommissioningDate = DateTime.Parse("2023-06-10"), MeasurementAccuracy = 0.98f, MeasurementTime = 120 },
+    new GammaSpectrometer { CommissioningDate = DateTime.Parse("2024-01-12"), MeasurementAccuracy = 0.58f, MeasurementTime = 130 },
+    new GammaSpectrometer { CommissioningDate = DateTime.Parse("2023-03-13"), MeasurementAccuracy = 2.98f, MeasurementTime = 110 },
+    new GammaSpectrometer { CommissioningDate = DateTime.Parse("2023-02-14"), MeasurementAccuracy = 1.98f, MeasurementTime = 140 },
+    new GammaSpectrometer { CommissioningDate = DateTime.Parse("2022-08-20"), MeasurementAccuracy = 0.95f, MeasurementTime = 150 }
+};
             context.GammaSpectrometers.AddRange(spectrometers);
             await context.SaveChangesAsync();
-            // Администраторы
+
+            // Админы и Клиенты
             var admin1 = new Administrator { FullName = "Ivan Petrov", PhoneNumber = "+79991234567", Email = "ivan.petrov@admin.com", JobTitle = "Главный администратор", AdministratorLogin = "admin_ivan", AdministratorPassword = "pass_ivan123" };
             var admin2 = new Administrator { FullName = "Elena Sokolova", PhoneNumber = "+79997654321", Email = "elena.sokolova@admin.com", JobTitle = "Менеджер", AdministratorLogin = "admin_elena", AdministratorPassword = "pass_elena123" };
             context.Administrators.AddRange(admin1, admin2);
 
-            // Клиенты
+
             var customer1 = new Customer { CompanyName = "ООО \"ТехноСервис\"", PhoneNumber = "+79261234567", ContactPerson = "Андрей Смирнов", Email = "andrey@technoservice.ru", Address = "Москва, ул. Ленина, 10", CustomerLogin = "techservice", CustomerPassword = "tech123" };
             var customer2 = new Customer { CompanyName = "АО \"ЭкоМониторинг\"", PhoneNumber = "+79371234568", ContactPerson = "Мария Иванова", Email = "maria@ecomonitor.ru", Address = "Санкт-Петербург, ул. Пушкина, 5", CustomerLogin = "ecomonitor", CustomerPassword = "eco123" };
             context.Customers.AddRange(customer1, customer2);
@@ -457,32 +460,48 @@ namespace Spectr.Db
             context.Contracts.AddRange(contract1, contract2, contract3, contract4);
             await context.SaveChangesAsync();
 
+            // Зоны
             var areas = new List<Area>()
             {
-            new Area { AreaName = "Зона Север", ContractID = contract1.ContractID },
-            new Area { AreaName = "Зона Запад", ContractID = contract1.ContractID },
-            new Area { AreaName = "Зона Северо-Восток", ContractID = contract1.ContractID },
-            new Area { AreaName = "Зона Восток", ContractID = contract2.ContractID },
-            new Area { AreaName = "Зона Юг", ContractID = contract2.ContractID },
-            new Area { AreaName = "Зона НижнеВартовск", ContractID = contract2.ContractID },
-            new Area { AreaName = "Зона Плоскогорья", ContractID = contract3.ContractID },
-            new Area { AreaName = "Зона Отчуждения", ContractID = contract4.ContractID },
+                new Area { AreaName = "Зона Север", ContractID = contract1.ContractID },
+                new Area { AreaName = "Зона Запад", ContractID = contract1.ContractID },
+                new Area { AreaName = "Зона Северо-Восток", ContractID = contract1.ContractID },
+                new Area { AreaName = "Зона Восток", ContractID = contract2.ContractID },
+                new Area { AreaName = "Зона Юг", ContractID = contract2.ContractID },
+                new Area { AreaName = "Зона НижнеВартовск", ContractID = contract2.ContractID },
+                new Area { AreaName = "Зона Плоскогорья", ContractID = contract3.ContractID },
+                new Area { AreaName = "Зона Отчуждения", ContractID = contract4.ContractID }
             };
-
-             context.Areas.AddRange(areas);
-         
+            context.Areas.AddRange(areas);
             await context.SaveChangesAsync();
 
             Random rand = new Random();
-            List<Profile> profiles = new List<Profile>();
-            List<Picket> pickets = new List<Picket>();
-            var operators = new List<Operator> { op1, op2, op3, op4 };
-            int operatorIndex = 0;
 
-            foreach (var area in areas) 
+            // Генерация координат для Зон
+            foreach (var area in areas)
             {
-                int profileCount = rand.Next(1, 4);
+                var minX = rand.Next(0, 100);
+                var minY = rand.Next(0, 100);
+                var width = rand.Next(20, 50);
+                var height = rand.Next(20, 50);
 
+                context.AreaCoordinates.AddRange(new List<AreaCoordinates>
+            {
+                new AreaCoordinates { X = minX,         Y = minY,          AreaID = area.AreaID },
+                new AreaCoordinates { X = minX + width, Y = minY,          AreaID = area.AreaID },
+                new AreaCoordinates { X = minX + width, Y = minY + height, AreaID = area.AreaID },
+                new AreaCoordinates { X = minX,         Y = minY + height, AreaID = area.AreaID },
+                new AreaCoordinates { X = minX,         Y = minY,          AreaID = area.AreaID } // замыкаем контур
+            });
+            }
+            await context.SaveChangesAsync();
+
+
+            // Профили внутри Зон
+            var profiles = new List<Profile>();
+            foreach (var area in areas)
+            {
+                int profileCount = rand.Next(1, 3);
                 for (int i = 0; i < profileCount; i++)
                 {
                     var profile = new Profile
@@ -491,130 +510,154 @@ namespace Spectr.Db
                         ProfileType = (i % 2 == 0) ? "Гамма-спектрометрия" : "Почвенные исследования",
                         AreaID = area.AreaID
                     };
-                  
-
                     profiles.Add(profile);
                 }
             }
-            foreach (var area in areas)
-            {
-                int AreaCoordinatesCount = rand.Next(3, 6);
-
-                for (int i = 0; i < AreaCoordinatesCount; i++)
-                {
-                   context.AreaCoordinates.Add(
-                   new AreaCoordinates
-                   {
-                       X = GenerateRandomCoordinate(0.0f, 300.0f),
-                       Y = GenerateRandomCoordinate(0.0f, 300.0f),
-                       AreaID = area.AreaID
-                   });               
-                }
-            }
-
             await context.Profiles.AddRangeAsync(profiles);
             await context.SaveChangesAsync();
-        
+
             var savedProfiles = await context.Profiles.ToListAsync();
+            var savedAreas = await context.Areas.Include(a => a.AreaCoordinates).ToListAsync();
 
+            // Генерация координат профилей внутри зоны
             foreach (var profile in savedProfiles)
             {
-                int picketCount = rand.Next(1, 5);
-                for (int i = 0; i < picketCount; i++)
+                var area = savedAreas.FirstOrDefault(a => a.AreaID == profile.AreaID);
+
+                if (area != null && area.AreaCoordinates.Count >= 2)
                 {
-                    float coordX = GenerateRandomCoordinate(55.0f, 60.0f);
-                    float coordY = GenerateRandomCoordinate(10.0f, 88.0f);
-                    float ch1 = GenerateRandomCoordinate(0.0f, 100.0f);
-                    float ch2 = GenerateRandomCoordinate(0.0f, 100.0f);
-                    float ch3 = GenerateRandomCoordinate(0.0f, 100.0f);
+                    var minX = area.AreaCoordinates.Min(c => c.X);
+                    var maxX = area.AreaCoordinates.Max(c => c.X);
+                    var minY = area.AreaCoordinates.Min(c => c.Y);
+                    var maxY = area.AreaCoordinates.Max(c => c.Y);
 
-                    var currentOp = operators[operatorIndex % operators.Count];
-                    operatorIndex++;
-
-                    pickets.Add(new Picket
+                    // Сгенерируем 5 случайных координат для профиля
+                    var profileCoordinates = new List<ProfileCoordinates>();
+                    for (int i = 0; i < 5; i++)
                     {
-                        CoordinateX = coordX,
-                        CoordinateY = coordY,
-                        Channel1 = ch1,
-                        Channel2 = ch2,
-                        Channel3 = ch3,
-                        ProfileID = profile.ProfileID,
-                        OperatorID = currentOp.OperatorID,
-                        SpectrometerID = spectrometers[0].GammaSpectrometerID
+                        profileCoordinates.Add(new ProfileCoordinates
+                        {
+                            X = GenerateRandomCoordinate(minX, maxX),
+                            Y = GenerateRandomCoordinate(minY, maxY),
+                            ProfileID = profile.ProfileID
+                        });
+                    }
+
+                    // Замкнем контур
+                    profileCoordinates.Add(new ProfileCoordinates
+                    {
+                        X = profileCoordinates[0].X,  // Последняя координата будет совпадать с первой
+                        Y = profileCoordinates[0].Y,
+                        ProfileID = profile.ProfileID
                     });
-                   
+
+                    // Добавим все координаты в контекст
+                    context.ProfileCoordinates.AddRange(profileCoordinates);
                 }
             }
-            foreach (var profile in savedProfiles)
-            {
-                int picketCount = rand.Next(3, 6);
-                for (int i = 0; i < picketCount; i++)
-                {
-                    context.ProfileCoordinates.Add(
-                       new ProfileCoordinates
-                       {
-                           X = GenerateRandomCoordinate(0.0f, 300.0f),
-                           Y = GenerateRandomCoordinate(0.0f, 300.0f),
-                           ProfileID = profile.ProfileID
-                       });
-                }
-            }
-            await context.Pickets.AddRangeAsync(pickets);
+
             await context.SaveChangesAsync();
 
 
-            Analyst analyst1 = new Analyst
-            {
-                FullName = "Сергей Николаев",
-                PhoneNumber = "+79112223344",
-                Email = "sergey.nikolaev@analysis.ru",
-                JobTitle = "Аналитик данных",
-                AnalystLogin = "analyst_sergey",
-                AnalystPassword = "analyst_pass1"
-            };
 
-            Analyst analyst2 = new Analyst
-            {
-                FullName = "Анна Козлова",
-                PhoneNumber = "+79114445566",
-                Email = "anna.kozlova@analysis.ru",
-                JobTitle = "Ведущий аналитик",
-                AnalystLogin = "analyst_anna",
-                AnalystPassword = "analyst_pass2"
-            };
+             bool IsPointInPolygon(float pointX, float pointY, List<ProfileCoordinates> polygon)
+        {
+            int i, j = polygon.Count - 1;
+            bool inside = false;
 
-            Analyst analyst3 = new Analyst
+            for (i = 0; i < polygon.Count; j = i++)
             {
-                FullName = "Игорь Смирнов",
-                PhoneNumber = "+79005556677",
-                Email = "igor.smirnov@analysis.ru",
-                JobTitle = "Младший аналитик",
-                AnalystLogin = "analyst_igor",
-                AnalystPassword = "analyst_pass3"
-            };
+                var xi = polygon[i].X;
+                var yi = polygon[i].Y;
+                var xj = polygon[j].X;
+                var yj = polygon[j].Y;
 
-            await context.Analysts.AddRangeAsync(analyst1, analyst2, analyst3);
+                var intersect = ((yi > pointY) != (yj > pointY)) &&
+                                (pointX < (xj - xi) * (pointY - yi) / (yj - yi) + xi);
+                if (intersect)
+                    inside = !inside;
+            }
+
+            return inside;
+        }
+            var profileCoords = await context.ProfileCoordinates.ToListAsync();
+            var pickets = new List<Picket>();
+            int operatorIndex = 0;
+
+            // Изменим тип на float, чтобы соответствовать типу данных в базе
+            float picketX, picketY;
+
+            foreach (var profile in savedProfiles)
+            {
+                var coords = profileCoords.Where(p => p.ProfileID == profile.ProfileID).ToList();
+
+                if (coords.Count >= 3)  // Убедимся, что у нас есть хотя бы 3 точки для формирования многоугольника
+                {
+                    var picketCount = rand.Next(3, 6);
+
+                    for (int i = 0; i < picketCount; i++)
+                    {
+                        var currentOp = operators[operatorIndex % operators.Count];
+                        operatorIndex++;
+
+                        // Ищем подходящие координаты внутри многоугольника
+                        do
+                        {
+                            picketX = GenerateRandomCoordinate(coords.Min(c => c.X), coords.Max(c => c.X));
+                            picketY = GenerateRandomCoordinate(coords.Min(c => c.Y), coords.Max(c => c.Y));
+                        }
+                        while (!IsPointInPolygon(picketX, picketY, coords));
+
+                        pickets.Add(new Picket
+                        {
+                            CoordinateX = picketX,
+                            CoordinateY = picketY,
+                            Channel1 = GenerateRandomCoordinate(0, 100),
+                            Channel2 = GenerateRandomCoordinate(0, 100),
+                            Channel3 = GenerateRandomCoordinate(0, 100),
+                            ProfileID = profile.ProfileID,
+                            OperatorID = currentOp.OperatorID,
+                            SpectrometerID = spectrometers[0].GammaSpectrometerID
+                        });
+                    }
+                }
+            }
+
+
+
+
+            await context.Pickets.AddRangeAsync(pickets);
+        await context.SaveChangesAsync();
+
+
+            // Генерация Аналитиков и привязки к контрактам
+            var analysts = new List<Analyst>
+{
+    new Analyst { FullName = "Сергей Николаев", PhoneNumber = "+79112223344", Email = "sergey.nikolaev@analysis.ru", JobTitle = "Аналитик данных", AnalystLogin = "analyst_sergey", AnalystPassword = "analyst_pass1" },
+    new Analyst { FullName = "Анна Козлова", PhoneNumber = "+79114445566", Email = "anna.kozlova@analysis.ru", JobTitle = "Ведущий аналитик", AnalystLogin = "analyst_anna", AnalystPassword = "analyst_pass2" },
+    new Analyst { FullName = "Игорь Смирнов", PhoneNumber = "+79005556677", Email = "igor.smirnov@analysis.ru", JobTitle = "Младший аналитик", AnalystLogin = "analyst_igor", AnalystPassword = "analyst_pass3" }
+};
+            await context.Analysts.AddRangeAsync(analysts);
             await context.SaveChangesAsync();
 
             var contractAnalysts = new List<ContractAnalyst>
-    {
-        new ContractAnalyst { ContractID = contract1.ContractID, AnalystID = analyst1.AnalystID },
-        new ContractAnalyst { ContractID = contract1.ContractID, AnalystID = analyst2.AnalystID },
-        new ContractAnalyst { ContractID = contract2.ContractID, AnalystID = analyst2.AnalystID },
-        new ContractAnalyst { ContractID = contract3.ContractID, AnalystID = analyst1.AnalystID },
-        new ContractAnalyst { ContractID = contract4.ContractID, AnalystID = analyst2.AnalystID },
-          new ContractAnalyst { ContractID = contract4.ContractID, AnalystID = analyst1.AnalystID },
-        new ContractAnalyst { ContractID = contract1.ContractID, AnalystID = analyst3.AnalystID } // Дополнительно: третий аналитик работает с первым контрактом
-    };
+{
+    new ContractAnalyst { ContractID = contract1.ContractID, AnalystID = analysts[0].AnalystID },
+    new ContractAnalyst { ContractID = contract1.ContractID, AnalystID = analysts[1].AnalystID },
+    new ContractAnalyst { ContractID = contract2.ContractID, AnalystID = analysts[1].AnalystID },
+    new ContractAnalyst { ContractID = contract3.ContractID, AnalystID = analysts[0].AnalystID },
+    new ContractAnalyst { ContractID = contract4.ContractID, AnalystID = analysts[1].AnalystID },
+    new ContractAnalyst { ContractID = contract4.ContractID, AnalystID = analysts[0].AnalystID },
+    new ContractAnalyst { ContractID = contract1.ContractID, AnalystID = analysts[2].AnalystID }
+};
             await context.ContractAnalyst.AddRangeAsync(contractAnalysts);
             await context.SaveChangesAsync();
 
-
+            // Привязка Профилей к Операторам через Пикеты
             var allPickets = await context.Pickets
-        .Select(p => new { p.ProfileID, p.OperatorID })
-        .ToListAsync();
+                .Select(p => new { p.ProfileID, p.OperatorID })
+                .ToListAsync();
 
-            // Группируем по профилю и получаем уникальные операторов на каждом профиле
             var profileOperatorLinks = allPickets
                 .GroupBy(p => p.ProfileID)
                 .SelectMany(g => g.Select(p => p.OperatorID).Distinct()
@@ -625,11 +668,10 @@ namespace Spectr.Db
                     }))
                 .ToList();
 
-            // Добавляем полученные связи в базу
             await context.ProfileOperator.AddRangeAsync(profileOperatorLinks);
             await context.SaveChangesAsync();
-
         }
+
 
 
 

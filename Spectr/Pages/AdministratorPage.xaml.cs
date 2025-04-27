@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OxyPlot;
+using OxyPlot.Wpf;
 using Spectr.Data;
 using Spectr.Db;
 using System.Collections.ObjectModel;
@@ -348,7 +350,18 @@ namespace Spectr
 
         private void BtnSchem_Click(object sender, RoutedEventArgs e)
         {
-
+            ResetVisibility();
+            MyPlotView.Visibility = Visibility.Visible;
+            Contract contract = treeView.SelectedItem as Contract;
+            if (contract != null)
+            {
+                this.MyPlotView.Model = Graphic.GenerateSchem(contract);
+                this.MyPlotView.InvalidatePlot(true);
+            }
+            else
+            {
+                MessageBox.Show("Выберите Контракт");
+            }
         }
 
         private void BtnReport_Click(object sender, RoutedEventArgs e)
@@ -599,6 +612,7 @@ namespace Spectr
         private void ResetVisibility()
 
         {
+            MyPlotView.Visibility = Visibility.Collapsed;
             labelSpectrometrsHeader.Visibility = Visibility.Collapsed;
             listViewSpectrometrs.Visibility = Visibility.Collapsed;
             labelAnalystContract.Visibility = Visibility.Collapsed;

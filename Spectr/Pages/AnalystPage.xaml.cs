@@ -1,4 +1,6 @@
-﻿using Spectr.Data;
+﻿using OxyPlot.Series;
+using OxyPlot;
+using Spectr.Data;
 using Spectr.Db;
 using System;
 using System.Collections.Generic;
@@ -16,6 +18,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using OxyPlot.Wpf;
 
 namespace Spectr.Pages
 {
@@ -63,8 +66,21 @@ namespace Spectr.Pages
 
         private void BtnSchem_Click(object sender, RoutedEventArgs e)
         {
+            ResetVisibility();
+            MyPlotView.Visibility = Visibility.Visible;
+            Contract contract = treeView.SelectedItem as Contract;
+            if (contract != null)
+            {
+                this.MyPlotView.Model = Graphic.GenerateSchem(contract);
+                this.MyPlotView.InvalidatePlot(true);
+            }
+            else
+            {
+                MessageBox.Show("Выберите Контракт");
+            }
 
         }
+
 
         private void BtnReport_Click(object sender, RoutedEventArgs e)
         {
@@ -305,6 +321,8 @@ namespace Spectr.Pages
         private void ResetVisibility()
 
         {
+          
+            MyPlotView.Visibility = Visibility.Collapsed;
             labelAnalystContract.Visibility = Visibility.Collapsed;
             listViewAnalystsContract.Visibility = Visibility.Collapsed;
 

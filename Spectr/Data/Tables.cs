@@ -266,7 +266,19 @@ namespace Spectr.Data
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         [Key]
-        public int AreaID { get; set; }
+        private int _areaID;
+        public int AreaID
+        {
+            get => _areaID;
+            set
+            {
+                if (_areaID != value)
+                {
+                    _areaID = value;
+                    OnPropertyChanged(nameof(AreaID));
+                }
+            }
+        }
 
         private string _areaName;
         [Required]
@@ -286,7 +298,16 @@ namespace Spectr.Data
         public Contract Contract { get; set; }
 
         public ObservableCollection<AreaCoordinates> AreaCoordinates { get; set; }
-        public ObservableCollection<Profile> Profiles { get; set; }
+        private ObservableCollection<Profile> _profiles = new();
+        public ObservableCollection<Profile> Profiles
+        {
+            get => _profiles;
+            set
+            {
+                _profiles = value;
+                OnPropertyChanged(nameof(Profiles));
+            }
+        }
     }
 
     public class AreaCoordinates : INotifyPropertyChanged
@@ -333,8 +354,21 @@ namespace Spectr.Data
         private void OnPropertyChanged(string propertyName) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
+     
+        private int _profileID;
         [Key]
-        public int ProfileID { get; set; }
+        public int ProfileID
+        {
+            get => _profileID;
+            set
+            {
+                if (_profileID != value)
+                {
+                    _profileID = value;
+                    OnPropertyChanged(nameof(ProfileID));
+                }
+            }
+        }
 
         private string _profileName;
         [Required]

@@ -24,8 +24,8 @@ namespace Spectr.Pages
     /// </summary>
     public partial class OperatorPage : Page
     {
-        Operator Operator;
-        Db_Helper dbHelper;
+        Operator _Operator;
+
         ObservableCollection<Area> areas = new ObservableCollection<Area>();
         ObservableCollection<Profile> profiles = new ObservableCollection<Profile>();
         ObservableCollection<Picket> pickets = new ObservableCollection<Picket>();
@@ -42,16 +42,17 @@ namespace Spectr.Pages
         ObservableCollection<Analyst> analystsDelete = new ObservableCollection<Analyst>();
         public OperatorPage(Operator _operator )
         {
-            Operator = _operator;
+            _Operator = _operator;
             InitializeComponent();
 
-            LabelLogin.Content = Operator.OperatorLogin;
-            dbHelper = new();
-            dbHelper.LoadProfilesForOperator(Operator.OperatorID);
+            LabelLogin.Content = _Operator.OperatorLogin;
 
+            Db_Helper.LoadProfilesForOperator(_Operator.OperatorID);
 
+            Db_Helper.LoadSpectrometrs();
 
-            treeView.ItemsSource = dbHelper.profiles;
+            treeView.ItemsSource = Db_Helper.profiles;
+            ResetVisibility();
         }
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
@@ -66,7 +67,7 @@ namespace Spectr.Pages
             if (sender is TextBox textBox && textBox.DataContext is object project)
             {
                 Debug.WriteLine("here");
-                dbHelper.SaveProject(project);
+                Db_Helper.SaveProject(project);
 
             }
         }
@@ -87,13 +88,13 @@ namespace Spectr.Pages
             listViewPickets.Visibility = Visibility.Collapsed;
             listViewProfile.Visibility = Visibility.Collapsed;
             listViewAnalysts.Visibility = Visibility.Collapsed;
-            listViewProfileCoordinates.Visibility = Visibility.Collapsed;
+    
             listViewAreaCoordinates.Visibility = Visibility.Collapsed;
 
             labelPicketsHeader.Visibility = Visibility.Collapsed;
             labelProfilesHeader.Visibility = Visibility.Collapsed;
             labelAreaHeader.Visibility = Visibility.Collapsed;
-            labelProfileCoordinatesHeader.Visibility = Visibility.Collapsed;
+ 
             labelAreaCoordinatesHeader.Visibility = Visibility.Collapsed;
             labelAnalystHeader.Visibility = Visibility.Collapsed;
 
@@ -179,123 +180,16 @@ namespace Spectr.Pages
         {
             ResetVisibility();
 
-            if (treeView.SelectedItem is Contract selectedContract)
-            {
-                dbHelper.LoadAnalyst();
-
-                this.DataContext = selectedContract;
-                infoLabel.Content = $"Информация о контракте {selectedContract.ContractID}";
-                areas = selectedContract.Areas;
-                listViewArea.ItemsSource = areas;
-
-                var analystsList = selectedContract.ContractAnalysts
-                  .Select(ca => ca.Analyst)
-                  .Distinct()
-                  .ToList();
-
-     
-                analystsContract.Clear();
-                foreach (var analyst in selectedContract.ContractAnalysts.Select(ca => ca.Analyst).Distinct())
-                {
-                    analystsContract.Add(analyst);
-                }
-                listViewAnalystsContract.ItemsSource = analystsContract;
-
-                labelAnalystContract.Visibility = Visibility.Visible;
-                listViewAnalystsContract.Visibility = Visibility.Visible;
-
+           
         
-
-
-
-
-
-                infoContractId.Visibility = Visibility.Visible;
-                infoContractIdLabel.Visibility = Visibility.Visible;
-                // infoContractId.Text =  selectedContract.ContractID.ToString();
-
-                infoContractDate.Visibility = Visibility.Visible;
-                infoContractDate1.Visibility = Visibility.Visible;
-                infoContractDateLabel.Visibility = Visibility.Visible;
-                infoContractDateLabel1.Visibility = Visibility.Visible;
-
-
-                infoContractServiceDescription.Visibility = Visibility.Visible;
-                infoContractServiceDescriptionLabel.Visibility = Visibility.Visible;
-
-
-                infoContractCustomerinfo.Visibility = Visibility.Visible;
-                infoContractCustomerinfo1.Visibility = Visibility.Visible;
-                infoContractCustomerinfo2.Visibility = Visibility.Visible;
-                infoContractCustomerinfo3.Visibility = Visibility.Visible;
-                infoContractCustomerinfo4.Visibility = Visibility.Visible;
-                infoContractCustomerinfoLabel.Visibility = Visibility.Visible;
-                infoContractCustomerinfoLabel1.Visibility = Visibility.Visible;
-                infoContractCustomerinfoLabel2.Visibility = Visibility.Visible;
-                infoContractCustomerinfoLabel3.Visibility = Visibility.Visible;
-                infoContractCustomerinfoLabel4.Visibility = Visibility.Visible;
-
-
-
-                labelAreaHeader.Visibility = Visibility.Visible;
-                labelAreaHeader.Content = $"Площади Контракта: {selectedContract.ContractID}";
-
-                listViewArea.Visibility = Visibility.Visible;
-
-                listViewAnalystsContract.Items.Refresh();
-
-
-
-                listViewArea.Items.Refresh();
-
-            }
-            else if (treeView.SelectedItem is Area selectedArea)
-            {
-                this.DataContext = selectedArea;
-                infoLabel.Content = $"Информация о Площади {selectedArea.AreaName}, {selectedArea.AreaID}";
-                profiles = selectedArea.Profiles;
-                listViewProfile.ItemsSource = profiles;
-                areaCcoordinates = selectedArea.AreaCoordinates;
-                listViewAreaCoordinates.ItemsSource = areaCcoordinates;
-
-
-
-
-
-
-
-
-
-                infoAreaID.Visibility = Visibility.Visible;
-                infoAreaIDLabel.Visibility = Visibility.Visible;
-
-                infoAreaName.Visibility = Visibility.Visible;
-                infoAreaNamedLabel.Visibility = Visibility.Visible;
-
-                labelProfilesHeader.Visibility = Visibility.Visible;
-                labelProfilesHeader.Content = $"Профили Площади: {selectedArea.AreaName}, {selectedArea.AreaID}";
-
-                labelAreaCoordinatesHeader.Visibility = Visibility.Visible;
-                labelAreaCoordinatesHeader.Content = $"Координаты Площади: {selectedArea.AreaName}, {selectedArea.AreaID}";
-
-
-
-                listViewProfile.Visibility = Visibility.Visible;
-                listViewAreaCoordinates.Visibility = Visibility.Visible;
-
-
-                listViewProfile.Items.Refresh();
-                listViewAreaCoordinates.Items.Refresh();
-
-            }
-            else if (treeView.SelectedItem is Profile selectedProfile)
+             if (treeView.SelectedItem is Profile selectedProfile)
             {
                 this.DataContext = selectedProfile;
                 infoLabel.Content = $"Информация о Профиле {selectedProfile.ProfileName}, {selectedProfile.ProfileID}";
-                pickets = selectedProfile.Pickets;
+                pickets = selectedProfile.Pickets.Where(op => op.OperatorID == _Operator.OperatorID).ToObservableCollection();
                 listViewPickets.ItemsSource = pickets;
                 profileCoordinates = selectedProfile.ProfileCoordinates;
-                listViewProfileCoordinates.ItemsSource = profileCoordinates;
+              
 
                 operatorsProfile.Clear();
 
@@ -310,22 +204,20 @@ namespace Spectr.Pages
                     }
                 }
 
-                listViewAnalystsContract.ItemsSource = dbHelper.analysts;
+                listViewAnalystsContract.ItemsSource = Db_Helper.analysts;
 
                 listViewOperatorsProfile.ItemsSource = operatorsProfile;
-                dbHelper.LoadOperators();
+                Db_Helper.LoadOperators();
   
 
                 labelPicketsHeader.Content = $"Пикеты Профиля: {selectedProfile.ProfileName}, {selectedProfile.ProfileID}";
 
-                labelProfilesHeader.Visibility = Visibility.Visible;
-                labelProfilesHeader.Content = $"Координаты Профиля: {selectedProfile.ProfileName}, {selectedProfile.ProfileID}";
-
+             
 
 
 
                 listViewPickets.Visibility = Visibility.Visible;
-                listViewProfileCoordinates.Visibility = Visibility.Visible;
+            
       
                 listViewOperatorsProfile.Visibility = Visibility.Visible;
                 labelOperatorsProfile.Visibility = Visibility.Visible;
@@ -349,7 +241,7 @@ namespace Spectr.Pages
                 labelPicketsHeader.Visibility = Visibility.Visible;
                 listViewPickets.Items.Refresh();
                 listViewOperatorsProfile.Items.Refresh();
-                listViewProfileCoordinates.Items.Refresh();
+           
        
             }
             else if (treeView.SelectedItem is Picket selectedPicket)
@@ -400,6 +292,144 @@ namespace Spectr.Pages
 
             Debug.WriteLine(1);
         }
+        private void BtnDeleteListview_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button button)
+            {
 
+                var itemToDelete = button.DataContext;
+
+                if (itemToDelete == null) return;
+
+                MessageBoxResult result = MessageBox.Show(
+                    "Вы уверены, что хотите удалить этот элемент?",
+                    "Подтверждение удаления",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Warning
+                );
+
+                if (result == MessageBoxResult.Yes)
+                {
+
+                    switch (itemToDelete)
+                    {
+                        case Area area:
+                            Db_Helper.DeleteProject(area);
+                            areas.Remove(area);
+                            break;
+
+                        case Profile profile:
+                            Db_Helper.DeleteProject(profile);
+                            profiles.Remove(profile);
+                            break;
+
+                        case Picket picket:
+                            Db_Helper.DeleteProject(picket);
+                            pickets.Remove(picket);
+                            break;
+
+                        case Operator @operator: // Используем @ перед operator, чтобы избежать конфликта с ключевым словом
+                            Profile _profile = (Profile)infoProfileID.DataContext;
+                            Db_Helper.DeleteProfileOperator(_profile.ProfileID, @operator.OperatorID);
+                            operatorsProfile.Remove(@operator);
+                            break;
+
+                        case Analyst analyst:
+                            Contract contract = (Contract)infoContractIdLabel.DataContext;
+                            Db_Helper.DeleteContractAnalyst(contract.ContractID, analyst.AnalystID);
+                            analystsContract.Remove(analyst);
+                            break;
+
+                        case AreaCoordinates areaCoordinate:
+                            Db_Helper.DeleteProject(areaCoordinate);
+                            areaCcoordinates.Remove(areaCoordinate);
+                            break;
+
+                        case ProfileCoordinates profileCoordinate:
+                            Db_Helper.DeleteProject(profileCoordinate);
+                            profileCoordinates.Remove(profileCoordinate);
+                            break;
+                        case GammaSpectrometer gammaSpectrometer:
+                            Db_Helper.DeleteProject(gammaSpectrometer);
+                            Db_Helper.gammaSpectrometers.Remove(gammaSpectrometer);
+                            break;
+
+                        default:
+                            MessageBox.Show("Неизвестный тип данных для удаления.");
+                            break;
+                    }
+                }
+            }
+        }
+        private void BtnAdd_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (sender is Button button)
+            {
+                string tagValue = button.Tag as string;
+
+
+                switch (tagValue)
+                {
+                  
+
+                    case "Picket":
+                        if (infoProfileID.DataContext is Profile profile)
+                        {
+                            if (pickets == null)
+                            {
+                                pickets = new ObservableCollection<Picket>();
+                                listViewPickets.ItemsSource = pickets;
+
+                            }
+
+                            Picket newPicket = new Picket
+                            {
+                                CoordinateX = 0f,
+                                CoordinateY = 0f,
+                                Channel1 = 0,
+                                Channel2 = 0,
+                                Channel3 = 0,
+                          
+                                Profile = profile,
+                                
+
+                              
+                                OperatorID = _Operator.OperatorID,
+
+                                GammaSpectrometer = Db_Helper.gammaSpectrometers[0],
+
+                            };
+
+
+                            pickets.Add(newPicket);
+
+                            listViewPickets.Items.Refresh();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Выберите профиль перед добавлением пикета.");
+                        }
+                        break;
+
+
+                 
+
+                    case "AreaCoordinates":
+                        AreaCoordinates newAreaCoordinate = new AreaCoordinates { /* Заполните свойства AreaCoordinates */ };
+                        areaCcoordinates.Add(newAreaCoordinate); // Используем свойство AreaCoordinatesCollection
+                        break;
+
+                    case "ProfileCoordinates":
+                        ProfileCoordinates newProfileCoordinate = new ProfileCoordinates { /* Заполните свойства ProfileCoordinates */ };
+                        profileCoordinates.Add(newProfileCoordinate); // Используем свойство ProfileCoordinatesCollection
+                        break;
+
+                    default:
+                        MessageBox.Show("Неизвестный тип данных для добавления.");
+                        break;
+                }
+            }
+        }
     }
 }

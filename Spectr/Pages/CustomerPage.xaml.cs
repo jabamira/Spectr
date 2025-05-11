@@ -25,8 +25,7 @@ namespace Spectr.Pages
     public partial class CustomerPage : Page
     {
         Customer Customer;
-        Db_Helper dbHelper;
-        ObservableCollection<Area> areas = new ObservableCollection<Area>();
+       ObservableCollection<Area> areas = new ObservableCollection<Area>();
         ObservableCollection<Profile> profiles = new ObservableCollection<Profile>();
         ObservableCollection<Picket> pickets = new ObservableCollection<Picket>();
 
@@ -47,12 +46,12 @@ namespace Spectr.Pages
             InitializeComponent();
             SetControlsReadOnly();
             LabelLogin.Content = Customer.CustomerLogin;
-            dbHelper = new();
-            dbHelper.LoadContractsForCustomerById(Customer.CustomerID);
+
+            Db_Helper.LoadContractsForCustomerById(Customer.CustomerID);
 
 
 
-            treeView.ItemsSource = dbHelper.contracts;
+            treeView.ItemsSource = Db_Helper.contracts;
             ResetVisibility();
         }
 
@@ -82,7 +81,7 @@ namespace Spectr.Pages
 
             if (treeView.SelectedItem is Contract selectedContract)
             {
-                dbHelper.LoadAnalyst();
+                Db_Helper.LoadAnalyst();
 
                 this.DataContext = selectedContract;
                 infoLabel.Content = $"Информация о контракте {selectedContract.ContractID}";
@@ -205,10 +204,10 @@ namespace Spectr.Pages
                     }
                 }
 
-                listViewAnalystsContract.ItemsSource = dbHelper.analysts;
+                listViewAnalystsContract.ItemsSource = Db_Helper.analysts;
 
                 listViewOperatorsProfile.ItemsSource = operatorsProfile;
-                dbHelper.LoadOperators();
+                Db_Helper.LoadOperators();
 
 
                 labelPicketsHeader.Content = $"Пикеты Профиля: {selectedProfile.ProfileName}, {selectedProfile.ProfileID}";

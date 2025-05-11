@@ -6,22 +6,17 @@ using System.Windows;
 using Contract = Spectr.Data.Contract;
 namespace Spectr.Db
 {
-    public class Db_Helper
+    public static class Db_Helper
     {
-        public ApplicationContext context;
-        public ObservableCollection<Contract> contracts;
-        public ObservableCollection<Profile> profiles;
-        public ObservableCollection<Operator> operators;
-        public ObservableCollection<Analyst> analysts;
-        public ObservableCollection<GammaSpectrometer> gammaSpectrometers;
+        public static ApplicationContext context = new ApplicationContext();
+        public static ObservableCollection<Contract> contracts;
+        public static ObservableCollection<Profile> profiles;
+        public static ObservableCollection<Operator> operators;
+        public static ObservableCollection<Analyst> analysts;
+        public static ObservableCollection<GammaSpectrometer> gammaSpectrometers;
 
-        public Db_Helper()
-        {
-
-            context = new ApplicationContext();
-
-        }
-        public void DeleteProject(object project)
+        
+        public static void DeleteProject(object project)
         {
             if (project == null) return;
 
@@ -82,7 +77,7 @@ namespace Spectr.Db
                 MessageBox.Show($"Произошла ошибка при удалении:\n{innerMessage}", "Ошибка удаления", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-        public void DeleteProfileOperator(int profileId, int operatorId)
+        public static void DeleteProfileOperator(int profileId, int operatorId)
         {
             var profileOperator = context.ProfileOperator
                 .FirstOrDefault(po => po.ProfileID == profileId && po.OperatorID == operatorId);
@@ -93,7 +88,7 @@ namespace Spectr.Db
                 context.SaveChanges();
             }
         }
-        public void DeleteContractAnalyst(int contractId, int analystId)
+        public static void DeleteContractAnalyst(int contractId, int analystId)
         {
             var сontractAnalyst = context.ContractAnalyst
                 .FirstOrDefault(po => po.ContractID == contractId && po.AnalystID == analystId);
@@ -104,7 +99,7 @@ namespace Spectr.Db
                 context.SaveChanges();
             }
         }
-        public void AddProfileOperator(int profileId, int operatorId)
+        public static void AddProfileOperator(int profileId, int operatorId)
         {
             try
             {
@@ -141,7 +136,7 @@ namespace Spectr.Db
                 MessageBox.Show("Ошибка: " + ex.Message);
             }
         }
-        public void AddContractAnalyst(int contractId, int analystId)
+        public static void AddContractAnalyst(int contractId, int analystId)
         {
 
             var exists = context.ContractAnalyst
@@ -159,7 +154,7 @@ namespace Spectr.Db
                 context.SaveChanges();
             }
         }
-        public void LoadContract()
+        public static void LoadContract()
         {
             contracts = new ObservableCollection<Contract>(
                 context.Contracts
@@ -188,7 +183,7 @@ namespace Spectr.Db
             );
 
         }
-        public void LoadContractsForAnalyst(int analystId)
+        public static void LoadContractsForAnalyst(int analystId)
         {
             contracts = new ObservableCollection<Contract>(
                 context.Contracts
@@ -217,7 +212,7 @@ namespace Spectr.Db
                     .ToList()
             );
         }
-        public void LoadProfilesForOperator(int operatorId)
+        public static void LoadProfilesForOperator(int operatorId)
         {
             profiles = new ObservableCollection<Profile>(
                 context.Profiles
@@ -237,7 +232,7 @@ namespace Spectr.Db
 
 
         }
-        public void LoadContractsForCustomerById(int customerId)
+        public static void LoadContractsForCustomerById(int customerId)
         {
             contracts = new ObservableCollection<Contract>(
                 context.Contracts
@@ -266,28 +261,28 @@ namespace Spectr.Db
                     .ToList()
             );
         }
-        public void LoadOperators()
+        public static void LoadOperators()
         {
             operators = new ObservableCollection<Operator>(
                 context.Operators.ToList()
             );
 
         }
-        public void LoadAnalyst()
+        public static void LoadAnalyst()
         {
             analysts = new ObservableCollection<Analyst>(
                 context.Analysts.ToList()
             );
 
         }
-        public void LoadSpectrometrs()
+        public static void LoadSpectrometrs()
         {
             gammaSpectrometers = new ObservableCollection<GammaSpectrometer>(
                 context.GammaSpectrometers.ToList()
             );
 
         }
-        public void SaveProject(object project)
+        public static void SaveProject(object project)
         {
             if (project == null) return;
 
@@ -381,16 +376,16 @@ namespace Spectr.Db
             }
 
         }
-        private float GenerateRandomCoordinate(float min, float max)
+        private static float GenerateRandomCoordinate(float min, float max)
         {
             Random rand = new Random();
             return (float)(rand.NextDouble() * (max - min) + min);
         }
-        private bool RectanglesOverlap(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2)
+        private static bool RectanglesOverlap(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2)
         {
             return !(x1 + w1 <= x2 || x2 + w2 <= x1 || y1 + h1 <= y2 || y2 + h2 <= y1);
         }
-        private bool AreCoordinatesIntersectingWithProfiles(List<ProfileCoordinates> newCoordinates, List<ProfileCoordinates> existingCoordinates)
+        private static bool AreCoordinatesIntersectingWithProfiles(List<ProfileCoordinates> newCoordinates, List<ProfileCoordinates> existingCoordinates)
         {
             foreach (var newCoord in newCoordinates)
             {
@@ -405,7 +400,7 @@ namespace Spectr.Db
             }
             return false;
         }
-        public async Task SeedDatabaseAsync(ApplicationContext context)
+        public static async Task SeedDatabaseAsync(ApplicationContext context)
         {
             // Очищаем базу
             context.ProfileOperator.RemoveRange(context.ProfileOperator);

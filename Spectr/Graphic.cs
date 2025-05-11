@@ -24,7 +24,7 @@ namespace Spectr
 
             var plotModel = new PlotModel { Title = "Схема Контракта" };
 
-            // 1. Рисуем ВСЕ Areas
+           
             foreach (var area in contract.Areas)
             {
                 if (area.AreaCoordinates != null && area.AreaCoordinates.Count > 0)
@@ -48,7 +48,7 @@ namespace Spectr
                     plotModel.Series.Add(areaSeries);
                 }
 
-                // 2. Рисуем ВСЕ Profiles внутри каждой Area
+
                 if (area.Profiles != null)
                 {
                     foreach (var profile in area.Profiles)
@@ -68,14 +68,14 @@ namespace Spectr
                                 profileSeries.Points.Add(new DataPoint(coord.X, coord.Y));
                             }
 
-                            // Замыкаем профиль
+
                             var first = profile.ProfileCoordinates.First();
                             profileSeries.Points.Add(new DataPoint(first.X, first.Y));
 
                             plotModel.Series.Add(profileSeries);
                         }
 
-                        // 3. Рисуем ВСЕ Pickets внутри каждого Profile
+
                         if (profile.Pickets != null)
                         {
                             var picketSeries = new ScatterSeries

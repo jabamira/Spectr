@@ -10,7 +10,7 @@ namespace Spectr.Db
     {
         public ApplicationContext context;
         public ObservableCollection<Contract> contracts;
-        public ObservableCollection<Profile> profiles;// для операторов
+        public ObservableCollection<Profile> profiles;
         public ObservableCollection<Operator> operators;
         public ObservableCollection<Analyst> analysts;
         public ObservableCollection<GammaSpectrometer> gammaSpectrometers;
@@ -21,7 +21,6 @@ namespace Spectr.Db
             context = new ApplicationContext();
 
         }
-
         public void DeleteProject(object project)
         {
             if (project == null) return;
@@ -83,7 +82,6 @@ namespace Spectr.Db
                 MessageBox.Show($"Произошла ошибка при удалении:\n{innerMessage}", "Ошибка удаления", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
         public void DeleteProfileOperator(int profileId, int operatorId)
         {
             var profileOperator = context.ProfileOperator
@@ -143,7 +141,6 @@ namespace Spectr.Db
                 MessageBox.Show("Ошибка: " + ex.Message);
             }
         }
-
         public void AddContractAnalyst(int contractId, int analystId)
         {
 
@@ -162,9 +159,6 @@ namespace Spectr.Db
                 context.SaveChanges();
             }
         }
-
-
-
         public void LoadContract()
         {
             contracts = new ObservableCollection<Contract>(
@@ -243,7 +237,6 @@ namespace Spectr.Db
 
 
         }
-
         public void LoadContractsForCustomerById(int customerId)
         {
             contracts = new ObservableCollection<Contract>(
@@ -273,8 +266,6 @@ namespace Spectr.Db
                     .ToList()
             );
         }
-
-
         public void LoadOperators()
         {
             operators = new ObservableCollection<Operator>(
@@ -296,7 +287,6 @@ namespace Spectr.Db
             );
 
         }
-
         public void SaveProject(object project)
         {
             if (project == null) return;
@@ -391,15 +381,30 @@ namespace Spectr.Db
             }
 
         }
-        Random random = new Random();
-
-
         private float GenerateRandomCoordinate(float min, float max)
         {
             Random rand = new Random();
             return (float)(rand.NextDouble() * (max - min) + min);
         }
-        
+        private bool RectanglesOverlap(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2)
+        {
+            return !(x1 + w1 <= x2 || x2 + w2 <= x1 || y1 + h1 <= y2 || y2 + h2 <= y1);
+        }
+        private bool AreCoordinatesIntersectingWithProfiles(List<ProfileCoordinates> newCoordinates, List<ProfileCoordinates> existingCoordinates)
+        {
+            foreach (var newCoord in newCoordinates)
+            {
+                foreach (var existingCoord in existingCoordinates)
+                {
+                 
+                    if (Math.Abs(existingCoord.X - newCoord.X) < 0.1f && Math.Abs(existingCoord.Y - newCoord.Y) < 0.1f)
+                    {
+                        return true; // Пересечение найдено
+                    }
+                }
+            }
+            return false;
+        }
         public async Task SeedDatabaseAsync(ApplicationContext context)
         {
             // Очищаем базу
@@ -476,16 +481,31 @@ namespace Spectr.Db
             await context.SaveChangesAsync();
 
             Random rand = new Random();
+            var usedRectangles = new List<(int X, int Y, int Width, int Height)>();
 
             // Генерация координат для Зон
             foreach (var area in areas)
             {
-                var minX = rand.Next(0, 100);
-                var minY = rand.Next(0, 100);
-                var width = rand.Next(20, 50);
-                var height = rand.Next(20, 50);
+                int attempts = 0;
+                bool placed = false;
 
-                context.AreaCoordinates.AddRange(new List<AreaCoordinates>
+                while (!placed && attempts < 100)
+                {
+                    attempts++;
+
+                    var minX = rand.Next(0, 500); // увеличь диапазон, чтобы было больше свободного места
+                    var minY = rand.Next(0, 500);
+                    var width = rand.Next(30, 60);
+                    var height = rand.Next(30, 60);
+
+                    bool intersects = usedRectangles.Any(r =>
+                        RectanglesOverlap(minX, minY, width, height, r.X, r.Y, r.Width, r.Height));
+
+                    if (!intersects)
+                    {
+                        usedRectangles.Add((minX, minY, width, height));
+
+                        context.AreaCoordinates.AddRange(new List<AreaCoordinates>
             {
                 new AreaCoordinates { X = minX,         Y = minY,          AreaID = area.AreaID },
                 new AreaCoordinates { X = minX + width, Y = minY,          AreaID = area.AreaID },
@@ -493,7 +513,17 @@ namespace Spectr.Db
                 new AreaCoordinates { X = minX,         Y = minY + height, AreaID = area.AreaID },
                 new AreaCoordinates { X = minX,         Y = minY,          AreaID = area.AreaID } // замыкаем контур
             });
+
+                        placed = true;
+                    }
+                }
+
+                if (!placed)
+                {
+                    Console.WriteLine($"Не удалось разместить зону: {area.AreaName}");
+                }
             }
+
             await context.SaveChangesAsync();
 
 
@@ -518,8 +548,8 @@ namespace Spectr.Db
 
             var savedProfiles = await context.Profiles.ToListAsync();
             var savedAreas = await context.Areas.Include(a => a.AreaCoordinates).ToListAsync();
+            var existingCoordinates = await context.ProfileCoordinates.ToListAsync(); // Получаем все существующие координаты профилей
 
-            // Генерация координат профилей внутри зоны
             foreach (var profile in savedProfiles)
             {
                 var area = savedAreas.FirstOrDefault(a => a.AreaID == profile.AreaID);
@@ -531,28 +561,37 @@ namespace Spectr.Db
                     var minY = area.AreaCoordinates.Min(c => c.Y);
                     var maxY = area.AreaCoordinates.Max(c => c.Y);
 
-                    // Сгенерируем 5 случайных координат для профиля
-                    var profileCoordinates = new List<ProfileCoordinates>();
-                    for (int i = 0; i < 5; i++)
+                    float maxWidth = Math.Max(5, (maxX - minX) / 3);
+                    float maxHeight = Math.Max(5, (maxY - minY) / 3);
+
+                    float width = GenerateRandomCoordinate(5, maxWidth);
+                    float height = GenerateRandomCoordinate(5, maxHeight);
+
+                    float startX = GenerateRandomCoordinate(minX, maxX - width);
+                    float startY = GenerateRandomCoordinate(minY, maxY - height);
+
+                    float offset = GenerateRandomCoordinate(1, width / 3); // сдвиг для трапеции
+
+                    var profileCoordinates = new List<ProfileCoordinates>
+        {
+            new() { X = startX, Y = startY, ProfileID = profile.ProfileID },
+            new() { X = startX + width, Y = startY, ProfileID = profile.ProfileID },
+            new() { X = startX + width - offset, Y = startY + height, ProfileID = profile.ProfileID },
+            new() { X = startX + offset, Y = startY + height, ProfileID = profile.ProfileID },
+            new() { X = startX, Y = startY, ProfileID = profile.ProfileID } // замыкаем
+        };
+
+                    // Проверяем, не пересекаются ли новые координаты с координатами других профилей
+                    if (!AreCoordinatesIntersectingWithProfiles(profileCoordinates, existingCoordinates))
                     {
-                        profileCoordinates.Add(new ProfileCoordinates
-                        {
-                            X = GenerateRandomCoordinate(minX, maxX),
-                            Y = GenerateRandomCoordinate(minY, maxY),
-                            ProfileID = profile.ProfileID
-                        });
+                        context.ProfileCoordinates.AddRange(profileCoordinates);
+                        existingCoordinates.AddRange(profileCoordinates); // Добавляем в существующие координаты профилей
                     }
-
-                    // Замкнем контур
-                    profileCoordinates.Add(new ProfileCoordinates
+                    else
                     {
-                        X = profileCoordinates[0].X,  // Последняя координата будет совпадать с первой
-                        Y = profileCoordinates[0].Y,
-                        ProfileID = profile.ProfileID
-                    });
-
-                    // Добавим все координаты в контекст
-                    context.ProfileCoordinates.AddRange(profileCoordinates);
+                        // Если координаты пересекаются, генерируем новые
+                        // Например, можно добавить цикл, который будет пытаться генерировать уникальные координаты.
+                    }
                 }
             }
 
@@ -560,7 +599,12 @@ namespace Spectr.Db
 
 
 
-             bool IsPointInPolygon(float pointX, float pointY, List<ProfileCoordinates> polygon)
+
+
+
+
+
+            bool IsPointInPolygon(float pointX, float pointY, List<ProfileCoordinates> polygon)
         {
             int i, j = polygon.Count - 1;
             bool inside = false;
@@ -671,13 +715,6 @@ namespace Spectr.Db
             await context.ProfileOperator.AddRangeAsync(profileOperatorLinks);
             await context.SaveChangesAsync();
         }
-
-
-
-
-
-
-
 
     }
 

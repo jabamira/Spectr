@@ -331,7 +331,7 @@ namespace Spectr
 
         private void BtnGammaSpectr_Click(object sender, RoutedEventArgs e)
         {
-            
+         
            ResetVisibility();
             infoLabel.Visibility = Visibility.Collapsed;
             dbHelper.LoadSpectrometrs();
@@ -350,11 +350,12 @@ namespace Spectr
 
         private void BtnSchem_Click(object sender, RoutedEventArgs e)
         {
-            ResetVisibility();
-            MyPlotView.Visibility = Visibility.Visible;
+          
             Contract contract = treeView.SelectedItem as Contract;
             if (contract != null)
             {
+                ResetVisibility();
+                MyPlotView.Visibility = Visibility.Visible;
                 this.MyPlotView.Model = Graphic.GenerateSchem(contract);
                 this.MyPlotView.InvalidatePlot(true);
             }

@@ -457,7 +457,7 @@
                         <Label  Name="labelProfilesHeader" Content="Профили выбранной площади" Visibility="Collapsed" HorizontalAlignment="Center"></Label>
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
 
-                            <ListView Name="listViewProfile" Visibility="Collapsed" Height="120" ItemsSource="{Binding Profiles}">
+                            <ListView Name="listViewProfile" Visibility="Collapsed" Height="320" ItemsSource="{Binding Profiles}">
                                 <ListView.View>
                                     <GridView>
                                         <GridViewColumn Header="Название профиля">
@@ -500,7 +500,7 @@
                         <Label  Name="labelAreaHeader" Content="Площади выбранного контракта" Visibility="Collapsed" HorizontalAlignment="Center"></Label>
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
 
-                            <ListView Name="listViewArea" Visibility="Collapsed" Height="120" ItemsSource="{Binding Areas}">
+                            <ListView Name="listViewArea" Visibility="Collapsed" Height="220" ItemsSource="{Binding Areas}">
                                 <ListView.View>
                                     <GridView>
                                         <GridViewColumn Header="ID" DisplayMemberBinding="{Binding AreaID}">
@@ -618,7 +618,7 @@
 
                         <Label  Name="labelOperatorsHeader" Content="Операторы этого выбранного элемента" HorizontalAlignment="Center" Visibility="Collapsed"  ></Label>
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                            <ListView Name="listViewOperators" Height="320" Visibility="Collapsed" Margin="20 0 20 0">
+                            <ListView Name="listViewOperators" Height="320"  Visibility="Collapsed" Margin="20 0 20 0">
                                 <ListView.View>
                                     <GridView>
                                     
@@ -693,7 +693,7 @@
                             <StackPanel Orientation="Vertical">
                                 <Label  Name="labelOperatorsAdd" Content="Выберите оператора для добавления" HorizontalAlignment="Center" Visibility="Collapsed"  ></Label>
                                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                                    <ListView Name="listViewOperatorsAdd" Height="320"  Width="200" Visibility="Collapsed">
+                                    <ListView Name="listViewOperatorsAdd" Height="320"   Visibility="Collapsed">
                                         <ListView.View>
                                             <GridView>
                                                 <GridViewColumn  Header="Операторы" DisplayMemberBinding="{Binding FullName}">
@@ -790,7 +790,7 @@
                         <Label  Name="labelAnalystHeader" Content="Аналитики" HorizontalAlignment="Center" Visibility="Collapsed"></Label>
 
                         <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                            <ListView Name="listViewAnalysts" Height="120" Visibility="Collapsed">
+                            <ListView Name="listViewAnalysts"  Margin="20 0 20 0" Height="280" Visibility="Collapsed">
                                 <ListView.View>
                                     <GridView>
                                         <GridViewColumn Header="ID Аналитика" DisplayMemberBinding="{Binding AnalystID}">
@@ -873,7 +873,7 @@
                                 <Label  Name="labelAnalystAll" Content="Все аналитики" HorizontalAlignment="Center" Visibility="Collapsed"></Label>
 
                                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                                    <ListView Name="listViewAnalystsAll" Height="120" Margin="0 0 0 0"  Visibility="Collapsed">
+                                    <ListView Name="listViewAnalystsAll" Height="320"  Margin="0 0 0 0"  Visibility="Collapsed">
                                         <ListView.View>
                                             <GridView>
                                                 <GridViewColumn Header="ID Аналитика" DisplayMemberBinding="{Binding AnalystID}">
@@ -908,7 +908,7 @@
                                 <Label  Name="labelAnalystContract" Content="Аналитики Контракта" HorizontalAlignment="Center" Visibility="Collapsed"></Label>
 
                                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                                    <ListView Name="listViewAnalystsContract" Height="120" Margin="100 0 0 0" Visibility="Collapsed">
+                                    <ListView Name="listViewAnalystsContract" Height="320" Margin="100 0 0 0" Visibility="Collapsed">
                                         <ListView.View>
                                             <GridView>
                                                 <GridViewColumn Header="ID Аналитика" DisplayMemberBinding="{Binding AnalystID}">
@@ -962,9 +962,13 @@
 
                         </StackPanel>
                         <StackPanel Orientation="Vertical">
-                          
-                            <oxy:PlotView x:Name="MyPlotView" Width="600" Height="600"/>
+                            <oxy:PlotView x:Name="MyPlotView"
+                  Height="600"
+                  Width="800"
+                  VerticalAlignment="Stretch"
+                  HorizontalAlignment="Stretch" />
                         </StackPanel>
+
                     </StackPanel>
 
                 </ScrollViewer>

@@ -239,8 +239,9 @@ namespace Spectr.Data
         }
 
         [ForeignKey("Customer")]
-        public int CustomerID { get; set; }
+        public int? CustomerID { get; set; } 
         public Customer Customer { get; set; }
+       
 
         [ForeignKey("Administrator")]
         public int AdministratorID { get; set; }

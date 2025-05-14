@@ -124,12 +124,35 @@
                 <StackPanel Grid.Row="0"  Orientation="Vertical">
 
                     <StackPanel Orientation="Horizontal" VerticalAlignment="top" >
+                        <Button x:Name="CreateContractBtn" Height="20"  Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="ManageCusomerBtn_Click">
+
+                            <Viewbox Stretch="Uniform">
+                                <TextBlock Text="Создать контракт" />
+                            </Viewbox>
+                        </Button>
                         <Button x:Name="BtnSpectrometrs" Height="20" Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnGammaSpectr_Click">
                             <Viewbox Stretch="Uniform">
                                 <TextBlock Text="Управлять Гамма-Спектрометрами" />
                             </Viewbox>
                         </Button>
+                        <Button x:Name="BtnManagmentWorkers" Height="20" Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnManagmentWorkers_Click">
 
+                            <Viewbox Stretch="Uniform">
+                                <TextBlock Text="Управлять работниками" />
+                            </Viewbox>
+                        </Button>
+
+
+
+                        <Button x:Name="ResetDatabase" Height="20"  Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="ResetDatabaset_Click">
+
+                            <Viewbox Stretch="Uniform">
+                                <TextBlock Text="Сгенерировать Данные" />
+                            </Viewbox>
+                        </Button>
+
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
                         <Button x:Name="BtnGraphik" Height="20" Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnGraphik_Click">
 
                             <Viewbox Stretch="Uniform">
@@ -141,20 +164,14 @@
                                 <TextBlock Text="Построить схему" />
                             </Viewbox>
                         </Button>
+
                         <Button x:Name="BtnReport" Height="20" Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnReport_Click">
                             <Viewbox Stretch="Uniform">
                                 <TextBlock Text="Сформировать отчет" />
                             </Viewbox>
                         </Button>
 
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <Button x:Name="BtnManagmentWorkers" Height="20" Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnManagmentWorkers_Click">
-
-                            <Viewbox Stretch="Uniform">
-                                <TextBlock Text="Управлять работниками" />
-                            </Viewbox>
-                        </Button>
+                     
 
                         <Button x:Name="BtnExport" Height="20"  Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnExport_Click">
 
@@ -163,12 +180,8 @@
                             </Viewbox>
                         </Button>
 
-                        <Button x:Name="ResetDatabase" Height="20"  Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="ResetDatabaset_Click">
-
-                            <Viewbox Stretch="Uniform">
-                                <TextBlock Text="Сгенерировать Данные" />
-                            </Viewbox>
-                        </Button>
+                     
+                     
                     </StackPanel>
 
                     <Label x:Name="LabelLogin" Content="User:Login" FontSize="12" HorizontalContentAlignment="Right" Margin="0 0 20 0">
@@ -373,7 +386,89 @@
 
                         </ScrollViewer>
 
+                        <Label  Name="labelCustomerHeader" Content="Заказчики" Visibility="Visible" HorizontalAlignment="Center"></Label>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
 
+                            <ListView Name="listViewCustomers" Height="280" Visibility="Collapsed" >
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Представитель">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding ContactPerson,  UpdateSourceTrigger=PropertyChanged}"   LostFocus="TextBox_LostFocus" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+
+                                        <GridViewColumn Header="Телфонный номер">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding PhoneNumber, UpdateSourceTrigger=PropertyChanged}"  LostFocus="TextBox_LostFocus" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Название компании">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding CompanyName, UpdateSourceTrigger=PropertyChanged}"  LostFocus="TextBox_LostFocus" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+
+                                        <GridViewColumn Header="Электронная почта">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"  LostFocus="TextBox_LostFocus" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+
+                                        <GridViewColumn Header="Адресс">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBox Text="{Binding Address, UpdateSourceTrigger=PropertyChanged}"  LostFocus="TextBox_LostFocus" />
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Создать новый контракт">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Button Background="Black" Width="120" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="CreateContract_Click">
+                                                        <Viewbox Stretch="Uniform">
+                                                            <TextBlock Text="Создать новый контракт" />
+                                                        </Viewbox>
+                                                    </Button>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+
+
+                                        <GridViewColumn Header="Удалить" >
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <Button Background="Black" Width="20" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnDeleteListview_Click">
+                                                        <Viewbox Stretch="Uniform">
+                                                            <TextBlock Text="Х" />
+                                                        </Viewbox>
+                                                    </Button>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+
+                                        </GridViewColumn>
+
+
+
+
+                                    </GridView>
+                                </ListView.View>
+                            </ListView>
+
+                        </ScrollViewer>
+                        <Button x:Name="addCusomerBtn" Tag="Customer"  Background="Black"  Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnAdd_Click">
+                            <Viewbox Stretch="Uniform">
+                                <TextBlock Text="Добавить Заказчика" />
+                            </Viewbox>
+                        </Button>
 
 
 
@@ -474,6 +569,7 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
+                                     
                                         <GridViewColumn Header="Удалить">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
@@ -485,6 +581,7 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
+                                       
                                     </GridView>
                                 </ListView.View>
                             </ListView>

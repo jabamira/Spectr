@@ -10,13 +10,14 @@ namespace Spectr.Db
     {
         public static ApplicationContext context = new ApplicationContext();
         public static ObservableCollection<Contract> contracts;
+        public static ObservableCollection<Customer> customers;
         public static ObservableCollection<Profile> profiles;
         public static ObservableCollection<Operator> operators;
         public static ObservableCollection<Analyst> analysts;
         public static ObservableCollection<GammaSpectrometer> gammaSpectrometers;
 
         
-        public static void DeleteProject(object project)
+        public static async void DeleteProject(object project)
         {
             if (project == null) return;
 
@@ -61,6 +62,12 @@ namespace Spectr.Db
                         break;
                     case GammaSpectrometer gammaSpectrometer:
                         context.GammaSpectrometers.Remove(gammaSpectrometer);
+                        break;
+                    case Customer customer:
+                        context.Customers.Remove(customer);
+                        
+                    
+
                         break;
 
                     default:
@@ -156,33 +163,36 @@ namespace Spectr.Db
         }
         public static void LoadContract()
         {
-            contracts = new ObservableCollection<Contract>(
-                context.Contracts
-                    .Include(c => c.Customer)
-                    .Include(c => c.Administrator)
-                    .Include(c => c.Areas)
-                        .ThenInclude(a => a.AreaCoordinates)
-                    .Include(c => c.Areas)
-                        .ThenInclude(a => a.Profiles)
-                            .ThenInclude(p => p.ProfileCoordinates)
-                    .Include(c => c.Areas)
-                        .ThenInclude(a => a.Profiles)
-                            .ThenInclude(p => p.Pickets)
-                                .ThenInclude(pk => pk.Operator)
-                    .Include(c => c.Areas)
-                        .ThenInclude(a => a.Profiles)
-                            .ThenInclude(p => p.Pickets)
-                                .ThenInclude(pk => pk.GammaSpectrometer)
-                    .Include(c => c.Areas)
-                        .ThenInclude(a => a.Profiles)
-                            .ThenInclude(p => p.ProfileOperators) // 👈 Добавили связь с промежуточной таблицей
-                                .ThenInclude(po => po.Operator)    // 👈 И подгружаем сами объекты Operator
-                    .Include(c => c.ContractAnalysts)
-                        .ThenInclude(ca => ca.Analyst)
-                    .ToList()
-            );
+         
+                contracts = new ObservableCollection<Contract>(
+               context.Contracts
+                   .Include(c => c.Customer)
+                   .Include(c => c.Administrator)
+                   .Include(c => c.Areas)
+                       .ThenInclude(a => a.AreaCoordinates)
+                   .Include(c => c.Areas)
+                       .ThenInclude(a => a.Profiles)
+                           .ThenInclude(p => p.ProfileCoordinates)
+                   .Include(c => c.Areas)
+                       .ThenInclude(a => a.Profiles)
+                           .ThenInclude(p => p.Pickets)
+                               .ThenInclude(pk => pk.Operator)
+                   .Include(c => c.Areas)
+                       .ThenInclude(a => a.Profiles)
+                           .ThenInclude(p => p.Pickets)
+                               .ThenInclude(pk => pk.GammaSpectrometer)
+                   .Include(c => c.Areas)
+                       .ThenInclude(a => a.Profiles)
+                           .ThenInclude(p => p.ProfileOperators) // 👈 Добавили связь с промежуточной таблицей
+                               .ThenInclude(po => po.Operator)    // 👈 И подгружаем сами объекты Operator
+                   .Include(c => c.ContractAnalysts)
+                       .ThenInclude(ca => ca.Analyst)
+                   .ToList()
+           );
+            }
+           
 
-        }
+        
         public static void LoadContractsForAnalyst(int analystId)
         {
             contracts = new ObservableCollection<Contract>(
@@ -275,6 +285,13 @@ namespace Spectr.Db
             );
 
         }
+        public static void LoadCustomers()
+        {
+            customers = new ObservableCollection<Customer>(
+                context.Customers.ToList()
+            );
+
+        }
         public static void LoadSpectrometrs()
         {
             gammaSpectrometers = new ObservableCollection<GammaSpectrometer>(
@@ -360,6 +377,12 @@ namespace Spectr.Db
                             context.Operators.Update(_operator);
                         }
 
+                        break;
+                    case Customer customer:
+                        if (customer.CustomerID == 0)
+                            context.Customers.Add(customer);
+                        else
+                            context.Customers.Update(customer);
                         break;
 
 

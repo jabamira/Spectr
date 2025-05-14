@@ -50,7 +50,15 @@ namespace Spectr.Data
             modelBuilder.Entity<ContractAnalyst>()
          .HasKey(ca => new { ca.ContractID, ca.AnalystID });
             modelBuilder.Entity<ProfileOperator>()
-        .HasKey(po => new { po.ProfileID, po.OperatorID });
+                          .HasKey(po => new { po.ProfileID, po.OperatorID });
+
+modelBuilder.Entity<Contract>()
+.HasOne(c => c.Customer)
+.WithMany()
+.HasForeignKey(c => c.CustomerID)
+.OnDelete(DeleteBehavior.Cascade);
+
+
 
 
 

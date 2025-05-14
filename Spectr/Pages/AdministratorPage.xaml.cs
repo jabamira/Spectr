@@ -3,6 +3,7 @@ using OxyPlot;
 using OxyPlot.Wpf;
 using Spectr.Data;
 using Spectr.Db;
+using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
@@ -172,6 +173,11 @@ namespace Spectr
 
                         profileCoordinates.Add(newProfileCoordinate); 
                         break;
+                    case "Customer":
+                        Customer customer = CreateDefaultCustomer();
+                        Db_Helper.customers.Add(customer);
+                        Db_Helper.SaveProject(customer);
+                        break;
 
                     default:
                         MessageBox.Show("Неизвестный тип данных для добавления.");
@@ -244,6 +250,14 @@ namespace Spectr
                         case GammaSpectrometer gammaSpectrometer:
                             Db_Helper.DeleteProject(gammaSpectrometer);
                             Db_Helper.gammaSpectrometers.Remove(gammaSpectrometer);
+                            break;
+                        case Customer customer:
+                            Db_Helper.DeleteProject(customer);
+                            Db_Helper.customers.Remove(customer);
+                          
+                            Db_Helper.LoadContract();
+                            treeView.ItemsSource = Db_Helper.contracts;
+
                             break;
 
                         default:
@@ -632,6 +646,9 @@ namespace Spectr
         private void ResetVisibility()
 
         {
+            addCusomerBtn.Visibility = Visibility.Collapsed;
+            labelCustomerHeader.Visibility = Visibility.Collapsed;
+            listViewCustomers.Visibility = Visibility.Collapsed;
             MyPlotView.Visibility = Visibility.Collapsed;
             labelSpectrometrsHeader.Visibility = Visibility.Collapsed;
             listViewSpectrometrs.Visibility = Visibility.Collapsed;
@@ -860,6 +877,67 @@ namespace Spectr
             Debug.WriteLine("DB reset");
         }
 
+        private void ManageCusomerBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Db_Helper.LoadCustomers();
+            ResetVisibility();
+            addCusomerBtn.Visibility = Visibility.Visible;
+            labelCustomerHeader.Visibility = Visibility.Visible;
+            listViewCustomers.Visibility = Visibility.Visible;
+            listViewCustomers.ItemsSource = Db_Helper.customers;
+        }
+        public Contract CreateDefaultContract(int customerId, int administratorId)
+        {
+            return new Contract
+            {
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now.AddMonths(6),
+                ServiceDescription = "Обслуживание по умолчанию",
+                CustomerID = customerId,
+                AdministratorID = administratorId,
+                Areas = new ObservableCollection<Area>(),
+                ContractAnalysts = new ObservableCollection<ContractAnalyst>()
+            };
+        }
+        public Customer CreateDefaultCustomer()
+        {
+           
 
+            string login = GenerateScaryString(12);
+            return new Customer
+            {
+               
+                CompanyName = "Компания по умолчанию",
+                PhoneNumber = "+7 (000) 000-00-00",
+                ContactPerson = "Иван Иванов",
+                Email = "default@example.com",
+                Address = "г. Пример, ул. Стандартная, д.1",
+                CustomerLogin = login,
+                CustomerPassword = Guid.NewGuid().ToString(), // или задай простой пароль
+                Contracts = new ObservableCollection<Contract>()
+            };
+          
+            string GenerateScaryString(int length)
+            {
+     
+                const string chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[]{}<>?";
+                var random = new Random();
+                return new string(Enumerable.Repeat(chars, length)
+                    .Select(s => s[random.Next(s.Length)]).ToArray());
+            }
+
+        }
+       
+
+        private void CreateContract_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.DataContext is Customer customer)
+            {
+                Contract contract = CreateDefaultContract(customer.CustomerID, Administrator.AdministratorID);
+                Db_Helper.contracts.Add(contract);
+                Db_Helper.SaveProject(contract);
+            }
+       
+        }
     }
 }

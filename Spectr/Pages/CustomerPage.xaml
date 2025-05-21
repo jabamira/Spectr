@@ -465,7 +465,7 @@
                             <StackPanel Orientation="Vertical">
                                 <Label  Name="labelOperatorsProfile"  Content="Операторы этого выбранного элемента" HorizontalAlignment="Center" Visibility="Collapsed"  ></Label>
                                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                                    <ListView Name="listViewOperatorsProfile" Margin="50 0 0 0" Height="320" Visibility="Collapsed">
+                                    <ListView Name="listViewOperatorsProfile" Margin="0 0 0 0" Height="320" Visibility="Collapsed">
                                         <ListView.View>
                                             <GridView>
 
@@ -564,7 +564,7 @@
                                 <Label  Name="labelAnalystContract" Content="Аналитики Контракта" HorizontalAlignment="Center" Visibility="Collapsed"></Label>
 
                                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                                    <ListView Name="listViewAnalystsContract" Height="120" Margin="100 0 0 0" Visibility="Collapsed">
+                                    <ListView Name="listViewAnalystsContract" Height="120" Margin="00 0 0 0" Visibility="Collapsed">
                                         <ListView.View>
                                             <GridView>
                                                 <GridViewColumn Header="ID Аналитика" DisplayMemberBinding="{Binding AnalystID}">

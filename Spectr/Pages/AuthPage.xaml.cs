@@ -18,13 +18,13 @@ namespace Spectr
             InitializeComponent();
             typeUserComboBox.ItemsSource = Enum.GetValues(typeof(UserType)).Cast<UserType>();
             typeUserComboBox.SelectedIndex = 0;
-            //Login_box.Text = "analyst_sergey";
-            //Password_box.Text = "analyst_pass1";
+           
+      
+
+            Login_box.Text = "analyst_sergey";
+            Password_box.Text = "analyst_pass1";
             Login_box.Text = "admin_ivan";
             Password_box.Text = "pass_ivan123";
-
-
-
         }
 
         private void LoginBtn_Click(object sender, RoutedEventArgs e)

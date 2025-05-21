@@ -153,10 +153,10 @@
 
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
-                        <Button x:Name="BtnGraphik" Height="20" Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnGraphik_Click">
+                        <Button x:Name="BtnGraphik" Height="20" Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnReport_Click">
 
                             <Viewbox Stretch="Uniform">
-                                <TextBlock Text="Построить график" />
+                                <TextBlock Text="Составить отчет" />
                             </Viewbox>
                         </Button>
                         <Button x:Name="BtnSchem" Height="20" Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnSchem_Click">
@@ -165,9 +165,9 @@
                             </Viewbox>
                         </Button>
 
-                        <Button x:Name="BtnReport" Height="20" Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnReport_Click">
+                        <Button x:Name="BtnImport" Height="20" Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnImport_Click">
                             <Viewbox Stretch="Uniform">
-                                <TextBlock Text="Сформировать отчет" />
+                                <TextBlock Text="Импортировать" />
                             </Viewbox>
                         </Button>
 
@@ -317,6 +317,7 @@
                                     <TextBox Name="infoGammaSpectrometerMeasurementTime" HorizontalContentAlignment="Left"  LostFocus="TextBox_LostFocus" Text="{Binding GammaSpectrometer.MeasurementTime,  UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed" Margin="5" IsReadOnly="False" BorderBrush="Transparent" Background="Transparent" />
                                 </StackPanel>
                             </StackPanel>
+                            <TextBlock x:Name="StatisticsTextBlock" FontSize="14" TextWrapping="Wrap" Margin="10" Visibility="Collapsed"/>
                         </StackPanel>
 
 

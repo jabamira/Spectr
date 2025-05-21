@@ -106,12 +106,7 @@
                     <StackPanel Orientation="Horizontal" VerticalAlignment="top" >
                        
 
-                        <Button x:Name="BtnGraphik" Height="20" Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnGraphik_Click">
-
-                            <Viewbox Stretch="Uniform">
-                                <TextBlock Text="Построить график" />
-                            </Viewbox>
-                        </Button>
+                      
                         <Button x:Name="BtnSchem" Height="20" Width="110" VerticalAlignment="Top" Margin="5"  Background="Black" Foreground="White" BorderThickness="0" Style="{StaticResource RoundedButtonStyle}" Click="BtnSchem_Click">
                             <Viewbox Stretch="Uniform">
                                 <TextBlock Text="Построить схему" />
@@ -141,7 +136,7 @@
                 </StackPanel>
                 <ScrollViewer  Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" >
                     <StackPanel Orientation="Vertical" >
-
+                        <TextBlock x:Name="StatisticsTextBlock" FontSize="14" TextWrapping="Wrap" Margin="10" Visibility="Collapsed"/>
                         <Label Name="infoLabel" HorizontalContentAlignment="Center">Выберите Проект</Label>
                         <StackPanel Orientation="Horizontal">
                             <Label Name="infoContractIdLabel" Content="ID:" />
@@ -633,17 +628,17 @@
                             </StackPanel>
 
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal">
+                       
 
                             <StackPanel Orientation="Vertical">
                                 <oxy:PlotView x:Name="MyPlotView"
 Height="600"
 Width="800"
-VerticalAlignment="Stretch"
-HorizontalAlignment="Stretch" />
+VerticalAlignment="Center"
+HorizontalAlignment="Center" />
                             </StackPanel>
 
-                        </StackPanel>
+                   
                     </StackPanel>
 
                 </ScrollViewer>

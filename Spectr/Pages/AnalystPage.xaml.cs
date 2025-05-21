@@ -83,15 +83,100 @@ namespace Spectr.Pages
         }
 
 
-        private void BtnReport_Click(object sender, RoutedEventArgs e)
+       
+                private void BtnReport_Click(object sender, RoutedEventArgs e)
         {
+            ResetVisibility();
+            StatisticsTextBlock.Visibility = Visibility.Visible;
+            int totalContracts = Db_Helper.contracts.Count;
+            int totalCustomers = Db_Helper.contracts.Select(c => c.Customer).Distinct().Count();
+            int totalAdministrators = Db_Helper.contracts.Select(c => c.Administrator).Distinct().Count();
+            int totalAnalysts = Db_Helper.contracts
+                .SelectMany(c => c.ContractAnalysts)
+                .Select(ca => ca.Analyst)
+                .Distinct()
+                .Count();
+            int totalAreas = Db_Helper.contracts
+                .SelectMany(c => c.Areas)
+                .Distinct()
+                .Count();
+            int totalProfiles = Db_Helper.contracts
+                .SelectMany(c => c.Areas)
+                .SelectMany(a => a.Profiles)
+                .Distinct()
+                .Count();
+            int totalPickets = Db_Helper.contracts
+                .SelectMany(c => c.Areas)
+                .SelectMany(a => a.Profiles)
+                .SelectMany(p => p.Pickets)
+                .Distinct()
+                .Count();
+            int totalOperators = Db_Helper.contracts
+                .SelectMany(c => c.Areas)
+                .SelectMany(a => a.Profiles)
+                .SelectMany(p => p.ProfileOperators)
+                .Select(po => po.Operator)
+                .Distinct()
+                .Count();
+            int totalSpectrometers = Db_Helper.contracts
+                .SelectMany(c => c.Areas)
+                .SelectMany(a => a.Profiles)
+                .SelectMany(p => p.Pickets)
+                .Select(pk => pk.GammaSpectrometer)
+                .Distinct()
+                .Count();
 
+
+            var areaStats = Db_Helper.contracts
+                .SelectMany(c => c.Areas)
+                .Select(area =>
+                {
+                    var pickets = area.Profiles
+                        .SelectMany(p => p.Pickets)
+                        .ToList();
+
+                    double avgCh1 = pickets.Where(p => p.Channel1.HasValue).Select(p => p.Channel1.Value).DefaultIfEmpty().Average();
+                    double avgCh2 = pickets.Where(p => p.Channel2.HasValue).Select(p => p.Channel2.Value).DefaultIfEmpty().Average();
+                    double avgCh3 = pickets.Where(p => p.Channel3.HasValue).Select(p => p.Channel3.Value).DefaultIfEmpty().Average();
+
+                    return new
+                    {
+                        AreaName = area.AreaName,
+                        AvgChannel1 = avgCh1,
+                        AvgChannel2 = avgCh2,
+                        AvgChannel3 = avgCh3
+                    };
+                })
+                .ToList();
+
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine("📊 Статистика по загруженным данным:");
+            sb.AppendLine($"- Контрактов: {totalContracts}");
+            sb.AppendLine($"- Заказчиков: {totalCustomers}");
+            sb.AppendLine($"- Администраторов: {totalAdministrators}");
+            sb.AppendLine($"- Аналитиков: {totalAnalysts}");
+            sb.AppendLine($"- Участков (Areas): {totalAreas}");
+            sb.AppendLine($"- Профилей: {totalProfiles}");
+            sb.AppendLine($"- Пикетов: {totalPickets}");
+            sb.AppendLine($"- Операторов: {totalOperators}");
+            sb.AppendLine($"- Гамма-спектрометров: {totalSpectrometers}");
+            sb.AppendLine();
+
+            sb.AppendLine("📈 Средние значения каналов по участкам:");
+            foreach (var stat in areaStats)
+            {
+                sb.AppendLine($"- {stat.AreaName}:");
+                sb.AppendLine($"   • Channel 1: {stat.AvgChannel1:F2}");
+                sb.AppendLine($"   • Channel 2: {stat.AvgChannel2:F2}");
+                sb.AppendLine($"   • Channel 3: {stat.AvgChannel3:F2}");
+            }
+
+            StatisticsTextBlock.Text = sb.ToString();
         }
+        
 
-        private void BtnExport_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
+   
 
         private void treeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
@@ -322,7 +407,7 @@ namespace Spectr.Pages
         private void ResetVisibility()
 
         {
-          
+            StatisticsTextBlock.Visibility = Visibility.Collapsed;
             MyPlotView.Visibility = Visibility.Collapsed;
             labelAnalystContract.Visibility = Visibility.Collapsed;
             listViewAnalystsContract.Visibility = Visibility.Collapsed;
@@ -475,7 +560,29 @@ namespace Spectr.Pages
 
 
         }
+        private void BtnExport_Click(object sender, RoutedEventArgs e)
+        {
+            var saveFileDialog = new Microsoft.Win32.SaveFileDialog
+            {
+                Title = "Сохранить файл Excel",
+                Filter = "Excel файл (*.xlsx)|*.xlsx",
+                FileName = $"Export_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx",
+                DefaultExt = ".xlsx",
+                AddExtension = true
+            };
 
+            bool? result = saveFileDialog.ShowDialog();
+
+            if (result == true)
+            {
+                string filePath = saveFileDialog.FileName;
+
+                var exporter = new ExcelExporter();
+                exporter.ExportAllToExcel(filePath);
+
+                MessageBox.Show($"Экспорт завершён:\n{filePath}", "Успешно", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
         private void MainWindow_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
